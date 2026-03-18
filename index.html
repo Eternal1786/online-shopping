@@ -182,45 +182,121 @@
         <div class="footer-note" id="footer-note">Secure access for global users.</div>
     </div>
 </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eternal | Business Hub</title>
+    <style>
+        :root { --blue: #3b82f6; --bg: #0f172a; --card-bg: #1e293b; --green: #10b981; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
+        
+        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
+        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
+        
+        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
+        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
+        .reg-btn { background: var(--blue); color: white; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 30px; border: 1px solid var(--blue); width: 420px; border-radius: 20px; position: relative; }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
+        
+        .tab-menu { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
+        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; transition: 0.3s; }
+        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
+
+        input, select { width: 94%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 14px; outline: none; }
+        input:focus { border-color: var(--blue); }
+        
+        .submit-btn { width: 100%; padding: 14px; background: var(--green); border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 16px; }
+        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; text-align: center; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">ETERNAL</div>
+    <div class="auth-btns">
+        <button class="login-btn" onclick="openModal('login')">Login</button>
+        <button class="reg-btn" onclick="openModal('signup')">Sign Up</button>
+    </div>
+</nav>
+
+<header style="text-align:center; padding: 100px 20px;">
+    <h1>Welcome to Eternal Hub</h1>
+    <p>The bridge between global sellers and buyers.</p>
+</header>
+
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        
+        <div class="tab-menu">
+            <div id="tab-buyer" class="tab active-tab" onclick="switchRole('buyer')">Buyer</div>
+            <div id="tab-seller" class="tab" onclick="switchRole('seller')">Seller</div>
+        </div>
+
+        <h3 id="form-title" style="margin: 0 0 15px 0; text-align: center;">Sign Up</h3>
+        
+        <div id="form-fields"></div>
+        
+        <button class="submit-btn" onclick="handleFinalAction()">CONTINUE</button>
+        <div class="footer-note" id="footer-note">Secure connection established.</div>
+    </div>
+</div>
 
 <script>
-    let currentRole = 'buyer';
-    let currentMode = 'signup';
+    let currentRole = 'buyer'; // Default rol
+    let currentMode = 'signup'; // Default rejim
 
+    // Modalı açan funksiya
     function openModal(mode) {
         currentMode = mode;
         document.getElementById('authModal').style.display = "block";
         renderFields();
     }
 
+    // Modalı bağlayan funksiya
     function closeModal() {
         document.getElementById('authModal').style.display = "none";
     }
 
+    // Rolu (Buyer/Seller) dəyişən funksiya
     function switchRole(role) {
         currentRole = role;
-        document.getElementById('tab-buyer').className = role === 'buyer' ? 'tab active-tab' : 'tab';
-        document.getElementById('tab-seller').className = role === 'seller' ? 'tab active-tab' : 'tab';
-        renderFields();
+        document.getElementById('tab-buyer').classList.remove('active-tab');
+        document.getElementById('tab-seller').classList.remove('active-tab');
+        
+        if(role === 'buyer') {
+            document.getElementById('tab-buyer').classList.add('active-tab');
+        } else {
+            document.getElementById('tab-seller').classList.add('active-tab');
+        }
+        renderFields(); // Sahələri yenidən çək
     }
 
+    // Əsas "Deyişən" hissə - Sahələri bura yazır
     function renderFields() {
-        const fields = document.getElementById('form-fields');
-        const title = document.getElementById('form-title');
-        const btn = document.getElementById('main-submit-btn');
+        const fieldsDiv = document.getElementById('form-fields');
+        const titleH3 = document.getElementById('form-title');
+        const footer = document.getElementById('footer-note');
 
         if (currentMode === 'login') {
-            title.innerText = "Welcome Back";
-            btn.innerText = "LOGIN";
-            fields.innerHTML = `
-                <input type="email" id="log-email" placeholder="Email Address">
-                <input type="password" id="log-pass" placeholder="Password">
+            titleH3.innerText = "Welcome Back";
+            footer.innerText = "Enter your credentials to access your account.";
+            fieldsDiv.innerHTML = `
+                <input type="email" id="email" placeholder="Email Address">
+                <input type="password" id="pass" placeholder="Password">
             `;
         } else {
-            title.innerText = currentRole === 'seller' ? "Seller Registration" : "Buyer Registration";
-            btn.innerText = "CREATE ACCOUNT";
+            // Sign Up Rejimi
             if (currentRole === 'seller') {
-                fields.innerHTML = `
+                titleH3.innerText = "Seller Registration";
+                footer.innerHTML = "<b>Note:</b> Phone verification required for payouts.";
+                fieldsDiv.innerHTML = `
                     <div style="display: flex; gap: 5px;">
                         <input type="text" placeholder="First Name">
                         <input type="text" placeholder="Last Name">
@@ -231,10 +307,12 @@
                         <input type="text" placeholder="City">
                     </div>
                     <input type="email" placeholder="Gmail Address">
-                    <input type="password" placeholder="Password (min. 6 chars)">
+                    <input type="password" placeholder="Password (min. 6 characters)">
                 `;
             } else {
-                fields.innerHTML = `
+                titleH3.innerText = "Buyer Registration";
+                footer.innerText = "Fast sign up for global shoppers.";
+                fieldsDiv.innerHTML = `
                     <input type="text" placeholder="Full Name">
                     <input type="email" placeholder="Gmail Address">
                     <input type="password" placeholder="Password">
@@ -243,11 +321,18 @@
         }
     }
 
+    // Giriş/Qeydiyyat düyməsinə basanda
     function handleFinalAction() {
-        // Test üçün birbaşa yönləndirmə
-        alert("Success! Welcome to the Eternal system.");
-        window.location.href = "dashboard.html";
+        alert("Success! Processing your " + currentMode + " request...");
+        if(currentRole === 'seller') {
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Buyer area is coming soon!");
+        }
     }
+
+    // İlk açılışda sahələri hazırla
+    renderFields();
 </script>
 
 </body>
