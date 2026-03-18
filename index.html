@@ -4,40 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eternal | Business Hub</title>
-    <style>
-        :root { --blue: #3b82f6; --bg: #0f172a; --card: #1e293b; --green: #10b981; --gold: #fbbf24; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
-        
-        /* Naviqasiya - Təmiz tək düymələr */
-        nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 26px; font-weight: 900; color: var(--blue); letter-spacing: 2px; }
-        .nav-btns button { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; margin-left: 10px; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .reg-btn { background: var(--blue); color: white; }
-
-        /* Qiymət kartları */
-        .pricing-container { display: flex; justify-content: center; gap: 20px; padding: 50px 20px; flex-wrap: wrap; }
-        .price-card { background: var(--card); padding: 30px; border-radius: 20px; width: 300px; text-align: center; border: 1px solid #334155; transition: 0.3s; }
-        .price-card.vip { border: 2px solid var(--gold); transform: scale(1.05); }
-        .price-card h3 { margin: 0; font-size: 24px; color: var(--blue); }
-        .price { font-size: 36px; font-weight: bold; margin: 20px 0; }
-        .features { list-style: none; padding: 0; text-align: left; margin-bottom: 25px; min-height: 150px; }
-        .features li { margin-bottom: 10px; font-size: 14px; color: #cbd5e1; }
-        .choose-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: var(--blue); color: white; }
-        .vip-btn { background: var(--gold); color: black; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
-        .modal-content { background: var(--card); margin: 5% auto; padding: 35px; border: 1px solid var(--blue); width: 400px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tabs { display: flex; margin-bottom: 20px; background: #0f172a; border-radius: 10px; padding: 5px; }
-        .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 8px; color: #64748b; font-weight: bold; }
-        .tab.active { background: var(--blue); color: white; }
-
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; box-sizing: border-box; }
-        .submit-btn { width: 100%; padding: 15px; background: var(--green); border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; font-size: 16px; }
-    </style>
+<style>
+    :root { --blue: #3b82f6; --bg: #0f172a; --card: #1e293b; --green: #10b981; --gold: #fbbf24; }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
+    nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
+    .logo { font-size: 26px; font-weight: 900; color: var(--blue); letter-spacing: 2px; }
+    .nav-btns button { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; margin-left: 10px; }
+    .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
+    .reg-btn { background: var(--blue); color: white; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
+    .modal-content { background: var(--card); margin: 5% auto; padding: 35px; border: 1px solid var(--blue); width: 420px; border-radius: 20px; position: relative; }
+    input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; box-sizing: border-box; }
+    .submit-btn { width: 100%; padding: 15px; background: var(--green); border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; }
+</style>
 </head>
 <body>
 
@@ -46,19 +25,6 @@
     <div class="nav-btns">
         <button class="login-btn" onclick="openModal('login')">Login</button>
         <button class="reg-btn" onclick="openModal('signup')">Sign Up</button>
-    </div>
-</nav>
-
-<div class="pricing-container">
-    <div class="price-card">
-        <h3>Standard</h3>
-        <div class="price">$10 <span>/mo</span></div>
-        <ul class="features">
-            <li>✅ 50 Active Products</li>
-            <li>✅ Basic Analytics</li>
-            <li>✅ Community Support</li>
-        </ul>
-        <button class="choose-btn" onclick="openModal('signup')">CHOOSE PLAN</button>
     </div>
 
     <div class="price-card vip">
@@ -72,7 +38,26 @@
         </ul>
         <button class="choose-btn vip-btn" onclick="openModal('signup')">CHOOSE PLAN</button>
     </div>
+<nav>
+    <div class="logo">ETERNAL</div>
+    <div class="nav-btns">
+        <button class="login-btn" onclick="openAuth('login')">Login</button>
+        <button class="reg-btn" onclick="openAuth('signup')">Sign Up</button>
+    </div>
+</nav>
 
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <span onclick="closeAuth()" style="float:right; cursor:pointer;">&times;</span>
+        <div id="role-tabs" style="display:flex; margin-bottom:20px; background:#0f172a; padding:5px; border-radius:10px;">
+            <div id="t-buyer" style="flex:1; text-align:center; cursor:pointer;" onclick="setRole('buyer')">Buyer</div>
+            <div id="t-seller" style="flex:1; text-align:center; cursor:pointer;" onclick="setRole('seller')">Seller</div>
+        </div>
+        <h2 id="m-title" style="text-align:center;">Account</h2>
+        <div id="dynamic-fields"></div>
+        <button class="submit-btn" onclick="submitAuth()">CONTINUE</button>
+    </div>
+</div>
     <div class="price-card">
         <h3>Enterprise</h3>
         <div class="price">$40 <span>/mo</span></div>
