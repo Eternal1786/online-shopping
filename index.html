@@ -3,143 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Müdürün Dünyası</title>
+    <title>Eternal | Satıcı Paneli</title>
     <style>
-        /* Modern və tünd dizayn (Proqramçı üslubu) */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #0f172a;
-            color: #f8fafc;
+            color: white;
             margin: 0;
             padding: 0;
         }
-
-        /* Başlıq (Header) */
         header {
-            background-color: #1e293b;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #3b82f6;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #3b82f6;
-            text-transform: uppercase;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: 500;
-        }
-
-        /* Giriş (Banner) */
-        .hero {
             text-align: center;
-            padding: 100px 20px;
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://source.unsplash.com/random/1600x900/?tech');
-            background-size: cover;
+            padding: 50px 20px;
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
         }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: #94a3b8;
-        }
-
-        /* VIP Bölməsi (Sənin 7-8 manatlıq kabel qiymətləri bura gələcək) */
-        .vip-section {
-            padding: 50px;
+        .container {
             display: flex;
-            justify-content: space-around;
+            gap: 20px;
+            justify-content: center;
+            padding: 40px;
             flex-wrap: wrap;
         }
-
         .card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 30px;
-            width: 250px;
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            border-radius: 15px;
+            padding: 25px;
+            width: 280px;
             text-align: center;
             transition: 0.3s;
-            margin-bottom: 20px;
         }
-
         .card:hover {
-            border-color: #3b82f6;
             transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
         }
-
+        .vip-card {
+            border: 2px solid #fbbf24;
+            transform: scale(1.05);
+        }
         .btn {
-            display: inline-block;
-            background-color: #3b82f6;
+            background: #3b82f6;
             color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
             margin-top: 15px;
         }
-
-        /* Dropshipping (Mağaza) Hissəsi */
-        .shop-preview {
-            background-color: #020617;
-            padding: 50px;
-            text-align: center;
+        .vip-btn {
+            background: #fbbf24;
+            color: black;
         }
+        ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        li { margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">ETERNAL</div>
-        <nav>
-            <a href="#">Ana Səhifə</a>
-            <a href="#">Mağaza</a>
-            <a href="#">VIP Paketlər</a>
-            <a href="#">Giriş</a>
-        </nav>
+        <h1>Böyük İşlərin Mərkəzi</h1>
+        <p>Dropshipping sistemi və AI mühərriki bir arada.</p>
     </header>
 
-    <section class="hero">
-        <h1>Böyük İşlərin Mərkəzi</h1>
-        <p>VIP qiymətlər, Dropshipping sistemi və AI mühərriki bir arada.</p>
-        <a href="#" class="btn">İndi Başla</a>
-    </section>
-
-    <section class="vip-section">
+    <div class="container">
         <div class="card">
-            <h3>Standard Paket</h3>
+            <h3 style="color: #3b82f6;">Standard Paket</h3>
             <p>Giriş səviyyəli imkanlar</p>
-            <h2 style="color: #3b82f6;">5 AZN</h2>
-            <a href="#" class="btn">Al</a>
+            <hr style="border: 0.1px solid #334155;">
+            <h2>10 AZN</h2>
+            <ul>
+                <li>✅ Məhsul yerləşdirmə</li>
+                <li>✅ Standart mağaza paneli</li>
+            </ul>
+            <button class="btn">AL</button>
         </div>
-        <div class="card" style="border-color: #fbbf24;">
-            <h3>VIP Müdür</h3>
-            <p>Bütün qapıları açan açar</p>
-            <h2 style="color: #fbbf24;">15 AZN</h2>
-            <a href="#" class="btn" style="background-color: #fbbf24; color: black;">Al</a>
-        </div>
-        <div class="card">
-            <h3>Enterprise</h3>
-            <p>Professional sistemlər</p>
-            <h2 style="color: #3b82f6;">40 AZN</h2>
-            <a href="#" class="btn">Al</a>
-        </div>
-    </section>
 
-    <div class="shop-preview">
-        <h2>Trend Olan Mallar</h2>
-        <p>Alibaba və digər mağazalardan ən son gələn məhsullar burada görünəcək.</p>
+        <div class="card vip-card">
+            <h3 style="color: #fbbf24;">VIP</h3>
+            <p>Bütün qapıları açan açar</p>
+            <hr style="border: 0.1px solid #334155;">
+            <h2>20 AZN</h2>
+            <ul>
+                <li>🔥 Dropshipping Avtomatlaşdırma</li>
+                <li>🔥 VIP Satış Alətləri</li>
+                <li>🔥 Prioritet Dəstək</li>
+            </ul>
+            <button class="btn vip-btn">AL</button>
+        </div>
+
+        <div class="card">
+            <h3 style="color: #3b82f6;">Enterprise</h3>
+            <p>Professional sistemlər</p>
+            <hr style="border: 0.1px solid #334155;">
+            <h2>40 AZN</h2>
+            <ul>
+                <li>📦 Limitsiz Mağaza İmkanı</li>
+                <li>📦 Şəxsi Domen Qoşma</li>
+                <li>📦 7/24 Şəxsi Menecer</li>
+            </ul>
+            <button class="btn">AL</button>
+        </div>
     </div>
 
 </body>
