@@ -157,3 +157,65 @@
 </script>
 </body>
 </html>
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="form-title">Login / Sign Up</h3>
+        
+        <div id="email-step">
+            <input type="email" id="user-email" placeholder="Enter your Gmail">
+            <input type="password" id="user-pass" placeholder="Create Password (min. 6 chars)">
+            <button class="submit-btn" onclick="sendOtp()">SEND CODE TO GMAIL</button>
+        </div>
+
+        <div id="otp-step" style="display: none;">
+            <p style="font-size: 13px; color: #fbbf24;">Check your Gmail for the 6-digit code!</p>
+            <input type="text" id="otp-code" placeholder="Enter 6-digit code" maxlength="6">
+            <button class="submit-btn" style="background: #3b82f6;" onclick="verifyOtp()">VERIFY & ENTER</button>
+            <button class="login-btn" style="border:none; font-size: 12px;" onclick="backToEmail()">Back</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal() { document.getElementById('authModal').style.display = "block"; }
+    function closeModal() { document.getElementById('authModal').style.display = "none"; }
+    function backToEmail() {
+        document.getElementById('email-step').style.display = "block";
+        document.getElementById('otp-step').style.display = "none";
+    }
+
+    function sendOtp() {
+        const email = document.getElementById('user-email').value.trim();
+        const pass = document.getElementById('user-pass').value.trim();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // 1. Sərt Yoxlama (Validasiya)
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid Gmail address!");
+            return;
+        }
+        if (pass.length < 6) {
+            alert("Password must be at least 6 characters!");
+            return;
+        }
+
+        // 2. Simulyasiya: Kodu göndər
+        console.log("OTP Sent to: " + email);
+        document.getElementById('email-step').style.display = "none";
+        document.getElementById('otp-step').style.display = "block";
+        alert("Verification code has been sent to " + email);
+    }
+
+    function verifyOtp() {
+        const code = document.getElementById('otp-code').value.trim();
+
+        // Şimdilik test kodu olaraq '123456' qoyuram
+        if (code === "123456") {
+            alert("Identity verified! Welcome to Eternal.");
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Wrong code, ayqa! Check your Gmail again.");
+        }
+    }
+</script>
