@@ -125,145 +125,130 @@
         </div>
     </div>
 </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eternal | Global Hub</title>
+    <style>
+        :root { --blue: #3b82f6; --bg: #0f172a; --card-bg: #1e293b; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
+        
+        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
+        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
+        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
+        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
+        .reg-btn { background: var(--blue); color: white; }
 
-<script>
-    let currentRole = 'buyer';
-    function openModal() { document.getElementById('authModal').style.display = "block"; }
-    function closeModal() { document.getElementById('authModal').style.display = "none"; }
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 30px; border: 1px solid var(--blue); width: 400px; border-radius: 20px; position: relative; }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
+        
+        .tab-menu { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
+        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; }
+        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
 
-    function switchTab(role) {
-        currentRole = role;
-        document.getElementById('tab-buyer').className = role === 'buyer' ? 'tab active-tab' : 'tab';
-        document.getElementById('tab-seller').className = role === 'seller' ? 'tab active-tab' : 'tab';
-        const fields = document.getElementById('form-fields');
-        const title = document.getElementById('form-title');
-        const note = document.getElementById('footer-note');
+        input, select { width: 95%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 14px; }
+        .submit-btn { width: 100%; padding: 14px; background: #10b981; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; }
+        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; text-align: center; }
+    </style>
+</head>
+<body>
 
-        if (role === 'buyer') {
-            title.innerText = "Buyer Access";
-            fields.innerHTML = '<input type="email" placeholder="Email Address"><input type="password" placeholder="Password">';
-            note.innerHTML = "Secure access for global buyers.";
-        } else {
-            title.innerText = "Seller Registration";
-            fields.innerHTML = '<input type="email" placeholder="Business Email"><input type="password" placeholder="Password">';
-            note.innerHTML = "<b>NOTE:</b> Phone verification is only required for the first withdrawal of funds.";
-        }
-    }
+<nav>
+    <div class="logo">ETERNAL</div>
+    <div class="auth-btns">
+        <button class="login-btn" onclick="openModal('login')">Login</button>
+        <button class="reg-btn" onclick="openModal('signup')">Sign Up</button>
+    </div>
+</nav>
 
-    function handleAuth() {
-        alert("Success! Accessing as " + currentRole);
-        closeModal();
-    }
-</script>
-</body>
-</html>
 <div id="authModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h3 id="form-title">Login / Sign Up</h3>
         
-        <div id="email-step">
-            <input type="email" id="user-email" placeholder="Enter your Gmail">
-            <input type="password" id="user-pass" placeholder="Create Password (min. 6 chars)">
-            <button class="submit-btn" onclick="sendOtp()">SEND CODE TO GMAIL</button>
+        <div class="tab-menu">
+            <div id="tab-buyer" class="tab active-tab" onclick="switchRole('buyer')">Buyer</div>
+            <div id="tab-seller" class="tab" onclick="switchRole('seller')">Seller</div>
         </div>
 
-        <div id="otp-step" style="display: none;">
-            <p style="font-size: 13px; color: #fbbf24;">Check your Gmail for the 6-digit code!</p>
-            <input type="text" id="otp-code" placeholder="Enter 6-digit code" maxlength="6">
-            <button class="submit-btn" style="background: #3b82f6;" onclick="verifyOtp()">VERIFY & ENTER</button>
-            <button class="login-btn" style="border:none; font-size: 12px;" onclick="backToEmail()">Back</button>
-        </div>
+        <h3 id="form-title" style="margin: 0 0 15px 0;">Create Account</h3>
+        <div id="form-fields">
+            </div>
+        
+        <button id="main-submit-btn" class="submit-btn" onclick="handleFinalAction()">CONTINUE</button>
+        <div class="footer-note" id="footer-note">Secure access for global users.</div>
     </div>
 </div>
 
 <script>
-    function openModal() { document.getElementById('authModal').style.display = "block"; }
-    function closeModal() { document.getElementById('authModal').style.display = "none"; }
-    function backToEmail() {
-        document.getElementById('email-step').style.display = "block";
-        document.getElementById('otp-step').style.display = "none";
+    let currentRole = 'buyer';
+    let currentMode = 'signup';
+
+    function openModal(mode) {
+        currentMode = mode;
+        document.getElementById('authModal').style.display = "block";
+        renderFields();
     }
 
-    function sendOtp() {
-        const email = document.getElementById('user-email').value.trim();
-        const pass = document.getElementById('user-pass').value.trim();
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        // 1. Sərt Yoxlama (Validasiya)
-        if (!emailPattern.test(email)) {
-            alert("Please enter a valid Gmail address!");
-            return;
-        }
-        if (pass.length < 6) {
-            alert("Password must be at least 6 characters!");
-            return;
-        }
-
-        // 2. Simulyasiya: Kodu göndər
-        console.log("OTP Sent to: " + email);
-        document.getElementById('email-step').style.display = "none";
-        document.getElementById('otp-step').style.display = "block";
-        alert("Verification code has been sent to " + email);
+    function closeModal() {
+        document.getElementById('authModal').style.display = "none";
     }
 
-    function verifyOtp() {
-        const code = document.getElementById('otp-code').value.trim();
+    function switchRole(role) {
+        currentRole = role;
+        document.getElementById('tab-buyer').className = role === 'buyer' ? 'tab active-tab' : 'tab';
+        document.getElementById('tab-seller').className = role === 'seller' ? 'tab active-tab' : 'tab';
+        renderFields();
+    }
 
-        // Şimdilik test kodu olaraq '123456' qoyuram
-        if (code === "123456") {
-            alert("Identity verified! Welcome to Eternal.");
-            window.location.href = "dashboard.html";
+    function renderFields() {
+        const fields = document.getElementById('form-fields');
+        const title = document.getElementById('form-title');
+        const btn = document.getElementById('main-submit-btn');
+
+        if (currentMode === 'login') {
+            title.innerText = "Welcome Back";
+            btn.innerText = "LOGIN";
+            fields.innerHTML = `
+                <input type="email" id="log-email" placeholder="Email Address">
+                <input type="password" id="log-pass" placeholder="Password">
+            `;
         } else {
-            alert("Wrong code, ayqa! Check your Gmail again.");
+            title.innerText = currentRole === 'seller' ? "Seller Registration" : "Buyer Registration";
+            btn.innerText = "CREATE ACCOUNT";
+            if (currentRole === 'seller') {
+                fields.innerHTML = `
+                    <div style="display: flex; gap: 5px;">
+                        <input type="text" placeholder="First Name">
+                        <input type="text" placeholder="Last Name">
+                    </div>
+                    <input type="text" placeholder="Store Name (Brand)">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="text" placeholder="Country">
+                        <input type="text" placeholder="City">
+                    </div>
+                    <input type="email" placeholder="Gmail Address">
+                    <input type="password" placeholder="Password (min. 6 chars)">
+                `;
+            } else {
+                fields.innerHTML = `
+                    <input type="text" placeholder="Full Name">
+                    <input type="email" placeholder="Gmail Address">
+                    <input type="password" placeholder="Password">
+                `;
+            }
         }
+    }
+
+    function handleFinalAction() {
+        // Test üçün birbaşa yönləndirmə
+        alert("Success! Welcome to the Eternal system.");
+        window.location.href = "dashboard.html";
     }
 </script>
-<div id="seller-reg-fields" style="display: none; max-height: 400px; overflow-y: auto; padding-right: 10px;">
-    <div style="display: flex; gap: 10px;">
-        <input type="text" id="first-name" placeholder="First Name">
-        <input type="text" id="last-name" placeholder="Last Name">
-    </div>
-    <input type="text" id="store-name" placeholder="Store Name (e.g. MyShop)">
-    
-    <div style="display: flex; gap: 10px;">
-        <input type="text" id="country" placeholder="Country">
-        <input type="text" id="city" placeholder="City">
-    </div>
 
-    <select id="store-category" style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white;">
-        <option value="">Select Store Category</option>
-        <option value="electronics">Electronics</option>
-        <option value="fashion">Fashion & Clothing</option>
-        <option value="home">Home & Decor</option>
-        <option value="other">Other</option>
-    </select>
-
-    <input type="email" id="seller-email" placeholder="Gmail Address">
-    <input type="password" id="seller-pass" placeholder="Create Password">
-    
-    <button class="submit-btn" onclick="processSellerReg()">CREATE MY STORE</button>
-</div>
-<div id="buyer-reg-fields" style="padding: 10px 0;">
-    <div style="display: flex; gap: 10px;">
-        <input type="text" id="buyer-first-name" placeholder="First Name">
-        <input type="text" id="buyer-last-name" placeholder="Last Name">
-    </div>
-    
-    <input type="email" id="buyer-email" placeholder="Gmail Address">
-    <input type="password" id="buyer-pass" placeholder="Create Password">
-    
-    <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0; font-size: 12px; color: #94a3b8;">
-        <input type="checkbox" id="buyer-terms" style="width: auto; margin: 0;">
-        <label for="buyer-terms">I agree to the Terms & Privacy Policy</label>
-    </div>
-
-    <button class="submit-btn" onclick="processBuyerReg()" style="background: #3b82f6;">JOIN AS BUYER</button>
-    
-    <p style="font-size: 12px; color: #64748b; margin-top: 15px;">
-        Or sign up instantly with:
-    </p>
-    <button style="width: 100%; padding: 10px; border: 1px solid #334155; background: white; color: black; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
-        <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" width="18"> Continue with Google
-    </button>
-</div>
+</body>
+</html>
