@@ -247,72 +247,95 @@
         <div class="footer-note" id="footer-note">Secure connection established.</div>
     </div>
 </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eternal | Registration Fix</title>
+    <style>
+        :root { --blue: #3b82f6; --bg: #0f172a; --card: #1e293b; }
+        body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; }
+        
+        nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--blue); }
+        .btn { padding: 10px 20px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
+        .blue-btn { background: var(--blue); color: white; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .modal-content { background: var(--card); width: 400px; margin: 50px auto; padding: 30px; border-radius: 15px; border: 1px solid var(--blue); }
+        
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #444; }
+        .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: #888; }
+        .active { color: var(--blue); border-bottom: 2px solid var(--blue); font-weight: bold; }
+
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #000; color: white; }
+        .submit { width: 100%; padding: 15px; background: #10b981; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div style="font-size: 24px; color: var(--blue); font-weight: bold;">ETERNAL</div>
+    <div>
+        <button class="btn" style="background:transparent; color:white;" onclick="startModal('login')">Login</button>
+        <button class="btn blue-btn" onclick="startModal('signup')">Sign Up</button>
+    </div>
+</nav>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span style="float:right; cursor:pointer;" onclick="document.getElementById('myModal').style.display='none'">[X]</span>
+        
+        <div class="tabs">
+            <div id="t-buyer" class="tab active" onclick="setRole('buyer')">Buyer</div>
+            <div id="t-seller" class="tab" onclick="setRole('seller')">Seller</div>
+        </div>
+
+        <h2 id="m-title" style="text-align: center;">Registration</h2>
+        <div id="m-fields"></div>
+        <button class="submit" onclick="go()">CONTINUE</button>
+    </div>
+</div>
 
 <script>
-    let currentRole = 'buyer'; // Default rol
-    let currentMode = 'signup'; // Default rejim
+    let role = 'buyer';
+    let mode = 'signup';
 
-    // Modalı açan funksiya
-    function openModal(mode) {
-        currentMode = mode;
-        document.getElementById('authModal').style.display = "block";
-        renderFields();
+    function startModal(m) {
+        mode = m;
+        document.getElementById('myModal').style.display = 'block';
+        updateUI();
     }
 
-    // Modalı bağlayan funksiya
-    function closeModal() {
-        document.getElementById('authModal').style.display = "none";
+    function setRole(r) {
+        role = r;
+        document.getElementById('t-buyer').className = (r === 'buyer') ? 'tab active' : 'tab';
+        document.getElementById('t-seller').className = (r === 'seller') ? 'tab active' : 'tab';
+        updateUI();
     }
 
-    // Rolu (Buyer/Seller) dəyişən funksiya
-    function switchRole(role) {
-        currentRole = role;
-        document.getElementById('tab-buyer').classList.remove('active-tab');
-        document.getElementById('tab-seller').classList.remove('active-tab');
-        
-        if(role === 'buyer') {
-            document.getElementById('tab-buyer').classList.add('active-tab');
-        } else {
-            document.getElementById('tab-seller').classList.add('active-tab');
-        }
-        renderFields(); // Sahələri yenidən çək
-    }
+    function updateUI() {
+        const fields = document.getElementById('m-fields');
+        const title = document.getElementById('m-title');
 
-    // Əsas "Deyişən" hissə - Sahələri bura yazır
-    function renderFields() {
-        const fieldsDiv = document.getElementById('form-fields');
-        const titleH3 = document.getElementById('form-title');
-        const footer = document.getElementById('footer-note');
-
-        if (currentMode === 'login') {
-            titleH3.innerText = "Welcome Back";
-            footer.innerText = "Enter your credentials to access your account.";
-            fieldsDiv.innerHTML = `
-                <input type="email" id="email" placeholder="Email Address">
-                <input type="password" id="pass" placeholder="Password">
+        if (mode === 'login') {
+            title.innerText = "Welcome Back";
+            fields.innerHTML = `
+                <input type="email" placeholder="Email Address">
+                <input type="password" placeholder="Password">
             `;
         } else {
-            // Sign Up Rejimi
-            if (currentRole === 'seller') {
-                titleH3.innerText = "Seller Registration";
-                footer.innerHTML = "<b>Note:</b> Phone verification required for payouts.";
-                fieldsDiv.innerHTML = `
-                    <div style="display: flex; gap: 5px;">
-                        <input type="text" placeholder="First Name">
-                        <input type="text" placeholder="Last Name">
-                    </div>
+            title.innerText = (role === 'seller') ? "Seller Sign Up" : "Buyer Sign Up";
+            if (role === 'seller') {
+                fields.innerHTML = `
+                    <input type="text" placeholder="First & Last Name">
                     <input type="text" placeholder="Store Name (Brand)">
-                    <div style="display: flex; gap: 5px;">
-                        <input type="text" placeholder="Country">
-                        <input type="text" placeholder="City">
-                    </div>
+                    <input type="text" placeholder="Country / City">
                     <input type="email" placeholder="Gmail Address">
-                    <input type="password" placeholder="Password (min. 6 characters)">
+                    <input type="password" placeholder="Password (min. 6 chars)">
                 `;
             } else {
-                titleH3.innerText = "Buyer Registration";
-                footer.innerText = "Fast sign up for global shoppers.";
-                fieldsDiv.innerHTML = `
+                fields.innerHTML = `
                     <input type="text" placeholder="Full Name">
                     <input type="email" placeholder="Gmail Address">
                     <input type="password" placeholder="Password">
@@ -321,18 +344,10 @@
         }
     }
 
-    // Giriş/Qeydiyyat düyməsinə basanda
-    function handleFinalAction() {
-        alert("Success! Processing your " + currentMode + " request...");
-        if(currentRole === 'seller') {
-            window.location.href = "dashboard.html";
-        } else {
-            alert("Buyer area is coming soon!");
-        }
+    function go() {
+        alert("Success! Entering the system...");
+        window.location.href = (role === 'seller') ? "dashboard.html" : "index.html";
     }
-
-    // İlk açılışda sahələri hazırla
-    renderFields();
 </script>
 
 </body>
