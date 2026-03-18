@@ -7,30 +7,20 @@
     <style>
         :root { --blue: #3b82f6; --bg: #0f172a; --card: #1e293b; --green: #10b981; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
-        
         nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 26px; font-weight: 900; color: var(--blue); letter-spacing: 2px; }
-        .nav-btns button { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; margin-left: 10px; transition: 0.3s; }
+        .nav-btns button { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; margin-left: 10px; }
         .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
         .reg-btn { background: var(--blue); color: white; }
-
-        .hero { text-align: center; padding: 120px 20px; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); }
-        .hero h1 { font-size: 50px; margin-bottom: 10px; color: white; }
-        .hero p { color: #94a3b8; font-size: 20px; max-width: 700px; margin: 0 auto 30px; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
-        .modal-content { background: var(--card); margin: 5% auto; padding: 35px; border: 1px solid var(--blue); width: 420px; border-radius: 25px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tabs { display: flex; margin-bottom: 25px; background: #0f172a; border-radius: 12px; padding: 5px; }
-        .tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; border-radius: 10px; color: #64748b; font-weight: bold; transition: 0.3s; }
+        .hero { text-align: center; padding: 100px 20px; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); }
+        .modal-content { background: var(--card); margin: 50px auto; padding: 30px; border: 1px solid var(--blue); width: 400px; border-radius: 20px; position: relative; }
+        .tabs { display: flex; margin-bottom: 20px; background: #0f172a; border-radius: 10px; padding: 5px; }
+        .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 8px; color: #64748b; font-weight: bold; }
         .tab.active { background: var(--blue); color: white; }
-
         .form-group { margin-bottom: 15px; }
-        input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #334155; background: #020617; color: white; box-sizing: border-box; outline: none; }
-        input:focus { border-color: var(--blue); }
-        .submit-btn { width: 100%; padding: 16px; background: var(--green); border: none; color: white; font-weight: bold; border-radius: 12px; cursor: pointer; margin-top: 10px; font-size: 16px; }
+        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; box-sizing: border-box; outline: none; }
+        .submit-btn { width: 100%; padding: 15px; background: var(--green); border: none; color: white; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -45,21 +35,20 @@
 
 <div class="hero">
     <h1>E-Commerce Reimagined</h1>
-    <p>Mağazanızı qurun, Alibaba məhsullarını tək kliklə inteqrasiya edin və satışa başlayın. İndi qeydiyyatdan keçmək tamamilə pulsuzdur!</p>
-    <button class="reg-btn" style="padding: 15px 45px; font-size: 18px;" onclick="openAuth('signup')">Həmin An Başla (Free)</button>
+    <p>Mağazanızı qurun, Alibaba inteqrasiyası ilə satışa başlayın.</p>
+    <button class="reg-btn" style="padding: 15px 40px; font-size: 18px;" onclick="openAuth('signup')">Həmin An Başla (Free)</button>
 </div>
 
 <div id="authModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeAuth()">&times;</span>
-        <div class="tabs" id="role-tabs">
+        <span style="position:absolute; right:20px; top:15px; cursor:pointer;" onclick="closeAuth()">&times;</span>
+        <div id="role-tabs" class="tabs">
             <div id="tab-buyer" class="tab active" onclick="setRole('buyer')">Buyer</div>
             <div id="tab-seller" class="tab" onclick="setRole('seller')">Seller</div>
         </div>
-        <h2 id="modal-title" style="text-align: center; margin-bottom: 20px;">Create Account</h2>
+        <h2 id="modal-title" style="text-align:center;">Account</h2>
         <div id="dynamic-fields"></div>
         <button class="submit-btn" onclick="submitAuth()">CONTINUE</button>
-        <p id="footer-note" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 15px;">Secure connection active.</p>
     </div>
 </div>
 
@@ -86,14 +75,33 @@
     function updateUI() {
         const fields = document.getElementById('dynamic-fields');
         const title = document.getElementById('modal-title');
-
         if (currentMode === 'login') {
             title.innerText = "Welcome Back";
-            fields.innerHTML = `
-                <input type="email" id="email" placeholder="Gmail Address" class="form-group">
-                <input type="password" id="pass" placeholder="Password" class="form-group">
-            `;
+            fields.innerHTML = <input type="email" id="email" placeholder="Gmail Address" class="form-group"><input type="password" id="pass" placeholder="Password" class="form-group">;
         } else {
             if (currentRole === 'seller') {
-                title.innerText = "Seller Business Account";
-                fields.
+                title.innerText = "Seller Account";
+                fields.innerHTML = `
+                    <div style="display:flex; gap:10px;"><input type="text" placeholder="First Name"><input type="text" placeholder="Last Name"></div>
+                    <input type="text" placeholder="Market Name" class="form-group">
+                    <input type="email" id="email" placeholder="Gmail Address" class="form-group">
+                    <input type="password" id="pass" placeholder="Password" class="form-group">
+                    <div style="font-size:11px; color:#94a3b8;"><input type="checkbox" id="terms" style="width:auto"> I agree to Terms</div>
+                `;
+            } else {
+                title.innerText = "Buyer Account";
+                fields.innerHTML = <input type="text" placeholder="Full Name" class="form-group"><input type="email" id="email" placeholder="Gmail Address" class="form-group"><input type="password" id="pass" placeholder="Password" class="form-group">;
+            }
+        }
+    }
+
+    function submitAuth() {
+        const email = document.getElementById('email')?.value;
+        const pass = document.getElementById('pass')?.value;
+        if (!email || !pass) { alert("Xanaları doldur!"); return; }
+        alert("Success! Redirecting...");
+        window.location.href = (currentRole === 'seller') ? "dashboard.html" : "index.html";
+    }
+</script>
+</body>
+</html>
