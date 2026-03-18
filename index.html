@@ -3,705 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Global Dropshipping Hub</title>
+    <title>Eternal | Global Business Hub</title>
     <style>
-        :root { --blue: #3b82f6; --gold: #fbbf24; --bg: #0f172a; --card-bg: #1e293b; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: white; margin: 0; }
+        :root { --blue: #3b82f6; --bg: #0f172a; --card: #1e293b; --green: #10b981; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: white; margin: 0; }
         
         /* Navigation */
-        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
-        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
-        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; transition: 0.3s; }
+        nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .logo { font-size: 28px; font-weight: 900; color: var(--blue); letter-spacing: 3px; }
+        .nav-btns .btn { padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; margin-left: 10px; transition: 0.3s; }
         .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .login-btn:hover { background: var(--blue); }
         .reg-btn { background: var(--blue); color: white; }
+        .reg-btn:hover { background: #2563eb; }
 
-        /* Hero Section */
-        header { text-align: center; padding: 60px 20px; background: linear-gradient(to bottom, #1e293b, #0f172a); }
-        header h1 { font-size: 42px; margin-bottom: 10px; font-weight: 800; }
-        header p { color: #94a3b8; font-size: 18px; }
+        /* Modal Structure */
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
+        .modal-content { background: var(--card); margin: 50px auto; padding: 40px; border: 1px solid var(--blue); width: 420px; border-radius: 25px; position: relative; box-shadow: 0 0 30px rgba(59, 130, 246, 0.3); }
+        .close-btn { position: absolute; right: 25px; top: 20px; font-size: 28px; cursor: pointer; color: #94a3b8; }
 
-        /* Pricing Cards */
-        .container { display: flex; gap: 25px; justify-content: center; padding: 40px; flex-wrap: wrap; }
-        .card { background: var(--card-bg); border: 1px solid #334155; border-radius: 15px; padding: 30px; width: 280px; text-align: center; transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1); }
-        .vip-card { border: 2px solid var(--gold); transform: scale(1.05); }
-        
-        .price { font-size: 36px; font-weight: bold; margin: 20px 0; color: #fff; }
-        .price span { font-size: 18px; color: #94a3b8; }
-        
-        .features { list-style: none; padding: 0; text-align: left; font-size: 14px; color: #cbd5e1; min-height: 150px; }
-        .features li { margin-bottom: 12px; }
-        
-        .buy-btn { width: 100%; padding: 14px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.2s; }
-        .std-btn { background: var(--blue); color: white; }
-        .vip-btn { background: var(--gold); color: black; }
-        .buy-btn:active { transform: scale(0.98); }
+        /* Tabs */
+        .tabs { display: flex; margin-bottom: 25px; background: #0f172a; border-radius: 12px; padding: 5px; }
+        .tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; border-radius: 10px; transition: 0.3s; font-weight: 600; color: #64748b; }
+        .tab.active { background: var(--blue); color: white; }
 
-        /* Modal Login */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: var(--card-bg); margin: 8% auto; padding: 35px; border: 1px solid var(--blue); width: 360px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
+        /* Inputs */
+        .form-group { margin-bottom: 15px; }
+        input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #334155; background: #020617; color: white; font-size: 15px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--blue); box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
         
-        .tab-menu { display: flex; margin-bottom: 25px; border-bottom: 1px solid #334155; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; }
-        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        input { width: 92%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 15px; }
-        .submit-btn { width: 100%; padding: 14px; background: #10b981; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 16px; }
-        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; line-height: 1.4; }
+        .submit-btn { width: 100%; padding: 16px; background: var(--green); border: none; color: white; font-weight: 800; border-radius: 12px; cursor: pointer; font-size: 16px; margin-top: 20px; text-transform: uppercase; transition: 0.3s; }
+        .submit-btn:hover { background: #059669; transform: translateY(-2px); }
+        
+        .footer-text { font-size: 12px; color: #94a3b8; text-align: center; margin-top: 20px; line-height: 1.6; }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="logo">ETERNAL</div>
-    <div class="auth-btns">
-        <button class="login-btn" onclick="openModal()">Login</button>
-        <button class="reg-btn" onclick="openModal()">Sign Up</button>
+    <div class="nav-btns">
+        <button class="btn login-btn" onclick="openAuth('login')">Login</button>
+        <button class="btn reg-btn" onclick="openAuth('signup')">Sign Up</button>
     </div>
 </nav>
 
-<header>
-    <h1>Global Business Hub</h1>
-    <p>Premium Dropshipping & AI-Powered Trade Solutions</p>
+<header style="text-align:center; padding: 120px 20px; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);">
+    <h1 style="font-size: 48px; margin-bottom: 15px;">E-Commerce Reimagined</h1>
+    <p style="color: #94a3b8; font-size: 20px; max-width: 600px; margin: 0 auto;">Build, manage, and scale your global dropshipping business with AI-powered tools.</p>
 </header>
 
-<div class="container">
-    <div class="card">
-        <h3 style="color: var(--blue);">Standard Plan</h3>
-        <p style="font-size: 13px; color: #94a3b8;">Start your online business</p>
-        <div class="price">$10 <span>/ mo</span></div>
-        <ul class="features">
-            <li>✅ 50 Active Products</li>
-            <li>✅ Basic Seller Analytics</li>
-            <li>✅ Email & Community Support</li>
-        </ul>
-        <button class="buy-btn std-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-
-    <div class="card vip-card">
-        <h3 style="color: var(--gold);">VIP Seller</h3>
-        <p style="font-size: 13px; color: #94a3b8;">The Master Key for Professionals</p>
-        <div class="price">$20 <span>/ mo</span></div>
-        <ul class="features">
-            <li>🔥 1-Click Alibaba Sync</li>
-            <li>🔥 500 Active Products</li>
-            <li>🔥 VIP Sales Dashboard</li>
-            <li>🔥 Priority 24/7 Support</li>
-        </ul>
-        <button class="buy-btn vip-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-
-    <div class="card">
-        <h3 style="color: var(--blue);">Enterprise</h3>
-        <p style="font-size: 13px; color: #94a3b8;">Full System Autonomy</p>
-        <div class="price">$40 <span>/ mo</span></div>
-        <ul class="features">
-            <li>📦 Unlimited Inventory</li>
-            <li>📦 Custom Domain Integration</li>
-            <li>📦 Dedicated Account Manager</li>
-            <li>📦 Full API Access</li>
-        </ul>
-        <button class="buy-btn std-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-</div>
-
 <div id="authModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div class="tab-menu">
-            <div id="tab-buyer" class="tab active-tab" onclick="switchTab('buyer')">Buyer</div>
-            <div id="tab-seller" class="tab" onclick="switchTab('seller')">Seller</div>
-        </div>
-        <h3 id="form-title" style="margin-top: 0;">Buyer Access</h3>
-        <div id="form-fields">
-            <input type="email" placeholder="Email Address">
-            <input type="password" placeholder="Password">
-        </div>
-        <button class="submit-btn" onclick="handleAuth()">CONTINUE</button>
-        <div class="footer-note" id="footer-note">
-            Quick registration for global buyers. No identity check required.
-        </div>
-    </div>
-</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Global Hub</title>
-    <style>
-        :root { --blue: #3b82f6; --bg: #0f172a; --card-bg: #1e293b; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
+        <span class="close-btn" onclick="closeAuth()">&times;</span>
         
-        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
-        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
-        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .reg-btn { background: var(--blue); color: white; }
-
-        /* Modal Styles */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 30px; border: 1px solid var(--blue); width: 400px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tab-menu { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; }
-        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        input, select { width: 95%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 14px; }
-        .submit-btn { width: 100%; padding: 14px; background: #10b981; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; }
-        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; text-align: center; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">ETERNAL</div>
-    <div class="auth-btns">
-        <button class="login-btn" onclick="openModal('login')">Login</button>
-        <button class="reg-btn" onclick="openModal('signup')">Sign Up</button>
-    </div>
-</nav>
-
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        
-        <div class="tab-menu">
-            <div id="tab-buyer" class="tab active-tab" onclick="switchRole('buyer')">Buyer</div>
-            <div id="tab-seller" class="tab" onclick="switchRole('seller')">Seller</div>
+        <div class="tabs" id="role-tabs">
+            <div id="tab-buyer" class="tab active" onclick="setRole('buyer')">Buyer</div>
+            <div id="tab-seller" class="tab" onclick="setRole('seller')">Seller</div>
         </div>
 
-        <h3 id="form-title" style="margin: 0 0 15px 0;">Create Account</h3>
-        <div id="form-fields">
+        <h2 id="modal-title" style="text-align: center; margin-bottom: 20px;">Create Account</h2>
+        
+        <div id="dynamic-fields">
             </div>
-        
-        <button id="main-submit-btn" class="submit-btn" onclick="handleFinalAction()">CONTINUE</button>
-        <div class="footer-note" id="footer-note">Secure access for global users.</div>
-    </div>
-</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Business Hub</title>
-    <style>
-        :root { --blue: #3b82f6; --bg: #0f172a; --card-bg: #1e293b; --green: #10b981; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
-        
-        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
-        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
-        
-        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .reg-btn { background: var(--blue); color: white; }
 
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 30px; border: 1px solid var(--blue); width: 420px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tab-menu { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; transition: 0.3s; }
-        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        input, select { width: 94%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 14px; outline: none; }
-        input:focus { border-color: var(--blue); }
-        
-        .submit-btn { width: 100%; padding: 14px; background: var(--green); border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 16px; }
-        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; text-align: center; line-height: 1.5; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">ETERNAL</div>
-    <div class="auth-btns">
-        <button class="login-btn" onclick="openModal('login')">Login</button>
-        <button class="reg-btn" onclick="openModal('signup')">Sign Up</button>
-    </div>
-</nav>
-
-<header style="text-align:center; padding: 100px 20px;">
-    <h1>Welcome to Eternal Hub</h1>
-    <p>The bridge between global sellers and buyers.</p>
-</header>
-
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        
-        <div class="tab-menu">
-            <div id="tab-buyer" class="tab active-tab" onclick="switchRole('buyer')">Buyer</div>
-            <div id="tab-seller" class="tab" onclick="switchRole('seller')">Seller</div>
-        </div>
-
-        <h3 id="form-title" style="margin: 0 0 15px 0; text-align: center;">Sign Up</h3>
-        
-        <div id="form-fields"></div>
-        
-        <button class="submit-btn" onclick="handleFinalAction()">CONTINUE</button>
-        <div class="footer-note" id="footer-note">Secure connection established.</div>
-    </div>
-</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Global Dropshipping Hub</title>
-    <style>
-        :root { --blue: #3b82f6; --gold: #fbbf24; --bg: #0f172a; --card-bg: #1e293b; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: white; margin: 0; }
-        
-        /* Navigation */
-        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
-        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
-        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; transition: 0.3s; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .login-btn:hover { background: var(--blue); }
-        .reg-btn { background: var(--blue); color: white; }
-
-        /* Hero Section */
-        header { text-align: center; padding: 60px 20px; background: linear-gradient(to bottom, #1e293b, #0f172a); }
-        header h1 { font-size: 42px; margin-bottom: 10px; font-weight: 800; }
-        header p { color: #94a3b8; font-size: 18px; }
-
-        /* Pricing Cards */
-        .container { display: flex; gap: 25px; justify-content: center; padding: 40px; flex-wrap: wrap; }
-        .card { background: var(--card-bg); border: 1px solid #334155; border-radius: 15px; padding: 30px; width: 280px; text-align: center; transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1); }
-        .vip-card { border: 2px solid var(--gold); transform: scale(1.05); }
-        
-        .price { font-size: 36px; font-weight: bold; margin: 20px 0; color: #fff; }
-        .price span { font-size: 18px; color: #94a3b8; }
-        
-        .features { list-style: none; padding: 0; text-align: left; font-size: 14px; color: #cbd5e1; min-height: 150px; }
-        .features li { margin-bottom: 12px; }
-        
-        .buy-btn { width: 100%; padding: 14px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.2s; }
-        .std-btn { background: var(--blue); color: white; }
-        .vip-btn { background: var(--gold); color: black; }
-        .buy-btn:active { transform: scale(0.98); }
-
-        /* Modal Login */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: var(--card-bg); margin: 8% auto; padding: 35px; border: 1px solid var(--blue); width: 360px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tab-menu { display: flex; margin-bottom: 25px; border-bottom: 1px solid #334155; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; }
-        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        input { width: 92%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 15px; }
-        .submit-btn { width: 100%; padding: 14px; background: #10b981; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 16px; }
-        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; line-height: 1.4; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">ETERNAL</div>
-    <div class="auth-btns">
-        <button class="login-btn" onclick="openModal()">Login</button>
-        <button class="reg-btn" onclick="openModal()">Sign Up</button>
-    </div>
-</nav>
-
-<header>
-    <h1>Global Business Hub</h1>
-    <p>Premium Dropshipping & AI-Powered Trade Solutions</p>
-</header>
-
-<div class="container">
-    <div class="card">
-        <h3 style="color: var(--blue);">Standard Plan</h3>
-        <p style="font-size: 13px; color: #94a3b8;">Start your online business</p>
-        <div class="price">$10 <span>/ mo</span></div>
-        <ul class="features">
-            <li>✅ 50 Active Products</li>
-            <li>✅ Basic Seller Analytics</li>
-            <li>✅ Email & Community Support</li>
-        </ul>
-        <button class="buy-btn std-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-
-    <div class="card vip-card">
-        <h3 style="color: var(--gold);">VIP Seller</h3>
-        <p style="font-size: 13px; color: #94a3b8;">The Master Key for Professionals</p>
-        <div class="price">$20 <span>/ mo</span></div>
-        <ul class="features">
-            <li>🔥 1-Click Alibaba Sync</li>
-            <li>🔥 500 Active Products</li>
-            <li>🔥 VIP Sales Dashboard</li>
-            <li>🔥 Priority 24/7 Support</li>
-        </ul>
-        <button class="buy-btn vip-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-
-    <div class="card">
-        <h3 style="color: var(--blue);">Enterprise</h3>
-        <p style="font-size: 13px; color: #94a3b8;">Full System Autonomy</p>
-        <div class="price">$40 <span>/ mo</span></div>
-        <ul class="features">
-            <li>📦 Unlimited Inventory</li>
-            <li>📦 Custom Domain Integration</li>
-            <li>📦 Dedicated Account Manager</li>
-            <li>📦 Full API Access</li>
-        </ul>
-        <button class="buy-btn std-btn" onclick="openModal()">CHOOSE PLAN</button>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Global Dropshipping Hub</title>
-    <style>
-        :root { --blue: #3b82f6; --gold: #fbbf24; --bg: #0f172a; --card-bg: #1e293b; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: white; margin: 0; }
-        
-        /* Navigation */
-        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
-        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
-        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; transition: 0.3s; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .login-btn:hover { background: var(--blue); }
-        .reg-btn { background: var(--blue); color: white; }
-
-        /* Hero Section */
-        header { text-align: center; padding: 60px 20px; background: linear-gradient(to bottom, #1e293b, #0f172a); }
-        header h1 { font-size: 42px; margin-bottom: 10px; font-weight: 800; }
-        header p { color: #94a3b8; font-size: 18px; }
-
-        /* Pricing Cards */
-        .container { display: flex; gap: 25px; justify-content: center; padding: 40px; flex-wrap: wrap; }
-        .card { background: var(--card-bg); border: 1px solid #334155; border-radius: 15px; padding: 30px; width: 280px; text-align: center; transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1); }
-        .vip-card { border: 2px solid var(--gold); transform: scale(1.05); }
-        
-        .price { font-size: 36px; font-weight: bold; margin: 20px 0; color: #fff; }
-        .price span { font-size: 18px; color: #94a3b8; }
-        
-        .features { list-style: none; padding: 0; text-align: left; font-size: 14px; color: #cbd5e1; min-height: 150px; }
-        .features li { margin-bottom: 12px; }
-        
-        .buy-btn { width: 100%; padding: 14px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.2s; }
-        .std-btn { background: var(--blue); color: white; }
-        .vip-btn { background: var(--gold); color: black; }
-        .buy-btn:active { transform: scale(0.98); }
-
-        /* Modal Login */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: var(--card-bg); margin: 8% auto; padding: 35px; border: 1px solid var(--blue); width: 360px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tab-menu { display: flex; margin-bottom: 25px; border-bottom: 1px solid #334155; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; }
-        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        input { width: 92%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 15px; }
-        .submit-btn { width: 100%; padding: 14px; background: #10b981; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 16px; }
-        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; line-height: 1.4; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">ETERNAL</div>
-    <div class="auth-btns">
-        <button class="login-btn" onclick="openModal()">Login</button>
-        <button class="reg-btn" onclick="openModal()">Sign Up</button>
-    </div>
-</nav>
-
-<header>
-    <h1>Global Business Hub</h1>
-    <p>Premium Dropshipping & AI-Powered Trade Solutions</p>
-</header>
-
-<div class="container">
-    <div class="card">
-        <h3 style="color: var(--blue);">Standard Plan</h3>
-        <p style="font-size: 13px; color: #94a3b8;">Start your online business</p>
-        <div class="price">$10 <span>/ mo</span></div>
-        <ul class="features">
-            <li>✅ 50 Active Products</li>
-            <li>✅ Basic Seller Analytics</li>
-            <li>✅ Email & Community Support</li>
-        </ul>
-        <button class="buy-btn std-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-
-    <div class="card vip-card">
-        <h3 style="color: var(--gold);">VIP Seller</h3>
-        <p style="font-size: 13px; color: #94a3b8;">The Master Key for Professionals</p>
-        <div class="price">$20 <span>/ mo</span></div>
-        <ul class="features">
-            <li>🔥 1-Click Alibaba Sync</li>
-            <li>🔥 500 Active Products</li>
-            <li>🔥 VIP Sales Dashboard</li>
-            <li>🔥 Priority 24/7 Support</li>
-        </ul>
-        <button class="buy-btn vip-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-
-    <div class="card">
-        <h3 style="color: var(--blue);">Enterprise</h3>
-        <p style="font-size: 13px; color: #94a3b8;">Full System Autonomy</p>
-        <div class="price">$40 <span>/ mo</span></div>
-        <ul class="features">
-            <li>📦 Unlimited Inventory</li>
-            <li>📦 Custom Domain Integration</li>
-            <li>📦 Dedicated Account Manager</li>
-            <li>📦 Full API Access</li>
-        </ul>
-        <button class="buy-btn std-btn" onclick="openModal()">CHOOSE PLAN</button>
-    </div>
-</div>
-
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div class="tab-menu">
-            <div id="tab-buyer" class="tab active-tab" onclick="switchTab('buyer')">Buyer</div>
-            <div id="tab-seller" class="tab" onclick="switchTab('seller')">Seller</div>
-        </div>
-        <h3 id="form-title" style="margin-top: 0;">Buyer Access</h3>
-        <div id="form-fields">
-            <input type="email" placeholder="Email Address">
-            <input type="password" placeholder="Password">
-        </div>
-        <button class="submit-btn" onclick="handleAuth()">CONTINUE</button>
-        <div class="footer-note" id="footer-note">
-            Quick registration for global buyers. No identity check required.
-        </div>
-    </div>
-</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Global Hub</title>
-    <style>
-        :root { --blue: #3b82f6; --bg: #0f172a; --card-bg: #1e293b; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
-        
-        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
-        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
-        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .reg-btn { background: var(--blue); color: white; }
-
-        /* Modal Styles */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 30px; border: 1px solid var(--blue); width: 400px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tab-menu { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; }
-        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        input, select { width: 95%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 14px; }
-        .submit-btn { width: 100%; padding: 14px; background: #10b981; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; }
-        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; text-align: center; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">ETERNAL</div>
-    <div class="auth-btns">
-        <button class="login-btn" onclick="openModal('login')">Login</button>
-        <button class="reg-btn" onclick="openModal('signup')">Sign Up</button>
-    </div>
-</nav>
-
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        
-        <div class="tab-menu">
-            <div id="tab-buyer" class="tab active-tab" onclick="switchRole('buyer')">Buyer</div>
-            <div id="tab-seller" class="tab" onclick="switchRole('seller')">Seller</div>
-        </div>
-
-        <h3 id="form-title" style="margin: 0 0 15px 0;">Create Account</h3>
-        <div id="form-fields">
-            </div>
-        
-        <button id="main-submit-btn" class="submit-btn" onclick="handleFinalAction()">CONTINUE</button>
-        <div class="footer-note" id="footer-note">Secure access for global users.</div>
-    </div>
-</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Business Hub</title>
-    <style>
-        :root { --blue: #3b82f6; --bg: #0f172a; --card-bg: #1e293b; --green: #10b981; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
-        
-        nav { background: var(--card-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); }
-        .logo { font-size: 26px; font-weight: bold; color: var(--blue); letter-spacing: 2px; }
-        
-        .auth-btns button { margin-left: 10px; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .reg-btn { background: var(--blue); color: white; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 30px; border: 1px solid var(--blue); width: 420px; border-radius: 20px; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
-        
-        .tab-menu { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; text-align: center; color: #94a3b8; font-weight: bold; transition: 0.3s; }
-        .active-tab { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        input, select { width: 94%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-size: 14px; outline: none; }
-        input:focus { border-color: var(--blue); }
-        
-        .submit-btn { width: 100%; padding: 14px; background: var(--green); border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 16px; }
-        .footer-note { font-size: 11px; color: #94a3b8; margin-top: 15px; text-align: center; line-height: 1.5; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">ETERNAL</div>
-    <div class="auth-btns">
-        <button class="login-btn" onclick="openModal('login')">Login</button>
-        <button class="reg-btn" onclick="openModal('signup')">Sign Up</button>
-    </div>
-</nav>
-
-<header style="text-align:center; padding: 100px 20px;">
-    <h1>Welcome to Eternal Hub</h1>
-    <p>The bridge between global sellers and buyers.</p>
-</header>
-
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        
-        <div class="tab-menu">
-            <div id="tab-buyer" class="tab active-tab" onclick="switchRole('buyer')">Buyer</div>
-            <div id="tab-seller" class="tab" onclick="switchRole('seller')">Seller</div>
-        </div>
-
-        <h3 id="form-title" style="margin: 0 0 15px 0; text-align: center;">Sign Up</h3>
-        
-        <div id="form-fields"></div>
-        
-        <button class="submit-btn" onclick="handleFinalAction()">CONTINUE</button>
-        <div class="footer-note" id="footer-note">Secure connection established.</div>
-    </div>
-</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Registration Fix</title>
-    <style>
-        :root { --blue: #3b82f6; --bg: #0f172a; --card: #1e293b; }
-        body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; }
-        
-        nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--blue); }
-        .btn { padding: 10px 20px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
-        .blue-btn { background: var(--blue); color: white; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
-        .modal-content { background: var(--card); width: 400px; margin: 50px auto; padding: 30px; border-radius: 15px; border: 1px solid var(--blue); }
-        
-        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #444; }
-        .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: #888; }
-        .active { color: var(--blue); border-bottom: 2px solid var(--blue); font-weight: bold; }
-
-        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #000; color: white; }
-        .submit { width: 100%; padding: 15px; background: #10b981; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div style="font-size: 24px; color: var(--blue); font-weight: bold;">ETERNAL</div>
-    <div>
-        <button class="btn" style="background:transparent; color:white;" onclick="startModal('login')">Login</button>
-        <button class="btn blue-btn" onclick="startModal('signup')">Sign Up</button>
-    </div>
-</nav>
-
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span style="float:right; cursor:pointer;" onclick="document.getElementById('myModal').style.display='none'">[X]</span>
-        
-        <div class="tabs">
-            <div id="t-buyer" class="tab active" onclick="setRole('buyer')">Buyer</div>
-            <div id="t-seller" class="tab" onclick="setRole('seller')">Seller</div>
-        </div>
-
-        <h2 id="m-title" style="text-align: center;">Registration</h2>
-        <div id="m-fields"></div>
-        <button class="submit" onclick="go()">CONTINUE</button>
+        <button class="submit-btn" onclick="submitAuth()">Continue</button>
+        <p id="footer-note" class="footer-text">Join thousands of businesses worldwide.</p>
     </div>
 </div>
 
 <script>
-    let role = 'buyer';
-    let mode = 'signup';
+    let currentRole = 'buyer'; 
+    let currentMode = 'signup';
 
-    function startModal(m) {
-        mode = m;
-        document.getElementById('myModal').style.display = 'block';
+    function openAuth(mode) {
+        currentMode = mode;
+        document.getElementById('authModal').style.display = 'block';
+        if(mode === 'login') {
+            document.getElementById('role-tabs').style.display = 'none';
+        } else {
+            document.getElementById('role-tabs').style.display = 'flex';
+        }
         updateUI();
     }
 
-    function setRole(r) {
-        role = r;
-        document.getElementById('t-buyer').className = (r === 'buyer') ? 'tab active' : 'tab';
-        document.getElementById('t-seller').className = (r === 'seller') ? 'tab active' : 'tab';
+    function closeAuth() {
+        document.getElementById('authModal').style.display = 'none';
+    }
+
+    function setRole(role) {
+        currentRole = role;
+        document.getElementById('tab-buyer').className = (role === 'buyer') ? 'tab active' : 'tab';
+        document.getElementById('tab-seller').className = (role === 'seller') ? 'tab active' : 'tab';
         updateUI();
     }
 
     function updateUI() {
-        const fields = document.getElementById('m-fields');
-        const title = document.getElementById('m-title');
+        const fields = document.getElementById('dynamic-fields');
+        const title = document.getElementById('modal-title');
+        const footer = document.getElementById('footer-note');
 
-        if (mode === 'login') {
+        if (currentMode === 'login') {
             title.innerText = "Welcome Back";
+            footer.innerText = "Access your personal dashboard and orders.";
             fields.innerHTML = `
-                <input type="email" placeholder="Email Address">
-                <input type="password" placeholder="Password">
+                <input type="email" placeholder="Gmail Address" class="form-group">
+                <input type="password" placeholder="Password" class="form-group">
             `;
         } else {
-            title.innerText = (role === 'seller') ? "Seller Sign Up" : "Buyer Sign Up";
-            if (role === 'seller') {
+            // SIGN UP MODE
+            if (currentRole === 'seller') {
+                title.innerText = "Seller Business Account";
+                footer.innerHTML = "<b>Note:</b> Phone verification is required for the first withdrawal of $ funds.";
                 fields.innerHTML = `
-                    <input type="text" placeholder="First & Last Name">
-                    <input type="text" placeholder="Store Name (Brand)">
-                    <input type="text" placeholder="Country / City">
-                    <input type="email" placeholder="Gmail Address">
-                    <input type="password" placeholder="Password (min. 6 chars)">
+                    <div style="display: flex; gap: 10px;" class="form-group">
+                        <input type="text" placeholder="First Name">
+                        <input type="text" placeholder="Last Name">
+                    </div>
+                    <input type="text" placeholder="Market Name (Brand)" class="form-group">
+                    <div style="display: flex; gap: 10px;" class="form-group">
+                        <input type="text" placeholder="Country">
+                        <input type="text" placeholder="City">
+                    </div>
+                    <select class="form-group">
+                        <option value="">Store Category</option>
+                        <option value="tech">Electronics & Tech</option>
+                        <option value="fashion">Fashion & Apparel</option>
+                        <option value="home">Home & Lifestyle</option>
+                    </select>
+                    <input type="email" placeholder="Gmail Address" class="form-group">
+                    <input type="password" placeholder="Create Password (min. 6 chars)" class="form-group">
                 `;
             } else {
+                title.innerText = "New Buyer Account";
+                footer.innerText = "Start shopping from global stores instantly.";
                 fields.innerHTML = `
-                    <input type="text" placeholder="Full Name">
-                    <input type="email" placeholder="Gmail Address">
-                    <input type="password" placeholder="Password">
+                    <input type="text" placeholder="Full Name" class="form-group">
+                    <input type="email" placeholder="Gmail Address" class="form-group">
+                    <input type="password" placeholder="Create Password" class="form-group">
                 `;
             }
         }
     }
 
-    function go() {
-        alert("Success! Entering the system...");
-        window.location.href = (role === 'seller') ? "dashboard.html" : "index.html";
+    function submitAuth() {
+        alert("Registration Successful! Redirecting...");
+        window.location.href = (currentRole === 'seller') ? "dashboard.html" : "index.html";
+    }
+
+    // Modal kənarına basanda bağlansın
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('authModal')) closeAuth();
     }
 </script>
 
