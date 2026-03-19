@@ -80,18 +80,54 @@
         <h2 class="form-title">Enter Verification Code</h2>
         <p style="color: #94a3b8; margin-bottom: 20px;">A 6-digit code has been sent to your Gmail.</p>
         <input type="text" id="otp-input" placeholder="000000" maxlength="6" style="text-align: center; font-size: 32px; letter-spacing: 12px; background: #111827; margin-bottom: 20px;">
-        <button class="submit-btn" onclick="verifyOTP()">Verify Account</button>
+      <button class="submit-btn" onclick="handleSignUp()" id="mActionBtn">Continue</button>
     </div>
 </div>
 
 <script>
-    // 🛑 DİQQƏT: Bura sənin Firebase API Keylərin lazımdır!
-    const firebaseConfig = {
-        apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
-        authDomain: "eternal-global.firebaseapp.com", 
-        projectId: "sonsuz küresel",
-        appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
-    };
+  // Firebase Məlumatları (Dəyişmə, bunlar belə qalmalıdır)
+  const firebaseConfig = {
+    apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
+    authDomain: "eternal-global.firebaseapp.com",
+    projectId: "sonsuz-kuresel",
+    appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
+  };
+
+  // Sistemi başlat
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const auth = firebase.auth();
+
+  // BU FUNKSİYA DÜYMƏYƏ BAĞLIDIR
+  function handleSignUp() {
+    // Sənin o inputlarının ID-ləri bunlardır:
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    // Alıcı yoxsa Satıcı? (Bunu indi aşağıda HTML-ə əlavə edəcəyik)
+    const roleElement = document.getElementById('userRole');
+    const role = roleElement ? roleElement.value : 'buyer';
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert("Hesab yaradıldı! Xoş gəldiniz.");
+        
+        // Kim haraya getsin?
+        if (role === "seller") {
+          window.location.href = "dashboard.html"; // Satıcı paneli
+        } else {
+          window.location.href = "home.html"; // Alıcı ana səhifəsi
+        }
+      })
+      .catch((error) => {
+        alert("Xəta baş verdi: " + error.message);
+      });
+  }
+</script>
+      });
+  }
+</script>
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
@@ -220,6 +256,34 @@ async function handleForgot() {
             .then(() => alert("Password reset link sent to your Gmail! Check your inbox."))
             .catch(e => alert(e.message));
     }
+    function handleSignUp() {
+    // Sənin HTML-dəki id-lər bunlardır
+    const email = document.getElementById('l_email').value;
+    const password = document.getElementById('l_pass').value;
+    
+    // Alıcı/Satıcı seçimi (userRole id-li select-dən götürür)
+    const roleElement = document.getElementById('userRole');
+    const role = roleElement ? roleElement.value : 'buyer';
+
+    if(!email || !password) {
+        alert("Zəhmət olmasa xanaları doldurun!");
+        return;
+    }
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert("Hesab uğurla yaradıldı!");
+        // Satıcıdırsa dashboard-a, alıcıdırsa home-a göndər
+        if (role === "seller") {
+            window.location.href = "dashboard.html";
+        } else {
+            window.location.href = "home.html";
+        }
+      })
+      .catch((error) => {
+        alert("Xəta: " + error.message);
+      });
+}
 </script>
 
 </body>
