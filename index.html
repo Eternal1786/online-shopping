@@ -197,61 +197,51 @@
                 <div class="input-group">
                     <label>${t.pass}</label>
                     <input type="password" id="l_pass">
-   // 1. Şifrəni göstər/gizlə
-function togglePass(id) {
-    const el = document.getElementById(id);
-    el.type = el.type === "password" ? "text" : "password";
+  // --- BU HİSSƏNİ 201-Cİ SƏTİRDƏN ETİBARƏN YAPIŞDIR ---
+
+// 1. Pəncərəni açan funksiya
+function openModal(mode) {
+    curMode = mode;
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Əgər renderForm funksiyan varsa, onu çağırır
+        if (typeof renderForm === "function") renderForm();
+    }
 }
 
-// 2. Qeydiyyat Funksiyası
+// 2. Pəncərəni bağlayan funksiya
+function closeModal() {
+    document.getElementById('authModal').style.display = 'none';
+    if(document.getElementById('otpModal')) {
+        document.getElementById('otpModal').style.display = 'none';
+    }
+}
+
+// 3. Qeydiyyat Funksiyası
 function handleSignUp() {
-    const email = document.getElementById('l_email').value;
-    const pass = document.getElementById('l_pass').value;
-    const role = document.getElementById('r_gender') ? document.getElementById('r_gender').value : 'buyer';
+    const email = document.getElementById('l_email')?.value;
+    const pass = document.getElementById('l_pass')?.value;
 
     if(!email || !pass) {
-        alert("Xanaları doldurun!");
+        alert("Zəhmət olmasa xanaları doldurun!");
         return;
     }
 
     auth.createUserWithEmailAndPassword(email, pass)
         .then(() => {
-            alert("Hesab yaradıldı! İndi təsdiq kodunu daxil edin.");
+            alert("Hesab yaradıldı! Təsdiq pəncərəsi açılır...");
             document.getElementById('authModal').style.display = 'none';
             document.getElementById('otpModal').style.display = 'flex';
         })
         .catch(error => alert("Xəta: " + error.message));
 }
 
-// 3. Kod Təsdiqi (OTP)
-function verifyOTP() {
-    alert("Hesabınız təsdiqləndi! Xoş gəldiniz.");
-    window.location.href = "home.html";
-}                
-    const email = document.getElementById('l_email').value;
-    const password = document.getElementById('l_pass').value;
-    
-    // Alıcı/Satıcı seçimi (userRole id-li select-dən götürür)
-    const roleElement = document.getElementById('userRole');
-    const role = roleElement ? roleElement.value : 'buyer';
-
-    if(!email || !password) {
-        alert("Zəhmət olmasa xanaları doldurun!");
-        return;
-    }
-
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        alert("Hesab uğurla yaradıldı!");
-        // Satıcıdırsa dashboard-a, alıcıdırsa home-a göndər
-        if (role === "seller") {
-            window.location.href = "dashboard.html";
-        } else {
-            window.location.href = "home.html";
-        }
-      })
-      .catch((error) => {
-        alert("Xəta: " + error.message);
+// 4. Şifrəni göstər/gizlə
+function togglePass(id) {
+    const el = document.getElementById(id);
+    if(el) el.type = el.type === "password" ? "text" : "password";
+}
       });
 }
 </script>
