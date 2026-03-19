@@ -138,10 +138,22 @@
                 </div>
                 <div class="input-group"><label>${t.email}</label><input type="email" id="r_email" placeholder="example@gmail.com"></div>
                 <div class="input-group">
-                    <label>${t.pass}</label>
-                    <input type="password" id="r_pass">
-                    <span class="eye-icon" onclick="togglePass('r_pass')">👁️</span>
-                </div>
+    <label>Gender</label>
+    <select id="r_gender">
+        <option value="" disabled selected>Cinsiyyət seçin</option>
+        <option value="male">Kişi</option>
+        <option value="female">Qadın</option>
+    </select>
+</div>
+              <div class="input-group">
+    <label>Password</label>
+    <div style="position: relative;">
+        <input type="password" id="l_pass" placeholder="••••••••">
+        <span onclick="togglePass('l_pass')" style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 18px;">👁️</span>
+    </div>
+    <a onclick="handleForgot()" style="color: #3b82f6; font-size: 12px; float: right; margin-top: 5px; cursor: pointer;">Forgot Password?</a>
+</div>
+</div>
             `;
         } else {
             body.innerHTML = `
@@ -177,7 +189,20 @@
             const pass = document.getElementById('l_pass').value;
             auth.signInWithEmailAndPassword(email, pass)
                 .then(() => window.location.href = "home.html")
-                .catch(e => { eBox.innerText = e.message; eBox.style.display = 'block'; });
+                .catch(e => { eBox.innerText = e.message; eBox.style.display = 'block'; });// Şifrəmi unutdum funksiyası
+async function handleForgot() {
+    const email = document.getElementById('l_email').value;
+    if (!email) {
+        alert("Lütfən, əvvəlcə Gmail ünvanınızı yazın!");
+        return;
+    }
+    try {
+        await auth.sendPasswordResetEmail(email);
+        alert("Şifrə yeniləmə linki Gmail-inizə göndərildi! Spam qovluğuna baxmağı unutmayın.");
+    } catch (e) {
+        alert("Xəta baş verdi: " + e.message);
+    }
+}
         }
     }
 
@@ -199,3 +224,7 @@
 
 </body>
 </html>
+<div class="input-group">
+    <label>Phone Number</label>
+    <input type="tel" id="r_phone" placeholder="+994 50 000 00 00">
+</div>
