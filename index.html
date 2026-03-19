@@ -197,67 +197,37 @@
                 <div class="input-group">
                     <label>${t.pass}</label>
                     <input type="password" id="l_pass">
-                    <span class="eye-icon" onclick="togglePass('l_pass')">👁️</span>
-                    <a class="footer-link" onclick="handleForgot()">${t.forgot}</a>
-                </div>
-            `;
-        }
-    }
+   // 1. Şifrəni göstər/gizlə
+function togglePass(id) {
+    const el = document.getElementById(id);
+    el.type = el.type === "password" ? "text" : "password";
+}
 
-    function togglePass(id) {
-        const el = document.getElementById(id);
-        el.type = el.type === "password" ? "text" : "password";
-    }
-
-    async function handleSubmit() {
-        const eBox = document.getElementById('error-box');
-        eBox.style.display = 'none';
-        
-        if (curMode === 'signup') {
-            const email = document.getElementById('r_email').value;
-            const pass = document.getElementById('r_pass').value;
-            // Bura Telefon təsdiqi realda SMS ilə olmalıdır, hələlik Gmail OTP-ni işə salaq
-            document.getElementById('authModal').style.display = 'none';
-            document.getElementById('otpModal').style.display = 'flex';
-        } else {
-            // Login Real Firebase Məntiqi
-            const email = document.getElementById('l_email').value;
-            const pass = document.getElementById('l_pass').value;
-            auth.signInWithEmailAndPassword(email, pass)
-                .then(() => window.location.href = "home.html")
-                .catch(e => { eBox.innerText = e.message; eBox.style.display = 'block'; });// Şifrəmi unutdum funksiyası
-async function handleForgot() {
+// 2. Qeydiyyat Funksiyası
+function handleSignUp() {
     const email = document.getElementById('l_email').value;
-    if (!email) {
-        alert("Lütfən, əvvəlcə Gmail ünvanınızı yazın!");
+    const pass = document.getElementById('l_pass').value;
+    const role = document.getElementById('r_gender') ? document.getElementById('r_gender').value : 'buyer';
+
+    if(!email || !pass) {
+        alert("Xanaları doldurun!");
         return;
     }
-    try {
-        await auth.sendPasswordResetEmail(email);
-        alert("Şifrə yeniləmə linki Gmail-inizə göndərildi! Spam qovluğuna baxmağı unutmayın.");
-    } catch (e) {
-        alert("Xəta baş verdi: " + e.message);
-    }
+
+    auth.createUserWithEmailAndPassword(email, pass)
+        .then(() => {
+            alert("Hesab yaradıldı! İndi təsdiq kodunu daxil edin.");
+            document.getElementById('authModal').style.display = 'none';
+            document.getElementById('otpModal').style.display = 'flex';
+        })
+        .catch(error => alert("Xəta: " + error.message));
 }
-        }
-    }
 
-    function verifyOTP() {
-        // Hələlik Gmail-ə real kod getməsi üçün EmailJS və ya backend lazımdır.
-        // Biz real qeydiyyatı bitirək:
-        alert("Account verified! Welcome to Eternal.");
-        window.location.href = "home.html";
-    }
-
-    function handleForgot() {
-        const email = document.getElementById('l_email').value;
-        if(!email) return alert("Please enter your Gmail address first.");
-        auth.sendPasswordResetEmail(email)
-            .then(() => alert("Password reset link sent to your Gmail! Check your inbox."))
-            .catch(e => alert(e.message));
-    }
-    function handleSignUp() {
-    // Sənin HTML-dəki id-lər bunlardır
+// 3. Kod Təsdiqi (OTP)
+function verifyOTP() {
+    alert("Hesabınız təsdiqləndi! Xoş gəldiniz.");
+    window.location.href = "home.html";
+}                
     const email = document.getElementById('l_email').value;
     const password = document.getElementById('l_pass').value;
     
