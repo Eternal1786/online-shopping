@@ -3,138 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Universal Trading</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <title>Eternal | Global Commerce</title>
     <style>
-        :root { --blue: #3b82f6; --bg: #0f172a; --card: #1e293b; --green: #10b981; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
-        nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--blue); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 26px; font-weight: 900; color: var(--blue); letter-spacing: 2px; }
-        .nav-btns { display: flex; align-items: center; gap: 15px; }
-        button { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; border: none; }
-        .login-btn { background: transparent; color: white; border: 1px solid var(--blue) !important; }
-        .reg-btn { background: var(--blue); color: white; }
+        :root { --blue: #3b82f6; --bg: #020617; --card: #0f172a; --text: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
         
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); }
-        .modal-content { background: var(--card); margin: 50px auto; padding: 30px; border: 1px solid var(--blue); width: 400px; border-radius: 20px; position: relative; }
-        .tabs { display: flex; margin-bottom: 20px; background: #0f172a; border-radius: 10px; padding: 5px; }
-        .tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; border-radius: 8px; color: #64748b; font-weight: bold; }
-        .tab.active { background: var(--blue); color: white; }
+        /* Naviqasiya */
+        nav { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* Modal Dizaynı */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; padding: 20px; overflow-y: auto; }
+        .modal-content { background: var(--card); max-width: 450px; margin: 30px auto; padding: 30px; border-radius: 20px; border: 1px solid #334155; position: relative; }
+        
+        /* Form Elementləri */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-group { margin-bottom: 15px; position: relative; }
-        input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #334155; background: #020617; color: white; box-sizing: border-box; outline: none; }
-        .eye-icon { position: absolute; right: 15px; top: 12px; cursor: pointer; opacity: 0.6; }
-        .submit-btn { width: 100%; padding: 16px; background: var(--green); color: white; border-radius: 12px; font-size: 16px; margin-top: 10px; }
+        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #1e293b; background: #020617; color: white; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--blue); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        
+        /* Düymələr */
+        .btn-main { width: 100%; padding: 14px; background: var(--blue); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .eye-btn { position: absolute; right: 12px; top: 10px; cursor: pointer; font-size: 18px; }
+        
+        .lang-btn { background: #1e293b; color: white; border: 1px solid #334155; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="logo">ETERNAL</div>
-    <div class="nav-btns">
-        <select onchange="console.log('Dil dəyişdi: ' + this.value)" style="background:transparent; color:white; border:1px solid #334155; padding:5px; border-radius:5px;">
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <select id="langSelect" onchange="translatePage(this.value)" class="lang-btn">
             <option value="az">AZ</option>
             <option value="en">EN</option>
             <option value="tr">TR</option>
             <option value="ru">RU</option>
         </select>
-        <button class="login-btn" onclick="openAuth('login')">Login</button>
-        <button class="reg-btn" onclick="openAuth('signup')">Sign Up</button>
+        <button onclick="openAuth('login')" style="background:transparent; color:white; border:none; cursor:pointer;" id="nav-login">Login</button>
+        <button onclick="openAuth('signup')" class="btn-main" style="width:auto; padding:8px 20px;" id="nav-signup">Sign Up</button>
     </div>
 </nav>
 
 <div id="authModal" class="modal">
     <div class="modal-content">
-        <span style="position:absolute; right:20px; top:15px; font-size:24px; cursor:pointer;" onclick="closeAuth()">&times;</span>
-        <div id="role-tabs" class="tabs">
-            <div id="tab-buyer" class="tab active" onclick="setRole('buyer')">Alıcı</div>
-            <div id="tab-seller" class="tab" onclick="setRole('seller')">Satıcı</div>
-        </div>
-        <h2 id="modal-title" style="text-align: center; margin-bottom: 20px;">Hesab Yaradın</h2>
-        <div id="dynamic-fields"></div>
-        <button class="submit-btn" onclick="handleSubmit()">Davam Et</button>
-    </div>
-</div>
-
-<div id="otpModal" class="modal">
-    <div class="modal-content" style="text-align:center;">
-        <h2>Təsdiq Kodu</h2>
-        <p>Gmail-ə göndərilən 6 rəqəmli kodu daxil edin:</p>
-        <input type="text" id="otp-input" placeholder="000000" maxlength="6" style="text-align:center; font-size:24px; letter-spacing:8px;">
-        <button class="submit-btn" onclick="verifyOTP()">Təsdiqlə</button>
+        <span onclick="closeAuth()" style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:24px;">&times;</span>
+        <h2 id="m-title" style="text-align:center;">Qeydiyyat</h2>
+        
+        <div id="auth-form">
+            </div>
+        
+        <button class="btn-main" onclick="processAuth()" id="m-btn">Davam Et</button>
     </div>
 </div>
 
 <script>
-    let currentRole = 'buyer'; 
-    let currentMode = 'signup';
+    const translations = {
+        az: { login: "Giriş", signup: "Qeydiyyat", email: "Gmail Ünvanı", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", forgot: "Şifrəmi Unutdum", seller: "Satıcı", buyer: "Alıcı" },
+        en: { login: "Login", signup: "Sign Up", email: "Email Address", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Date of Birth", forgot: "Forgot Password?", seller: "Seller", buyer: "Buyer" },
+        tr: { login: "Giriş", signup: "Kayıt Ol", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", forgot: "Şifremi Unuttum", seller: "Satıcı", buyer: "Alıcı" },
+        ru: { login: "Вход", signup: "Регистрация", email: "Эл. почта", pass: "Пароль", name: "Имя Фамилия", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рождения", forgot: "Забыли пароль?", seller: "Продавец", buyer: "Покупатель" }
+    };
+
+    let curLang = 'az';
+    let curMode = 'signup';
+
+    function translatePage(lang) {
+        curLang = lang;
+        document.getElementById('nav-login').innerText = translations[lang].login;
+        document.getElementById('nav-signup').innerText = translations[lang].signup;
+        if(document.getElementById('authModal').style.display === 'block') updateFields();
+    }
 
     function openAuth(mode) {
-        currentMode = mode;
+        curMode = mode;
         document.getElementById('authModal').style.display = 'block';
-        document.getElementById('role-tabs').style.display = (mode === 'login') ? 'none' : 'flex';
-        updateUI();
+        updateFields();
     }
 
     function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
-    function setRole(role) {
-        currentRole = role;
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById('tab-' + role).classList.add('active');
-        updateUI();
-    }
+    function updateFields() {
+        const f = document.getElementById('auth-form');
+        const t = translations[curLang];
+        document.getElementById('m-title').innerText = t[curMode];
 
-    function updateUI() {
-        const fields = document.getElementById('dynamic-fields');
-        const title = document.getElementById('modal-title');
-
-        if (currentMode === 'login') {
-            title.innerText = "Xoş Gəldiniz";
-            fields.innerHTML = `
-                <input type="email" id="email" placeholder="Gmail ünvanı" class="form-group">
+        if(curMode === 'login') {
+            f.innerHTML = `
+                <input type="email" placeholder="${t.email}" class="form-group">
                 <div class="form-group">
-                    <input type="password" id="pass" placeholder="Şifrə">
-                    <span class="eye-icon" onclick="togglePass()">👁️</span>
+                    <input type="password" id="p1" placeholder="${t.pass}">
+                    <span class="eye-btn" onclick="toggleView('p1')">👁️</span>
                 </div>
-                <p onclick="alert('Şifrə yeniləmə linki göndərildi!')" style="font-size:12px; color:#3b82f6; text-align:right; cursor:pointer;">Şifrəmi unutdum?</p>
+                <p style="color:var(--blue); font-size:12px; text-align:right; cursor:pointer;">${t.forgot}</p>
             `;
         } else {
-            title.innerText = (currentRole === 'seller' ? "Satıcı" : "Alıcı") + " Qeydiyyatı";
-            fields.innerHTML = `
-                <input type="text" placeholder="Ad və Soyad" class="form-group">
-                <select id="gender" class="form-group">
-                    <option value="" disabled selected>Cinsiyyətiniz</option>
-                    <option value="kisi">Kişi</option>
-                    <option value="qadin">Qadın</option>
-                </select>
-                <input type="email" id="email" placeholder="Gmail ünvanı" class="form-group">
+            f.innerHTML = `
+                <input type="text" placeholder="${t.name}" class="form-group">
+                <div class="grid-2 form-group">
+                    <select><option>${t.country}</option><option>Azerbaijan</option><option>Turkey</option><option>USA</option></select>
+                    <input type="text" placeholder="${t.city}">
+                </div>
+                <div class="grid-2 form-group">
+                    <select><option>${t.gender}</option><option>Male</option><option>Female</option></select>
+                    <input type="date" title="${t.dob}">
+                </div>
+                <input type="email" placeholder="${t.email}" class="form-group">
                 <div class="form-group">
-                    <input type="password" id="pass" placeholder="Şifrə">
-                    <span class="eye-icon" onclick="togglePass()">👁️</span>
+                    <input type="password" id="p2" placeholder="${t.pass}">
+                    <span class="eye-btn" onclick="toggleView('p2')">👁️</span>
                 </div>
             `;
         }
     }
 
-    function togglePass() {
-        const p = document.getElementById('pass');
-        p.type = p.type === "password" ? "text" : "password";
+    function toggleView(id) {
+        const x = document.getElementById(id);
+        x.type = x.type === "password" ? "text" : "password";
     }
 
-    function handleSubmit() {
-        if (currentMode === 'signup') {
-            document.getElementById('authModal').style.display = 'none';
-            document.getElementById('otpModal').style.display = 'block';
-        } else {
-            window.location.href = (currentRole === 'seller') ? "dashboard.html" : "index.html";
-        }
-    }
-
-    function verifyOTP() {
-        alert("Hesab təsdiqləndi!");
-        window.location.href = (currentRole === 'seller') ? "dashboard.html" : "index.html";
+    function processAuth() {
+        alert(curLang === 'az' ? "Təsdiq kodu Gmail-ə göndərildi!" : "Verification code sent to Gmail!");
+        // Bura gələcəkdə real OTP funksiyası qoşulacaq
     }
 </script>
+
 </body>
 </html>
