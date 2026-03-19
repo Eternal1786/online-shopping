@@ -165,22 +165,41 @@ function renderForm() {
                 <div class="input-group">
                     <label>${t.pass}</label>
                     <input type="password" id="l_pass">
-// 1. Dillər və Mətnlər
+// === 1. DİLLƏR VƏ MƏTNLƏR ===
 const langData = {
-    en: { title_s: "Create Account", email: "Email", pass: "Password", btn_s: "Sign Up", name: "Full Name", country: "Country", city: "City" },
-    az: { title_s: "Hesab Yaradın", email: "Gmail Ünvanı", pass: "Şifrə", btn_s: "Qeydiyyat", name: "Ad Soyad", country: "Ölkə", city: "Şəhər" }
+    en: { navLogin: "Login", navSignup: "Join Now", title_s: "Create Account", email: "Email", pass: "Password", btn_s: "Sign Up", name: "Full Name", country: "Country", city: "City" },
+    az: { navLogin: "Giriş", navSignup: "Qeydiyyat", title_s: "Hesab Yaradın", email: "Gmail", pass: "Şifrə", btn_s: "Qeydiyyat", name: "Ad Soyad", country: "Ölkə", city: "Şəhər" }
 };
 
 let curLang = 'en';
-let curMode = 'signup';
 
-// 2. Formanı səliqəli şəkildə pəncərənin içinə yığan funksiya
+// === 2. DİLİ DƏYİŞƏN FUNKSİYA ===
+function updateLanguage(val) {
+    curLang = val;
+    const t = langData[val];
+    const nL = document.getElementById('navLogin');
+    const nS = document.getElementById('navSignup');
+    if(nL) nL.innerText = t.navLogin;
+    if(nS) nS.innerText = t.navSignup;
+    if (document.getElementById('authModal').style.display === 'flex') renderForm();
+}
+
+// === 3. MODAL VƏ FORMA İDARƏSİ ===
+function openModal(mode) {
+    document.getElementById('authModal').style.display = 'flex';
+    renderForm();
+}
+
+function closeModal() {
+    document.getElementById('authModal').style.display = 'none';
+}
+
 function renderForm() {
     const t = langData[curLang];
-    const formBody = document.getElementById('formBody');
-    if (!formBody) return;
+    const body = document.getElementById('formBody');
+    if (!body) return;
 
-    formBody.innerHTML = `
+    body.innerHTML = `
         <div class="input-group"><label>${t.name}</label><input type="text" id="l_name"></div>
         <div class="grid" style="display: flex; gap: 10px;">
             <div class="input-group" style="flex: 1;"><label>${t.country}</label><input type="text" id="l_country"></div>
@@ -189,41 +208,26 @@ function renderForm() {
         <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
         <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"></div>
     `;
-    
     document.getElementById('mTitle').innerText = t.title_s;
     document.getElementById('mActionBtn').innerText = t.btn_s;
 }
 
-// 3. Pəncərə İdarəetməsi
-function openModal(mode) {
-    curMode = mode;
-    const modal = document.getElementById('authModal');
-    if (modal) {
-        modal.style.display = 'flex';
-        renderForm();
-    }
-}
-
-function closeModal() {
-    document.getElementById('authModal').style.display = 'none';
-}
-
-// 4. Qeydiyyat düyməsinə basanda işləyən funksiya
+// === 4. QEYDİYYAT FUNKSİYASI ===
 function handleSignUp() {
-    const email = document.getElementById('l_email')?.value;
-    const pass = document.getElementById('l_pass')?.value;
+    const email = document.getElementById('l_email').value;
+    const pass = document.getElementById('l_pass').value;
 
     if (!email || !pass) {
-        alert("Zəhmət olmasa bütün xanaları doldurun!");
+        alert("Bütün xanaları doldurun!");
         return;
     }
 
     auth.createUserWithEmailAndPassword(email, pass)
         .then(() => {
-            alert("Hesab uğurla yaradıldı!");
+            alert("Uğurla qeydiyyatdan keçdiniz!");
             closeModal();
         })
-        .catch(error => alert("Xəta: " + error.message));
+        .catch((error) => alert("Xəta: " + error.message));
 }
 }
 }
