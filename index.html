@@ -124,56 +124,25 @@
         alert("Xəta baş verdi: " + error.message);
       });
   }
+// Funksiyanın bitdiyi yerdən sonra yapışdır:
+function renderForm() {
+    const t = langData[curLang];
+    const body = document.getElementById('formBody');
+    if (!body) return;
+
+    body.innerHTML = `
+        <div class="input-group"><label>${t.name}</label><input type="text"></div>
+        <div class="grid">
+            <div class="input-group"><label>${t.country}</label><input type="text"></div>
+            <div class="input-group"><label>${t.city}</label><input type="text"></div>
+        </div>
+        <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
+        <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"></div>
+    `;
+}
+
+// BÜTÜN funksiyalar bitəndən sonra script-i bağla:
 </script>
-      });
-  }
-</script>
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    const langData = {
-        en: { title_s: "Create Account", title_l: "Welcome Back", name: "Full Name", email: "Email Address", pass: "Password", country: "Country", city: "City", dob: "Date of Birth", phone: "Phone Number", forgot: "Forgot Password?", btn_s: "Sign Up", btn_l: "Login" },
-        az: { title_s: "Hesab Yaradın", title_l: "Xoş Gəldiniz", name: "Ad Soyad", email: "Gmail Ünvanı", pass: "Şifrə", country: "Ölkə", city: "Şəhər", dob: "Doğum Tarixi", phone: "Telefon Nömrəsi", forgot: "Şifrəmi Unutdum?", btn_s: "Qeydiyyat", btn_l: "Giriş" },
-        tr: { title_s: "Hesap Oluştur", title_l: "Tekrar Hoşgeldiniz", name: "Ad Soyad", email: "E-posta", pass: "Şifre", country: "Ülke", city: "Şehir", dob: "Doğum Tarihi", phone: "Telefon Numarası", forgot: "Şifremi Unuttum?", btn_s: "Kayıt Ol", btn_l: "Giriş Yap" }
-    };
-
-    let curMode = 'signup';
-    let curLang = 'en';
-
-    function updateLanguage(val) {
-        curLang = val;
-        document.getElementById('curLang').innerText = val.toUpperCase();
-        document.getElementById('navLogin').innerText = langData[val].nav_login || "Login";
-        document.getElementById('navSignup').innerText = langData[val].nav_signup || "Join Now";
-        if (document.getElementById('authModal').style.display === 'flex') renderForm();
-    }
-
-    function toggleModal(mode) {
-        curMode = mode;
-        document.getElementById('authModal').style.display = 'flex';
-        renderForm();
-    }
-    function closeModal() { document.getElementById('authModal').style.display = 'none'; }
-
-    function renderForm() {
-        const t = langData[curLang] || langData['en'];
-        const body = document.getElementById('formBody');
-        document.getElementById('mTitle').innerText = (curMode === 'signup') ? t.title_s : t.title_l;
-        document.getElementById('mActionBtn').innerText = (curMode === 'signup') ? t.btn_s : t.btn_l;
-
-        if (curMode === 'signup') {
-            body.innerHTML = `
-                <div class="input-group"><label>${t.name}</label><input type="text" id="r_name" placeholder="John Doe"></div>
-                <div class="grid">
-                    <div class="input-group"><label>${t.country}</label><select id="r_country"><option>Azerbaijan</option><option>Turkey</option><option>USA</option></select></div>
-                    <div class="input-group"><label>${t.city}</label><input type="text" id="r_city" placeholder="Baku"></div>
-                </div>
-                <div class="grid">
-                    <div class="input-group"><label>${t.phone}</label><input type="tel" id="r_phone" placeholder="+994 50 000 00 00"></div>
-                    <div class="input-group"><label>${t.dob}</label><input type="date" id="r_dob"></div>
-                </div>
-                <div class="input-group"><label>${t.email}</label><input type="email" id="r_email" placeholder="example@gmail.com"></div>
-                <div class="input-group">
     <label>Gender</label>
     <select id="r_gender">
         <option value="" disabled selected>Cinsiyyət seçin</option>
