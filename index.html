@@ -60,7 +60,7 @@
             </div>
         </div>
         <button class="btn btn-outline" onclick="toggleModal('login')" id="navLogin">Login</button>
-        <button class="btn btn-primary" onclick="toggleModal('signup')" id="navSignup">Join Now</button>
+        <button id="navSignup" class="nav-btn" onclick="openModal('signup')">Join Now</button>
     </div>
 </nav>
 
@@ -71,7 +71,7 @@
         <div id="error-box" class="error-msg"></div>
         <div id="formBody">
             </div>
-        <button class="submit-btn" onclick="handleSubmit()" id="mActionBtn">Continue</button>
+        <button class="submit-btn" onclick="handleSignUp()" id="mActionBtn">Continue</button>
     </div>
 </div>
 
@@ -80,7 +80,7 @@
         <h2 class="form-title">Enter Verification Code</h2>
         <p style="color: #94a3b8; margin-bottom: 20px;">A 6-digit code has been sent to your Gmail.</p>
         <input type="text" id="otp-input" placeholder="000000" maxlength="6" style="text-align: center; font-size: 32px; letter-spacing: 12px; background: #111827; margin-bottom: 20px;">
-      <button class="submit-btn" onclick="handleSignUp()" id="mActionBtn">Continue</button>
+      <button class="submit-btn" onclick="verifyOTP()" id="vActionBtn">verifyAccount</button>
     </div>
 </div>
 
@@ -102,8 +102,8 @@
   // BU FUNKSİYA DÜYMƏYƏ BAĞLIDIR
   function handleSignUp() {
     // Sənin o inputlarının ID-ləri bunlardır:
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const email = document.getElementById('l_email').value;
+    const password = document.getElementById('l_pass').value;
     
     // Alıcı yoxsa Satıcı? (Bunu indi aşağıda HTML-ə əlavə edəcəyik)
     const roleElement = document.getElementById('userRole');
