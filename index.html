@@ -58,7 +58,6 @@ overflow-y: auto; }
 <section class="hero">
     <p id="hDesc">Expand your business across borders with our high-speed network. Connect, trade, and scale without limits.</p>
     <div style="display:flex; gap:15px;">
-    <h1 id="hTitle">Global Dropshipping...</h1>
     <button class="btn btn-primary" id="heroBtn" onclick="loginAndGo()">Get Started</button>
     </div>
 </section>
@@ -92,8 +91,8 @@ overflow-y: auto; }
     <div class="modal-content">
         <span onclick="closeModal()" style="position:absolute; right:20px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
         <h2 id="mTitle" style="text-align:center;">Account</h2>
-        <div id="formBody"></div>
-        <button class="btn btn-primary" style="width:100%; padding:14px; margin-top:10px;" onclick="handleSubmit()" id="mActionBtn">Continue</button>
+        <div id="formBody"<></div>
+        <button class="btn btn-primary" style="width:100%; padding:14px; margin-top:10px;" onclick="handleAction()" id="mActionBtn">Continue</button>
         
         <button onclick="alert('Firebase Console-da Google aktiv edilməlidir!')" style="width:100%; padding:10px; margin-top:10px; background:white; color:black; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; cursor:pointer; border:none;">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="margin-right:10px;">
@@ -238,6 +237,10 @@ overflow-y: auto; }
     }
     function loginAndGo() {
     window.location.href = "anasayfa.html";
+}
+    function handleSubmit() {
+    alert("Giriş uğurludur! Ana səhifəyə yönləndirilirsiniz...");
+    window.location.href = "anasayfa.html"; // Bax, bizi xilas edən sətir budur!
 }
 </script>
 
