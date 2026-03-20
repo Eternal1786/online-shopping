@@ -24,14 +24,15 @@
         .hero { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1), transparent 70%); }
         .hero h1 { font-size: 3rem; margin-bottom: 15px; background: linear-gradient(to right, #3b82f6, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInUp 1s ease; }
         .hero p { color: #94a3b8; max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
-
         /* Modal Sistemi */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--card); width: 100%; max-width: 450px; padding: 2rem; border-radius: 20px; border: 1px solid var(--border); position: relative; }
+        .modal-content { background: var(--card); width: 100%; max-width: 450px; padding: 2rem; border-radius: 20px; border: 1px solid var(--border); position: relative; max-height: 90vh; overflow-y: auto;
+overflow-y: auto; }
         .input-group { margin-bottom: 1rem; text-align: left; position: relative; }
         label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
         input, select { width: 100%; padding: 12px; background: #020617; border: 1px solid var(--border); border-radius: 10px; color: white; box-sizing: border-box; }
         .eye-btn { position: absolute; right: 12px; top: 32px; cursor: pointer; opacity: 0.6; }
+        max-height: 85vh; overflow-y: auto;
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -41,7 +42,7 @@
 <nav>
     <a href="#" class="logo">ETERNAL</a>
     <div class="nav-right">
-        <select onchange="updateLanguage(this.value)" id="langSelect" style="background:#0f172a; color:white; border:1px solid #1e293b; padding:5px; border-radius:5px;">
+        <select onchange="updateLanguage(this.value)" id="langSelect" style="background:#0f172a; color:white; border:1px solid #1e293b; padding:5px; border-radius:5px;" >
             <option value="en">EN</option>
             <option value="az">AZ</option>
             <option value="tr">TR</option>
@@ -55,11 +56,15 @@
 </nav>
 
 <section class="hero">
-    <h1 id="hTitle">Global Dropshipping <br> Future is Eternal</h1>
     <p id="hDesc">Expand your business across borders with our high-speed network. Connect, trade, and scale without limits.</p>
     <div style="display:flex; gap:15px;">
-        <button class="btn btn-primary" id="hBtn" onclick="openModal('signup')">Get Started</button>
+    <h1 id="hTitle">Global Dropshipping...</h1>
+    <button class="btn btn-primary" id="heroBtn" onclick="loginAndGo()">Get Started</button>
     </div>
+</section>
+    <section class="container mt-5">
+    <h2 id="aboutTitle">Haqqımızda</h2>
+    <p id="aboutText">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır.</p>
 </section>
 <footer style="padding: 40px 5%; background: #0f172a; border-top: 1px solid #1e293b; margin-top: 50px; text-align: left;">
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
@@ -68,14 +73,14 @@
             <p style="font-size: 0.9rem; color: #94a3b8;">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.</p>
         </div>
         <div>
-            <h4 style="color: white;">Hüquqi Sənədlər</h4>
+            <h5 id="legalDocsTitle">Hüquqi Sənədlər</h5>
             <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
                 <li><a href="privacy.html" style="color: #3b82f6; text-decoration: none;">Gizlilik Sözləşməsi</a></li>
                 <li><a href="terms.html" style="color: #3b82f6; text-decoration: none;">İstifadə Şərtləri</a></li>
             </ul>
         </div>
         <div>
-            <h4 style="color: white;">Dəstək</h4>
+            <h5 id="supportTitle">Dəstək</h5>
             <p style="font-size: 0.9rem; color: #94a3b8;">Naxçıvan, Azərbaycan<br>support@eternal.global</p>
         </div>
     </div>
@@ -147,18 +152,31 @@
     let curLang = 'en';
     let currentMode = 'login';
 
-    function updateLanguage(val) {
-        curLang = val;
-        const t = langData[val];
-        document.getElementById('navLogin').innerText = t.login;
-        document.getElementById('navSignup').innerText = t.signup;
-        document.getElementById('hTitle').innerHTML = t.hTitle;
-        document.getElementById('hDesc').innerText = t.hDesc;
-        if (document.getElementById('authModal').style.display === 'flex') renderForm();
-        document.getElementById('f_about').innerText = t.f_about;
-document.getElementById('f_legal').innerText = t.f_legal;
-document.getElementById('f_support').innerText = t.f_support;
+   function updateLanguage(val) {
+    curLang = val;
+    const t = langData[val];
+
+    // Üst menyu düymələri
+    if(document.getElementById('navLogin')) document.getElementById('navLogin').innerText = t.login;
+    if(document.getElementById('navSignup')) document.getElementById('navSignup').innerText = t.signup;
+
+    // Başlıq və Təsvir
+    if(document.getElementById('hTitle')) document.getElementById('hTitle').innerHTML = t.hTitle;
+    if(document.getElementById('hDesc')) document.getElementById('hDesc').innerText = t.hDesc;
+    
+    // Orta böyük düymə (Get Started)
+    if(document.getElementById('heroBtn')) document.getElementById('heroBtn').innerText = t.heroBtn;
+
+    // Aşağıdakı sənəd başlıqları (Documents)
+    if(document.getElementById('legalDocsTitle')) document.getElementById('legalDocsTitle').innerText = t.legalDocsTitle;
+    if(document.getElementById('supportTitle')) document.getElementById('supportTitle').innerText = t.supportTitle;
+    if(document.getElementById('aboutTitle')) document.getElementById('aboutTitle').innerText = t.aboutTitle;
+
+    // Modal pəncərəsi açıqdırsa, onu da yenilə
+    if (document.getElementById('authModal') && document.getElementById('authModal').style.display === 'flex') {
+        renderForm();
     }
+}
 
     function openModal(mode) {
         currentMode = mode;
@@ -218,6 +236,9 @@ document.getElementById('f_support').innerText = t.f_support;
         const email = prompt("Emailinizi daxil edin:");
         if (email) auth.sendPasswordResetEmail(email).then(() => alert("Link göndərildi!")).catch(e => alert(e.message));
     }
+    function loginAndGo() {
+    window.location.href = "anasayfa.html";
+}
 </script>
 
 </body>
