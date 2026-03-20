@@ -96,7 +96,21 @@
         </button>
     </div>
 </div>
-
+<footer style="padding: 40px 5%; background: #0f172a; border-top: 1px solid #1e293b; margin-top: 50px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+        <div>
+            <h3 style="color: #3b82f6;">ETERNAL</h3>
+            <p id="f_about" style="font-size: 0.9rem; color: #94a3b8;">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır.</p>
+        </div>
+        <div>
+            <h4 id="f_legal" style="color: white;">Hüquqi</h4>
+            <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
+                <li><a href="privacy.html" style="color: #3b82f6; text-decoration: none;">Privacy Policy</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+    
 <script>
     // Firebase Konfiqurasiyası
     const firebaseConfig = {
@@ -110,12 +124,24 @@
 
     // 7 Dil Məlumatı
     const langData = {
-        en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", role: "Role", seller: "Seller", buyer: "Buyer", forgot: "Forgot Password?", male: "Male", female: "Female" },
-        az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", role: "Rütbə", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifrəni unutmusan?", male: "Kişi", female: "Qadın" },
-        tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", role: "Rol", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifremi unuttum?", male: "Erkek", female: "Kadın" },
-        ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", role: "Роль", seller: "Продавец", buyer: "Покупатель", forgot: "Забыли пароль?", male: "Муж", female: "Жен" },
-        zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", role: "角色", seller: "卖家", buyer: "买家", forgot: "忘记密码?", male: "男", female: "女" },
-        ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", role: "دور", seller: "بائع", buyer: "مشتري", forgot: "نسيت؟", male: "ذكر", female: "أنثى" }
+        en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", role: "Role", seller: "Seller", buyer: "Buyer", forgot: "Forgot Password?", male: "Male", female: "Female", f_about: "Our customers are special to us. Your success is our mission. Your reliable partner in global trade.",
+            f_legal: "Legal Documents",
+            f_support: "Support" },
+        az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", role: "Rütbə", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifrəni unutmusan?", male: "Kişi", female: "Qadın", f_about: "Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.",
+            f_legal: "Hüquqi Sənədlər",
+            f_support: "Dəstək" },
+        tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", role: "Rol", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifremi unuttum?", male: "Erkek", female: "Kadın", f_about: "Müşterilerimiz bizim için özeldir. Başarınız bizim misyonumuzdur. Küresel ticarette güvenilir ortağınız.",
+            f_legal: "Hukuki Belgeler",
+            f_support: "Destek" },
+        ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", role: "Роль", seller: "Продавец", buyer: "Покупатель", forgot: "Забыли пароль?", male: "Муж", female: "Жен", f_about: "Наши клиенты особенны для нас. Ваш успех — наша миссия. Ваш надежный партнер в мировой торговле.",
+            f_legal: "Юридические документы",
+            f_support: "Поддержка" },
+        zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", role: "角色", seller: "卖家", buyer: "买家", forgot: "忘记密码?", male: "男", female: "女", f_about: "我们的客户对我们来说很特别。您的成功就是我们的使命。您在全球贸易中值得信赖 partners。",
+            f_legal: "法律文件",
+            f_support: "支持" },
+        ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", role: "دور", seller: "بائع", buyer: "مشتري", forgot: "نسيت؟", male: "ذكر", female: "أنثى", f_about: "عملائنا مميزون بالنسبة لنا. نجاحكم هو مهمتنا. شريككم الموثوق في التجارة العالمية.",
+            f_legal: "الوثائق القانونية",
+            f_support: "الدعم الفني" }
     };
 
     let curLang = 'en';
@@ -129,6 +155,9 @@
         document.getElementById('hTitle').innerHTML = t.hTitle;
         document.getElementById('hDesc').innerText = t.hDesc;
         if (document.getElementById('authModal').style.display === 'flex') renderForm();
+        document.getElementById('f_about').innerText = t.f_about;
+document.getElementById('f_legal').innerText = t.f_legal;
+document.getElementById('f_support').innerText = t.f_support;
     }
 
     function openModal(mode) {
