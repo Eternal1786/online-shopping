@@ -92,7 +92,7 @@ overflow-y: auto; }
         <span onclick="closeModal()" style="position:absolute; right:20px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
         <h2 id="mTitle" style="text-align:center;">Account</h2>
         <div id="formBody"<></div>
-        <button class="btn btn-primary" style="width:100%; padding:14px; margin-top:10px;" onclick="handleAction()" id="mActionBtn">Continue</button>
+        <button class="btn btn-primary" id="mActionBtn" onclick="handleSubmit()" style="width:100%; padding:14px; margin-top:10px;">Continue</button>
         
         <button onclick="alert('Firebase Console-da Google aktiv edilməlidir!')" style="width:100%; padding:10px; margin-top:10px; background:white; color:black; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; cursor:pointer; border:none;">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="margin-right:10px;">
@@ -102,16 +102,17 @@ overflow-y: auto; }
 </div>
 <footer style="padding: 40px 5%; background: #0f172a; border-top: 1px solid #1e293b; margin-top: 50px;">
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
-        <div>
-            <h3 style="color: #3b82f6;">ETERNAL</h3>
-            <p id="f_about" style="font-size: 0.9rem; color: #94a3b8;">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır.</p>
-        </div>
+        <div style="max-width: 800px; margin: 20px auto; text-align: center;">
+    <p id="f_about" style="font-size: 1rem; color: #94a3b8; line-height: 1.6;">
+        Sərhədsiz ticarətin mərkəzi. Bizim missiyamız qlobal bazarda hər bir sahibkar üçün sürətli, təhlükəsiz və limitsiz imkanlar yaratmaqdır.
+    </p>
+</div>
         <div>
             <h4 id="f_legal" style="color: white;">Hüquqi</h4>
             <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
                 <li><a href="privacy.html" style="color: #3b82f6; text-decoration: none;">Privacy Policy</a></li>
             </ul>
-        </div>
+      </div>
     </div>
 </footer>
     
@@ -128,55 +129,63 @@ overflow-y: auto; }
 
     // 7 Dil Məlumatı
     const langData = {
-        en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", role: "Role", seller: "Seller", buyer: "Buyer", forgot: "Forgot Password?", male: "Male", female: "Female", f_about: "Our customers are special to us. Your success is our mission. Your reliable partner in global trade.",
+        en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", role: "Role", seller: "Seller", buyer: "Buyer", forgot: "Forgot Password?", male: "Male", female: "Female", f_about: "Our customers are special to us. Your success is our mission. Your reliable partner in global trade. Legal Documents. Support Center. About Us.",
             f_legal: "Legal Documents",
             f_support: "Support" },
-        az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", role: "Rütbə", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifrəni unutmusan?", male: "Kişi", female: "Qadın", f_about: "Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.",
+            f_about: "The hub of borderless trade. Our mission is to create fast, secure, and limitless opportunities for every entrepreneur in the global market.",
+        az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", role: "Rütbə", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifrəni unutmusan?", male: "Kişi", female: "Qadın", f_about: "Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız. Hüquqi Sənədlər. Dəstək Mərkəzi. Haqqımızda.",
             f_legal: "Hüquqi Sənədlər",
             f_support: "Dəstək" },
-        tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", role: "Rol", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifremi unuttum?", male: "Erkek", female: "Kadın", f_about: "Müşterilerimiz bizim için özeldir. Başarınız bizim misyonumuzdur. Küresel ticarette güvenilir ortağınız.",
+            f_about: "Sərhədsiz ticarətin mərkəzi. Bizim missiyamız qlobal bazarda hər bir sahibkar üçün sürətli, təhlükəsiz və limitsiz imkanlar yaratmaqdır.",
+        tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", role: "Rol", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifremi unuttum?", male: "Erkek", female: "Kadın", f_about: "Müşterilerimiz bizim için özeldir. Başarınız bizim misyonumuzdur. Küresel ticarette güvenilir ortağınız. Hukuki Belgeler. Destek Merkezi. Hakkımızda.",
             f_legal: "Hukuki Belgeler",
             f_support: "Destek" },
-        ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", role: "Роль", seller: "Продавец", buyer: "Покупатель", forgot: "Забыли пароль?", male: "Муж", female: "Жен", f_about: "Наши клиенты особенны для нас. Ваш успех — наша миссия. Ваш надежный партнер в мировой торговле.",
+            f_about: "Sınırsız ticaretin merkezi. Misyonumuz, küresel pazardaki her girişimci için hızlı, güvenli ve sınırsız fırsatlar yaratmaktır.",
+        ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", role: "Роль", seller: "Продавец", buyer: "Покупатель", forgot: "Забыли пароль?", male: "Муж", female: "Жен", f_about: "Наши клиенты особенны для нас. Ваш успех — наша миссия. Ваш надежный партнер в мировой торговле. Юридические документы. Центр поддержки. О нас.",
             f_legal: "Юридические документы",
             f_support: "Поддержка" },
-        zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", role: "角色", seller: "卖家", buyer: "买家", forgot: "忘记密码?", male: "男", female: "女", f_about: "我们的客户对我们来说很特别。您的成功就是我们的使命。您在全球贸易中值得信赖 partners。",
+            f_about: "Центр международной торговли. Наша миссия — создавать быстрые, безопасные и безграничные возможности для каждого предпринимателя.",
+        zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", role: "角色", seller: "卖家", buyer: "买家", forgot: "忘记密码?", male: "男", female: "女", f_about: "我们的客户对我们来说很特别。您的成功就是我们的使命。您在全球贸易中值得信赖 partners。法律文件. 支持中心. 支持中心.",
             f_legal: "法律文件",
             f_support: "支持" },
-        ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", role: "دور", seller: "بائع", buyer: "مشتري", forgot: "نسيت؟", male: "ذكر", female: "أنثى", f_about: "عملائنا مميزون بالنسبة لنا. نجاحكم هو مهمتنا. شريككم الموثوق في التجارة العالمية.",
+            f_about: "无国界贸易中心。我们的使命是为全球市场的每一位企业家创造快速、安全、无限的机会。",
+        ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", role: "دور", seller: "بائع", buyer: "مشتري", forgot: "نسيت؟", male: "ذكر", female: "أنثى", f_about: "عملائنا مميزون بالنسبة لنا. نجاحكم هو مهمتنا. شريككم الموثوق في التجارة العالمية. الوثائق القانونية. مركز الدعم. من نحن.",
             f_legal: "الوثائق القانونية",
-            f_support: "الدعم الفني" }
+            f_support: "الدعم الفني" },
+            f_about: "مركز التجارة بلا حدود. مهمتنا هي خلق فرص سريعة وآمنة وغير محدودة لكل رائد أعمال في السوق العالمية.",
     };
 
     let curLang = 'en';
     let currentMode = 'login';
 
-   function updateLanguage(val) {
+function updateLanguage(val) {
     curLang = val;
     const t = langData[val];
 
-    // Üst menyu düymələri
-    if(document.getElementById('navLogin')) document.getElementById('navLogin').innerText = t.login;
-    if(document.getElementById('navSignup')) document.getElementById('navSignup').innerText = t.signup;
-
-    // Başlıq və Təsvir
     if(document.getElementById('hTitle')) document.getElementById('hTitle').innerHTML = t.hTitle;
     if(document.getElementById('hDesc')) document.getElementById('hDesc').innerText = t.hDesc;
     
-    // Orta böyük düymə (Get Started)
-    if(document.getElementById('heroBtn')) document.getElementById('heroBtn').innerText = t.heroBtn;
+    // Düymələr
+    if(document.getElementById('heroBtn')) document.getElementById('heroBtn').innerText = t.heroBtn || t.hBtn || "Get Started";
+    if(document.getElementById('navLogin')) document.getElementById('navLogin').innerText = t.login;
+    if(document.getElementById('navSignup')) document.getElementById('navSignup').innerText = t.signup;
 
-    // Aşağıdakı sənəd başlıqları (Documents)
-    if(document.getElementById('legalDocsTitle')) document.getElementById('legalDocsTitle').innerText = t.legalDocsTitle;
-    if(document.getElementById('supportTitle')) document.getElementById('supportTitle').innerText = t.supportTitle;
-    if(document.getElementById('aboutTitle')) document.getElementById('aboutTitle').innerText = t.aboutTitle;
+    // Sənədlər (ID-ləri sənin koda görə dəqiqləşdirdim)
+    const legal = document.getElementById('legalDocsTitle') || document.getElementById('f_legal');
+    const support = document.getElementById('supportTitle') || document.getElementById('f_support');
+    const about = document.getElementById('aboutTitle') || document.getElementById('f_about');
 
-    // Modal pəncərəsi açıqdırsa, onu da yenilə
+    if(legal) legal.innerText = t.f_legal || "Legal";
+    if(support) support.innerText = t.f_support || "Support";
+    if(about) about.innerText = t.f_about || "About";
+
+    // O altdakı yazı (GTA missiyası deyil, əsl missiya)
+    if(document.getElementById('aboutText')) document.getElementById('aboutText').innerText = t.aboutText;
+
     if (document.getElementById('authModal') && document.getElementById('authModal').style.display === 'flex') {
         renderForm();
     }
 }
-
     function openModal(mode) {
         currentMode = mode;
         document.getElementById('authModal').style.display = 'flex';
@@ -238,9 +247,11 @@ overflow-y: auto; }
     function loginAndGo() {
     window.location.href = "anasayfa.html";
 }
-    function handleSubmit() {
-    alert("Giriş uğurludur! Ana səhifəyə yönləndirilirsiniz...");
-    window.location.href = "anasayfa.html"; // Bax, bizi xilas edən sətir budur!
+   function handleSubmit() {
+    // Mesaj çıxarırıq
+    alert("Xoş gəldiniz! Yönləndirilirsiniz...");
+    // Səhifəni dəyişirik
+    window.location.href = "anasayfa.html";
 }
 </script>
 
