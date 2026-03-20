@@ -8,22 +8,32 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <style>
         :root { --blue: #3b82f6; --bg: #020617; --card: #0f172a; --border: #1e293b; --text: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
+        
+        /* Naviqasiya */
         nav { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--blue); text-decoration: none; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--blue); text-decoration: none; letter-spacing: 2px; }
         .nav-right { display: flex; gap: 10px; align-items: center; }
-        .btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.3s; }
+        
+        /* Düymələr */
+        .btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.3s; }
         .btn-outline { background: transparent; color: white; border: 1px solid var(--blue); }
         .btn-primary { background: var(--blue); color: white; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+
+        /* Hero Hissəsi (Giriş) */
+        .hero { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1), transparent 70%); }
+        .hero h1 { font-size: 3rem; margin-bottom: 15px; background: linear-gradient(to right, #3b82f6, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInUp 1s ease; }
+        .hero p { color: #94a3b8; max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
+
+        /* Modal Sistemi */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: var(--card); width: 100%; max-width: 450px; padding: 2rem; border-radius: 20px; border: 1px solid var(--border); position: relative; }
         .input-group { margin-bottom: 1rem; text-align: left; position: relative; }
         label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
         input, select { width: 100%; padding: 12px; background: #020617; border: 1px solid var(--border); border-radius: 10px; color: white; box-sizing: border-box; }
-        .eye-btn { position: absolute; right: 12px; top: 32px; cursor: pointer; }
-        .submit-btn { width: 100%; padding: 14px; background: var(--blue); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .footer-link { font-size: 0.8rem; color: var(--blue); cursor: pointer; text-decoration: none; display: block; margin-top: 5px; text-align: right; }
+        .eye-btn { position: absolute; right: 12px; top: 32px; cursor: pointer; opacity: 0.6; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -31,26 +41,43 @@
 <nav>
     <a href="#" class="logo">ETERNAL</a>
     <div class="nav-right">
-        <select onchange="updateLanguage(this.value)" style="background:#0f172a; color:white; border:1px solid #1e293b; border-radius:5px;">
-            <option value="en">EN</option><option value="az">AZ</option><option value="tr">TR</option>
-            <option value="ru">RU</option><option value="zh">CN</option><option value="ar">AR</option>
+        <select onchange="updateLanguage(this.value)" id="langSelect" style="background:#0f172a; color:white; border:1px solid #1e293b; padding:5px; border-radius:5px;">
+            <option value="en">EN</option>
+            <option value="az">AZ</option>
+            <option value="tr">TR</option>
+            <option value="ru">RU</option>
+            <option value="zh">CN</option>
+            <option value="ar">AR</option>
         </select>
         <button class="btn btn-outline" id="navLogin" onclick="openModal('login')">Login</button>
         <button class="btn btn-primary" id="navSignup" onclick="openModal('signup')">Join Now</button>
     </div>
 </nav>
 
+<section class="hero">
+    <h1 id="hTitle">Global Dropshipping <br> Future is Eternal</h1>
+    <p id="hDesc">Expand your business across borders with our high-speed network. Connect, trade, and scale without limits.</p>
+    <div style="display:flex; gap:15px;">
+        <button class="btn btn-primary" id="hBtn" onclick="openModal('signup')">Get Started</button>
+    </div>
+</section>
+
 <div id="authModal" class="modal">
     <div class="modal-content">
         <span onclick="closeModal()" style="position:absolute; right:20px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
-        <h2 id="mTitle">Account</h2>
+        <h2 id="mTitle" style="text-align:center;">Account</h2>
         <div id="formBody"></div>
-        <button class="submit-btn" onclick="handleSubmit()" id="mActionBtn">Continue</button>
+        <button class="btn btn-primary" style="width:100%; padding:14px; margin-top:10px;" onclick="handleSubmit()" id="mActionBtn">Continue</button>
+        
+        <button onclick="alert('Firebase Console-da Google aktiv edilməlidir!')" style="width:100%; padding:10px; margin-top:10px; background:white; color:black; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; cursor:pointer; border:none;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="margin-right:10px;">
+            Google
+        </button>
     </div>
 </div>
 
 <script>
-    // 1. Firebase (Sənin məlumatların)
+    // Firebase Konfiqurasiyası
     const firebaseConfig = {
         apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
         authDomain: "eternal-global.firebaseapp.com",
@@ -60,14 +87,14 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // 2. 7 DİL DESTEGİ
+    // 7 Dil Məlumatı
     const langData = {
-        en: { login: "Login", signup: "Join Now", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "DOB", role: "Role", seller: "Seller", buyer: "Buyer", forgot: "Forgot Password?", male: "Male", female: "Female", welcome: "Welcome!" },
-        az: { login: "Giriş", signup: "Qeydiyyat", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", role: "Rütbə", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifrəni unutmusan?", male: "Kişi", female: "Qadın", welcome: "Xoş gəldiniz!" },
-        tr: { login: "Giriş", signup: "Kayıt Ol", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", role: "Rol", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifremi unuttum?", male: "Erkek", female: "Kadın", welcome: "Hoş geldiniz!" },
-        ru: { login: "Вход", signup: "Регистрация", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", role: "Роль", seller: "Продавец", buyer: "Покупатель", forgot: "Забыли пароль?", male: "Муж", female: "Жен", welcome: "Добро пожаловать!" },
-        zh: { login: "登录", signup: "注册", email: "电子邮件", pass: "密码", name: "全名", country: "国家", city: "城市", gender: "性别", dob: "生日", role: "角色", seller: "卖家", buyer: "买家", forgot: "忘记密码?", male: "男", female: "女", welcome: "欢迎！" },
-        ar: { login: "تسجيل الدخول", signup: "انضم الآن", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", role: "دور", seller: "بائع", buyer: "مشتري", forgot: "نسيت كلمة السر؟", male: "ذكر", female: "أنثى", welcome: "أهلاً بك" }
+        en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", role: "Role", seller: "Seller", buyer: "Buyer", forgot: "Forgot Password?", male: "Male", female: "Female" },
+        az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", role: "Rütbə", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifrəni unutmusan?", male: "Kişi", female: "Qadın" },
+        tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", role: "Rol", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifremi unuttum?", male: "Erkek", female: "Kadın" },
+        ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", role: "Роль", seller: "Продавец", buyer: "Покупатель", forgot: "Забыли пароль?", male: "Муж", female: "Жен" },
+        zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", role: "角色", seller: "卖家", buyer: "买家", forgot: "忘记密码?", male: "男", female: "女" },
+        ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", role: "دور", seller: "بائع", buyer: "مشتري", forgot: "نسيت؟", male: "ذكر", female: "أنثى" }
     };
 
     let curLang = 'en';
@@ -75,8 +102,11 @@
 
     function updateLanguage(val) {
         curLang = val;
-        document.getElementById('navLogin').innerText = langData[val].login;
-        document.getElementById('navSignup').innerText = langData[val].signup;
+        const t = langData[val];
+        document.getElementById('navLogin').innerText = t.login;
+        document.getElementById('navSignup').innerText = t.signup;
+        document.getElementById('hTitle').innerHTML = t.hTitle;
+        document.getElementById('hDesc').innerText = t.hDesc;
         if (document.getElementById('authModal').style.display === 'flex') renderForm();
     }
 
@@ -104,15 +134,15 @@
                 <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
                 <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass">
                 <span class="eye-btn" onclick="togglePass()">👁️</span></div>
-                <a class="footer-link" onclick="handleForgot()">${t.forgot}</a>`;
+                <a style="font-size:0.8rem; color:#3b82f6; cursor:pointer;" onclick="handleForgot()">${t.forgot}</a>`;
         } else {
             body.innerHTML = `
                 <div class="input-group"><label>${t.name}</label><input type="text" id="l_name"></div>
-                <div class="grid">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                     <div class="input-group"><label>${t.country}</label><input type="text" id="l_country"></div>
                     <div class="input-group"><label>${t.city}</label><input type="text" id="l_city"></div>
                 </div>
-                <div class="grid">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                     <div class="input-group"><label>${t.gender}</label><select id="l_gender"><option value="m">${t.male}</option><option value="f">${t.female}</option></select></div>
                     <div class="input-group"><label>${t.dob}</label><input type="date" id="l_dob"></div>
                 </div>
@@ -125,19 +155,20 @@
     function handleSubmit() {
         const email = document.getElementById('l_email').value;
         const pass = document.getElementById('l_pass').value;
-        if (!email || !pass) return alert("Xanaları doldurun!");
+        if (!email || !pass) return alert("Bütün xanaları doldurun!");
 
         if (currentMode === 'login') {
-            auth.signInWithEmailAndPassword(email, pass).then(() => { alert(langData[curLang].welcome); closeModal(); }).catch(e => alert(e.message));
+            auth.signInWithEmailAndPassword(email, pass).then(() => { alert("Xoş gəldiniz!"); closeModal(); }).catch(e => alert(e.message));
         } else {
-            auth.createUserWithEmailAndPassword(email, pass).then(() => { alert(langData[curLang].welcome); closeModal(); }).catch(e => alert(e.message));
+            auth.createUserWithEmailAndPassword(email, pass).then(() => { alert("Qeydiyyat tamamlandı!"); closeModal(); }).catch(e => alert(e.message));
         }
     }
 
     function handleForgot() {
         const email = prompt("Emailinizi daxil edin:");
-        if (email) auth.sendPasswordResetEmail(email).then(() => alert("Şifrə sıfırlama linki göndərildi!")).catch(e => alert(e.message));
+        if (email) auth.sendPasswordResetEmail(email).then(() => alert("Link göndərildi!")).catch(e => alert(e.message));
     }
 </script>
+
 </body>
 </html>
