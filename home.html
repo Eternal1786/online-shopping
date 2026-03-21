@@ -1,46 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eternal | Dashboard</title>
     <style>
         body { 
             background-color: #020617; 
             color: white; 
-            font-family: sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
+            font-family: 'Segoe UI', sans-serif; 
             margin: 0; 
+            display: flex;
         }
-        .welcome-card {
+        /* Sidebar (Yan Menyu) */
+        .sidebar {
+            width: 250px;
             background: #0f172a;
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid #1e293b;
-            text-align: center;
+            height: 100vh;
+            border-right: 1px solid #1e293b;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
-        h1 { color: #3b82f6; }
+        .sidebar h2 { color: #3b82f6; font-size: 1.5rem; margin-bottom: 30px; }
+        .nav-link {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+        .nav-link:hover { background: #1e293b; color: white; }
+        .nav-link.active { background: #3b82f6; color: white; }
+
+        /* Main Content (Əsas Hissə) */
+        .main-content { flex: 1; padding: 40px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .stat-card {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #1e293b;
+        }
+        .stat-card h3 { margin: 0; color: #94a3b8; font-size: 0.9rem; }
+        .stat-card p { font-size: 1.8rem; font-weight: bold; margin: 10px 0 0 0; color: #3b82f6; }
+
         .logout-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
+            margin-top: auto;
+            padding: 12px;
             background: #ef4444;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="welcome-card">
-        <h1>Eternal-a Xoş Gəldiniz!</h1>
-        <p>Hesabınız uğurla təsdiqləndi.</p>
-        <p>Bura sənin şəxsi kabinetindir.</p>
+    <div class="sidebar">
+        <h2>ETERNAL</h2>
+        <a href="#" class="nav-link active">Panel</a>
+        <a href="#" class="nav-link">Sifarişlərim</a>
+        <a href="#" class="nav-link">Məhsullar</a>
+        <a href="#" class="nav-link">Profil</a>
         <button class="logout-btn" onclick="location.href='index.html'">Çıxış et</button>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Xoş gəldiniz, İstifadəçi!</h1>
+            <div style="background: #1e293b; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;">Status: Aktiv</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Ümumi Balans</h3>
+                <p>$0.00</p>
+            </div>
+            <div class="stat-card">
+                <h3>Aktiv Sifarişlər</h3>
+                <p>0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Tamamlananlar</h3>
+                <p>0</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; background: #0f172a; padding: 30px; border-radius: 15px; border: 1px solid #1e293b; text-align: center;">
+            <p style="color: #94a3b8;">Hələ ki, heç bir aktiv fəaliyyətiniz yoxdur. <br> Başlamaq üçün məhsul kataloquna baxa bilərsiniz.</p>
+        </div>
     </div>
 
 </body>
