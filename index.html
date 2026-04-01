@@ -21,16 +21,13 @@
         .hero p{color:#94a3b8;max-width:600px;margin-bottom:30px;font-size:1.1rem;}
         .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
         .modal-content{background:var(--card);width:100%;max-width:450px;padding:2.5rem;border-radius:24px;border:1px solid var(--border);position:relative;max-height:90vh;overflow-y:auto;}
-        .input-group{margin-bottom:1.2rem;text-align:left;position:relative;}
+        .input-group{margin-bottom:1.2rem;text-align:left;}
         label{display:block;font-size:0.85rem;color:#94a3b8;margin-bottom:8px;}
         input,select{width:100%;padding:14px;background:#020617;border:1px solid var(--border);border-radius:12px;color:white;box-sizing:border-box;outline:none;}
-        input:focus{border-color:var(--blue);}
-        .eye-btn{position:absolute;right:15px;top:40px;cursor:pointer;opacity:0.6;}
         footer{padding:60px 5%;background:#0f172a;border-top:1px solid var(--border);margin-top:50px;}
-        .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;max-width:1200px;margin:0 auto;}
-        footer h3, footer h4, footer h5{color:var(--blue);margin-top:0;}
-        footer p, footer li a{color:#94a3b8;font-size:0.95rem;text-decoration:none;line-height:1.6;}
-        footer ul{list-style:none;padding:0;}
+        .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;}
+        footer h3, h5{color:var(--blue);margin-top:0;}
+        footer p, footer li a{color:#94a3b8;font-size:0.95rem;text-decoration:none;}
     </style>
 </head>
 <body>
@@ -38,7 +35,7 @@
 <nav>
     <a href="#" class="logo">ETERNAL</a>
     <div class="nav-right">
-        <select id="langSelect" onchange="updateLanguage(this.value)" style="background:#1e293b;color:white;border:none;padding:8px;border-radius:8px;cursor:pointer;">
+        <select id="langSelect" onchange="updateLanguage(this.value)" style="background:#1e293b;color:white;border:none;padding:8px;border-radius:8px;">
             <option value="en">EN</option>
             <option value="az">AZ</option>
             <option value="tr">TR</option>
@@ -54,7 +51,7 @@
 <section class="hero">
     <h1 id="hTitle">Global Dropshipping <br> Future is Eternal</h1>
     <p id="hDesc">Expand your business across borders.</p>
-    <button class="btn btn-primary" id="heroBtn" onclick="openModal('signup')" style="padding:15px 40px; font-size:1.1rem;">Get Started</button>
+    <button class="btn btn-primary" id="heroBtn" onclick="openModal('signup')">Get Started</button>
 </section>
 
 <div id="authModal" class="modal">
@@ -62,19 +59,19 @@
         <span onclick="closeModal()" style="position:absolute;right:25px;top:20px;cursor:pointer;font-size:28px;color:#94a3b8;">&times;</span>
         <h2 id="mTitle" style="text-align:center;margin-bottom:25px;">Account</h2>
         <div id="formBody"></div>
-        <button class="btn btn-primary" id="mActionBtn" style="width:100%;padding:16px;margin-top:20px;font-size:1rem;" onclick="handleSubmit()">Continue</button>
+        <button class="btn btn-primary" id="mActionBtn" style="width:100%;padding:16px;margin-top:20px;" onclick="handleAuthAction()">Continue</button>
     </div>
 </div>
 
 <footer>
     <div class="footer-grid">
         <div>
-            <h3 id="f_logo">ETERNAL</h3>
-            <p id="f_about">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.</p>
+            <h3>ETERNAL</h3>
+            <p id="f_about">Qlobal ticarətdə etibarlı tərəfdaşınız. Sizin uğurunuz bizim missiyamızdır.</p>
         </div>
         <div>
             <h5 id="f_legal_title">Hüquqi Sənədlər</h5>
-            <ul>
+            <ul style="list-style:none;padding:0;">
                 <li><a href="privacy.html">Gizlilik Siyasəti</a></li>
                 <li><a href="terms.html">İstifadə Şərtləri</a></li>
             </ul>
@@ -84,15 +81,12 @@
             <p>Naxçıvan, Azərbaycan<br>support@eternal.global</p>
         </div>
     </div>
-    <div style="text-align:center;margin-top:50px;padding-top:20px;border-top:1px solid var(--border);font-size:0.8rem;color:#475569;">
-        © 2026 Eternal Global Network. Bütün hüquqlar qorunur.
-    </div>
 </footer>
 
 <script>
-// Firebase Konfiqurasiyası - Sənin Google Cloud API Key-ni bura yazdım (Sızdırılan açar)
+// Firebase Konfiqurasiyası
 const firebaseConfig = {
-    apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkfI0z66vVv9jIk", 
+    apiKey: "", 
     authDomain: "eternal-global.firebaseapp.com",
     projectId: "sonsuz-kuresel",
     appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
@@ -102,13 +96,14 @@ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// 6 Dilli Tərcümə Verilənləri
 const langData = {
-    en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", heroBtn: "Get Started", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", forgot: "Forgot Password?", f_about: "Our customers are special to us. Your success is our mission. Your reliable partner in global trade.", f_legal: "Legal Documents", f_support: "Support" },
-    az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", heroBtn: "Başla", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", forgot: "Şifrəni unutmusan?", f_about: "Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.", f_legal: "Hüquqi Sənədlər", f_support: "Dəstək" },
-    tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", heroBtn: "Başla", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", forgot: "Şifremi unuttum?", f_about: "Müşterilerimiz bizim için özeldir. Başarınız misyonumuzdur. Güvenilir ortağınız.", f_legal: "Hukuki Belgeler", f_support: "Destek" },
-    ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", heroBtn: "Начать", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", forgot: "Забыли пароль?", f_about: "Наши клиенты особенны. Ваш успех - наша миссия. Ваш партнер в торговле.", f_legal: "Юридические документы", f_support: "Поддержка" },
-    zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", heroBtn: "开始", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", forgot: "忘记密码?", f_about: "客户至上。您的成功是我们的使命。全球贸易伙伴。", f_legal: "法律文件", f_support: "支持" },
-    ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", heroBtn: "ابدأ الآن", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", forgot: "نسيت؟", f_about: "عملاؤنا مميزون. نجاحكم مهمتنا. شريككم في التجارة.", f_legal: "الوثائق القانونية", f_support: "الدعم" }
+    en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", heroBtn: "Get Started", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", forgot: "Forgot Password?", f_about: "Your reliable partner in global trade. Your success is our mission.", f_legal: "Legal Documents", f_support: "Support" },
+    az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", heroBtn: "Başla", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", forgot: "Şifrəni unutmusan?", f_about: "Qlobal ticarətdə etibarlı tərəfdaşınız. Sizin uğurunuz bizim missiyamızdır.", f_legal: "Hüquqi Sənədlər", f_support: "Dəstək" },
+    tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", heroBtn: "Başla", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", forgot: "Şifremi unuttum?", f_about: "Küresel ticarette güvenilir ortağınız. Başarınız misyonumuzdur.", f_legal: "Hukuki Belgeler", f_support: "Destek" },
+    ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", heroBtn: "Начать", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", forgot: "Забыли пароль?", f_about: "Ваш партнер в торговле. Ваш успех - наша миссия.", f_legal: "Юридические документы", f_support: "Поддержка" },
+    zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", heroBtn: "开始", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", forgot: "忘记密码?", f_about: "全球贸易伙伴。您的成功是我们的使命。", f_legal: "法律文件", f_support: "支持" },
+    ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", heroBtn: "ابدأ الآن", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", forgot: "نسيت؟", f_about: "شريككم في التجارة. نجاحكم مهمتنا.", f_legal: "الوثائق القانونية", f_support: "الدعم" }
 };
 
 let curLang = "en";
@@ -134,9 +129,7 @@ function openModal(mode) {
     renderForm();
 }
 
-function closeModal() {
-    document.getElementById('authModal').style.display = 'none';
-}
+function closeModal() { document.getElementById('authModal').style.display = 'none'; }
 
 function renderForm() {
     const t = langData[curLang];
@@ -148,7 +141,7 @@ function renderForm() {
         body.innerHTML = `
             <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
             <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"></div>
-            <a style="font-size:0.8rem;color:#3b82f6;cursor:pointer;text-decoration:none;" onclick="handleForgot()">${t.forgot}</a>
+            <a style="font-size:0.8rem;color:#3b82f6;cursor:pointer;" onclick="handleForgot()">${t.forgot}</a>
         `;
     } else {
         body.innerHTML = `
@@ -163,14 +156,14 @@ function renderForm() {
     }
 }
 
-function handleSubmit() {
+function handleAuthAction() {
     const email = document.getElementById('l_email').value;
     const pass = document.getElementById('l_pass').value;
 
     if (currentMode === 'login') {
         if (!email || !pass) { alert("Xanaları doldurun!"); return; }
         auth.signInWithEmailAndPassword(email, pass)
-            .then(() => { window.location.href = "dashboard.html"; }) // GitHub-dakı fayl adınla eyniləşdirdim
+            .then(() => { window.location.href = "dashboard.html"; }) // Fayl adını GitHub ilə eyniləşdirdim
             .catch(e => alert("Xəta: " + e.message));
     } else {
         const name = document.getElementById('l_name').value;
@@ -186,7 +179,7 @@ function handleSubmit() {
 
 function handleForgot() {
     const email = prompt("Emailinizi daxil edin:");
-    if (email) auth.sendPasswordResetEmail(email).then(() => alert("Şifrə sıfırlama linki göndərildi!")).catch(e => alert(e.message));
+    if (email) auth.sendPasswordResetEmail(email).then(() => alert("Sıfırlama linki göndərildi!")).catch(e => alert(e.message));
 }
 </script>
 </body>
