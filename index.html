@@ -32,7 +32,7 @@ overflow-y: auto; }
         label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
         input, select { width: 100%; padding: 12px; background: #020617; border: 1px solid var(--border); border-radius: 10px; color: white; box-sizing: border-box; }
         .eye-btn { position: absolute; right: 12px; top: 32px; cursor: pointer; opacity: 0.6; }
-        max-height: 85vh; overflow-y: auto;
+        .modal-content { background: var(--card); width: 100%; max-width: 450px; padding: 2rem; border-radius: 20px; border: 1px solid var(--border); position: relative; max-height: 90vh; overflow-y: auto;}
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -91,7 +91,7 @@ overflow-y: auto; }
     <div class="modal-content">
         <span onclick="closeModal()" style="position:absolute; right:20px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
         <h2 id="mTitle" style="text-align:center;">Account</h2>
-        <div id="formBody"<></div>
+        <div id="formBody"></div>
         <button class="btn btn-primary" id="mActionBtn" onclick="handleSubmit()" style="width:100%; padding:14px; margin-top:10px;">Continue</button>
         
         <button onclick="alert('Firebase Console-da Google aktiv edilməlidir!')" style="width:100%; padding:10px; margin-top:10px; background:white; color:black; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; cursor:pointer; border:none;">
@@ -206,32 +206,47 @@ overflow-y: auto; }
     let currentMode = 'login';
 
 function updateLanguage(lang) {
-    curLang = val;
+    curLang = lang;
     const t = langData[lang];
     if (!t) return;
 
-    if(document.getElementById('hTitle')) document.getElementById('hTitle').innerHTML = t.hTitle;
-    if(document.getElementById('hDesc')) document.getElementById('hDesc').innerText = t.hDesc;
-    if(document.getElementById('f_about')) document.getElementById('f_about').innerText = t.f_about;
-    if(document.getElementById('supportTitle')) document.getElementById('supportTitle').innerText = t.f_support;
-    // Düymələr
-    if(document.getElementById('heroBtn')) document.getElementById('heroBtn').innerText = t.heroBtn || t.hBtn || "Get Started";
-    if(document.getElementById('navLogin')) document.getElementById('navLogin').innerText = t.login;
-    if(document.getElementById('navSignup')) document.getElementById('navSignup').innerText = t.signup;
-    if(document.getElementById('loginBtn')) document.getElementById('loginBtn').innerText = t.login;
+    // Hero hissəsi
+    if (document.getElementById('hTitle'))
+        document.getElementById('hTitle').innerHTML = t.hTitle;
 
-    // Sənədlər (ID-ləri sənin koda görə dəqiqləşdirdim)
+    if (document.getElementById('hDesc'))
+        document.getElementById('hDesc').innerText = t.hDesc;
+
+    // Footer və digər hissələr
+    if (document.getElementById('f_about'))
+        document.getElementById('f_about').innerText = t.f_about;
+
+    if (document.getElementById('supportTitle'))
+        document.getElementById('supportTitle').innerText = t.f_support;
+
+    // Düymələr
+    if (document.getElementById('heroBtn'))
+        document.getElementById('heroBtn').innerText = t.heroBtn || "Get Started";
+
+    if (document.getElementById('navLogin'))
+        document.getElementById('navLogin').innerText = t.login;
+
+    if (document.getElementById('navSignup'))
+        document.getElementById('navSignup').innerText = t.signup;
+
+    // Digər başlıqlar
     const legal = document.getElementById('legalDocsTitle') || document.getElementById('f_legal');
     const support = document.getElementById('supportTitle') || document.getElementById('f_support');
-    const about = document.getElementById('aboutTitle') || document.getElementById('f_about');
+    const about = document.getElementById('aboutTitle');
 
-    if(legal) legal.innerText = t.f_legal || "Legal";
-    if(support) support.innerText = t.f_support || "Support";
-    if(about) about.innerText = t.f_about || "About";
+    if (legal) legal.innerText = t.f_legal || "Legal";
+    if (support) support.innerText = t.f_support || "Support";
+    if (about) about.innerText = t.aboutTitle || "About";
 
-    // O altdakı yazı (GTA missiyası deyil, əsl missiya)
-    if(document.getElementById('aboutText')) document.getElementById('aboutText').innerText = t.aboutText;
+    if (document.getElementById('aboutText'))
+        document.getElementById('aboutText').innerText = t.aboutText;
 
+    // Modal açıqdırsa yenilə
     if (document.getElementById('authModal') && document.getElementById('authModal').style.display === 'flex') {
         renderForm();
     }
@@ -278,18 +293,31 @@ function updateLanguage(lang) {
         }
     }
 
-    function handleSubmit() {
-        window.location.href = "dashboard.html";
-        const email = document.getElementById('l_email').value;
-        const pass = document.getElementById('l_pass').value;
-        if (!email || !pass) return alert("Bütün xanaları doldurun!");
+   function handleSubmit() {
+    const email = document.getElementById('l_email').value;
+    const pass = document.getElementById('l_pass').value;
 
-        if (currentMode === 'login') {
-            auth.signInWithEmailAndPassword(email, pass).then(() => { alert("Xoş gəldiniz!"); closeModal(); }).catch(e => alert(e.message));
-        } else {
-            auth.createUserWithEmailAndPassword(email, pass).then(() => { alert("Qeydiyyat tamamlandı!"); closeModal(); }).catch(e => alert(e.message));
-        }
+    if (!email || !pass) {
+        alert("Bütün xanaları doldurun!");
+        return;
     }
+
+    if (currentMode === 'login') {
+        auth.signInWithEmailAndPassword(email, pass)
+        .then(() => {
+            alert("Xoş gəldiniz!");
+            window.location.href = "anasayfa.html";
+        })
+        .catch(e => alert(e.message));
+    } else {
+        auth.createUserWithEmailAndPassword(email, pass)
+        .then(() => {
+            alert("Qeydiyyat tamamlandı!");
+            window.location.href = "anasayfa.html";
+        })
+        .catch(e => alert(e.message));
+    }
+}
 
     function handleForgot() {
         const email = prompt("Emailinizi daxil edin:");
