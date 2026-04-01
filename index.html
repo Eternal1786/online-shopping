@@ -1,173 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eternal | Global Dropshipping Network</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<style>
-:root { --blue:#3b82f6; --bg:#020617; --card:#0f172a; --border:#1e293b; --text:#f8fafc; }
-body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
-nav{background:rgba(15,23,42,0.9);backdrop-filter:blur(12px);padding:1rem 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;}
-.logo{font-size:1.5rem;font-weight:800;color:var(--blue);text-decoration:none;letter-spacing:2px;}
-.nav-right{display:flex;gap:10px;align-items:center;}
-.btn{padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;border:none;transition:0.3s;}
-.btn-outline{background:transparent;color:white;border:1px solid var(--blue);}
-.btn-primary{background:var(--blue);color:white;}
-.hero{height:80vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 20px;background:radial-gradient(circle at center, rgba(59,130,246,0.1), transparent 70%);}
-.hero h1{font-size:3rem;margin-bottom:15px;background:linear-gradient(to right,#3b82f6,#93c5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero p{color:#94a3b8;max-width:600px;margin-bottom:30px;font-size:1.1rem;}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:2000;align-items:center;justify-content:center;padding:20px;}
-.modal-content{background:var(--card);width:100%;max-width:500px;padding:2rem;border-radius:20px;border:1px solid var(--border);position:relative;max-height:90vh;overflow-y:auto;}
-.input-group{margin-bottom:1rem;text-align:left;position:relative;}
-label{display:block;font-size:0.8rem;color:#94a3b8;margin-bottom:5px;}
-input,select{width:100%;padding:12px;background:#020617;border:1px solid var(--border);border-radius:10px;color:white;box-sizing:border-box;}
-.eye-btn{position:absolute;right:12px;top:32px;cursor:pointer;opacity:0.6;}
-footer{padding:40px 5%;background:#0f172a;border-top:1px solid var(--border);margin-top:50px;}
-footer h3,h5,h4{color:#3b82f6;}
-footer p, footer li a{color:#94a3b8;font-size:0.9rem;text-decoration:none;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eternal | Global Dropshipping Network</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <style>
+        :root { --blue:#3b82f6; --bg:#020617; --card:#0f172a; --border:#1e293b; --text:#f8fafc; }
+        body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+        nav{background:rgba(15,23,42,0.9);backdrop-filter:blur(12px);padding:1rem 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;}
+        .logo{font-size:1.5rem;font-weight:800;color:var(--blue);text-decoration:none;letter-spacing:2px;}
+        .nav-right{display:flex;gap:10px;align-items:center;}
+        .btn{padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;border:none;transition:0.3s;}
+        .btn-outline{background:transparent;color:white;border:1px solid var(--blue);}
+        .btn-primary{background:var(--blue);color:white;}
+        .hero{height:80vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 20px;background:radial-gradient(circle at center, rgba(59,130,246,0.1), transparent 70%);}
+        .hero h1{font-size:3.5rem;margin-bottom:15px;background:linear-gradient(to right,#3b82f6,#93c5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .hero p{color:#94a3b8;max-width:600px;margin-bottom:30px;font-size:1.1rem;}
+        .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
+        .modal-content{background:var(--card);width:100%;max-width:450px;padding:2.5rem;border-radius:24px;border:1px solid var(--border);position:relative;max-height:90vh;overflow-y:auto;}
+        .input-group{margin-bottom:1.2rem;text-align:left;position:relative;}
+        label{display:block;font-size:0.85rem;color:#94a3b8;margin-bottom:8px;}
+        input,select{width:100%;padding:14px;background:#020617;border:1px solid var(--border);border-radius:12px;color:white;box-sizing:border-box;outline:none;}
+        input:focus{border-color:var(--blue);}
+        .eye-btn{position:absolute;right:15px;top:40px;cursor:pointer;opacity:0.6;}
+        footer{padding:60px 5%;background:#0f172a;border-top:1px solid var(--border);margin-top:50px;}
+        .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;max-width:1200px;margin:0 auto;}
+        footer h3, footer h4, footer h5{color:var(--blue);margin-top:0;}
+        footer p, footer li a{color:#94a3b8;font-size:0.95rem;text-decoration:none;line-height:1.6;}
+        footer ul{list-style:none;padding:0;}
+    </style>
 </head>
 <body>
 
 <nav>
-<a href="#" class="logo">ETERNAL</a>
-<div class="nav-right">
-<select id="langSelect" onchange="updateLanguage(this.value)" style="background:#0f172a;color:white;border:1px solid #1e293b;padding:5px;border-radius:5px;">
-<option value="en">EN</option>
-<option value="az">AZ</option>
-<option value="tr">TR</option>
-<option value="ru">RU</option>
-<option value="zh">CN</option>
-<option value="ar">AR</option>
-</select>
-<button class="btn btn-outline" id="navLogin" onclick="openModal('login')">Login</button>
-<button class="btn btn-primary" id="navSignup" onclick="openModal('signup')">Join Now</button>
-</div>
+    <a href="#" class="logo">ETERNAL</a>
+    <div class="nav-right">
+        <select id="langSelect" onchange="updateLanguage(this.value)" style="background:#1e293b;color:white;border:none;padding:8px;border-radius:8px;cursor:pointer;">
+            <option value="en">EN</option>
+            <option value="az">AZ</option>
+            <option value="tr">TR</option>
+            <option value="ru">RU</option>
+            <option value="zh">CN</option>
+            <option value="ar">AR</option>
+        </select>
+        <button class="btn btn-outline" id="navLogin" onclick="openModal('login')">Login</button>
+        <button class="btn btn-primary" id="navSignup" onclick="openModal('signup')">Join Now</button>
+    </div>
 </nav>
 
 <section class="hero">
-<h1 id="hTitle">Global Dropshipping <br> Future is Eternal</h1>
-<p id="hDesc">Expand your business across borders.</p>
-<div style="display:flex;gap:15px;">
-<button class="btn btn-primary" id="heroBtn" onclick="openModal('signup')">Get Started</button>
-</div>
+    <h1 id="hTitle">Global Dropshipping <br> Future is Eternal</h1>
+    <p id="hDesc">Expand your business across borders.</p>
+    <button class="btn btn-primary" id="heroBtn" onclick="openModal('signup')" style="padding:15px 40px; font-size:1.1rem;">Get Started</button>
 </section>
 
 <div id="authModal" class="modal">
-<div class="modal-content">
-<span onclick="closeModal()" style="position:absolute;right:20px;top:10px;cursor:pointer;font-size:24px;">&times;</span>
-<h2 id="mTitle" style="text-align:center;">Account</h2>
-<div id="formBody"></div>
-<button class="btn btn-primary" id="mActionBtn" style="width:100%;padding:14px;margin-top:10px;" onclick="handleSubmit()">Continue</button>
-</div>
+    <div class="modal-content">
+        <span onclick="closeModal()" style="position:absolute;right:25px;top:20px;cursor:pointer;font-size:28px;color:#94a3b8;">&times;</span>
+        <h2 id="mTitle" style="text-align:center;margin-bottom:25px;">Account</h2>
+        <div id="formBody"></div>
+        <button class="btn btn-primary" id="mActionBtn" style="width:100%;padding:16px;margin-top:20px;font-size:1rem;" onclick="handleSubmit()">Continue</button>
+    </div>
 </div>
 
 <footer>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;">
-<div>
-<h3>ETERNAL</h3>
-<p>Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.</p>
-</div>
-<div>
-<h5>Hüquqi Sənədlər</h5>
-<ul style="list-style:none;padding:0;font-size:0.9rem;">
-<li><a href="privacy.html">Gizlilik Siyasəti</a></li>
-<li><a href="terms.html">İstifadə Şərtləri</a></li>
-</ul>
-</div>
-<div>
-<h5>Dəstək</h5>
-<p>Naxçıvan, Azərbaycan<br>support@eternal.global</p>
-</div>
-</div>
-<div style="text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);font-size:0.75rem;color:#64748b;">
-© 2026 Eternal Global Network. Bütün hüquqlar qorunur.
-</div>
+    <div class="footer-grid">
+        <div>
+            <h3 id="f_logo">ETERNAL</h3>
+            <p id="f_about">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.</p>
+        </div>
+        <div>
+            <h5 id="f_legal_title">Hüquqi Sənədlər</h5>
+            <ul>
+                <li><a href="privacy.html">Gizlilik Siyasəti</a></li>
+                <li><a href="terms.html">İstifadə Şərtləri</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5 id="f_support_title">Dəstək</h5>
+            <p>Naxçıvan, Azərbaycan<br>support@eternal.global</p>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:50px;padding-top:20px;border-top:1px solid var(--border);font-size:0.8rem;color:#475569;">
+        © 2026 Eternal Global Network. Bütün hüquqlar qorunur.
+    </div>
 </footer>
 
 <script>
-// Firebase
+// Firebase Konfiqurasiyası - Sənin Google Cloud API Key-ni bura yazdım (Sızdırılan açar)
 const firebaseConfig = {
-apiKey:"", authDomain:"eternal-global.firebaseapp.com", projectId:"sonsuz-kuresel", appId:"1:1028365979555:web:ff7100da1ed4c9d66ad416"
+    apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkfI0z66vVv9jIk", 
+    authDomain: "eternal-global.firebaseapp.com",
+    projectId: "sonsuz-kuresel",
+    appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
 };
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Languages
 const langData = {
-en:{login:"Login", signup:"Join Now", hTitle:"Global Dropshipping <br> Future is Eternal", hDesc:"Expand your business across borders.", heroBtn:"Get Started", email:"Email", pass:"Password", name:"Full Name", country:"Country", city:"City", gender:"Gender", dob:"Birth Date", role:"Role", seller:"Seller", buyer:"Buyer", forgot:"Forgot Password?"},
-az:{login:"Giriş", signup:"Qeydiyyat", hTitle:"Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc:"Sərhədləri aşaraq biznesinizi böyüdün.", heroBtn:"Başla", email:"Gmail", pass:"Şifrə", name:"Ad Soyad", country:"Ölkə", city:"Şəhər", gender:"Cinsiyyət", dob:"Doğum Tarixi", role:"Rütbə", seller:"Satıcı", buyer:"Alıcı", forgot:"Şifrəni unutmusan?"},
-tr:{login:"Giriş", signup:"Kayıt Ol", hTitle:"Küresel Dropshipping <br> Gelecek Eternal'da", hDesc:"İşinizi sınırların ötesine taşıyın.", heroBtn:"Başla", email:"E-posta", pass:"Şifre", name:"Ad Soyad", country:"Ülke", city:"Şehir", gender:"Cinsiyet", dob:"Doğum Tarihi", role:"Rol", seller:"Satıcı", buyer:"Alıcı", forgot:"Şifremi unuttum?"},
-ru:{login:"Вход", signup:"Регистрация", hTitle:"Глобальный дропшиппинг <br> Будущее за Eternal", hDesc:"Расширяйте свой бизнес за границей.", heroBtn:"Начать", email:"Почта", pass:"Пароль", name:"ФИО", country:"Страна", city:"Город", gender:"Пол", dob:"Дата рожд.", role:"Роль", seller:"Продавец", buyer:"Покупатель", forgot:"Забыли пароль?"},
-ar:{login:"دخول", signup:"انضمام", hTitle:"دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc:"وسع أعمالك عبر الحدود.", heroBtn:"ابدأ الآن", email:"بريد", pass:"كلمة السر", name:"الاسم", country:"بلد", city:"مدينة", gender:"جنس", dob:"ميلاد", role:"دور", seller:"بائع", buyer:"مشتري", forgot:"نسيت؟"},
-zh:{login:"登录", signup:"注册", hTitle:"全球代发货 <br> 未来在于 Eternal", hDesc:"跨越国界扩展您的业务。", heroBtn:"开始", email:"电子邮件", pass:"密码", name:"姓名", country:"国家", city:"城市", gender:"性别", dob:"生日", role:"角色", seller:"卖家", buyer:"买家", forgot:"忘记密码?"}
+    en: { login: "Login", signup: "Join Now", hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", heroBtn: "Get Started", email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", forgot: "Forgot Password?", f_about: "Our customers are special to us. Your success is our mission. Your reliable partner in global trade.", f_legal: "Legal Documents", f_support: "Support" },
+    az: { login: "Giriş", signup: "Qeydiyyat", hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır", hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.", heroBtn: "Başla", email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", forgot: "Şifrəni unutmusan?", f_about: "Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.", f_legal: "Hüquqi Sənədlər", f_support: "Dəstək" },
+    tr: { login: "Giriş", signup: "Kayıt Ol", hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da", hDesc: "İşinizi sınırların ötesine taşıyın.", heroBtn: "Başla", email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", forgot: "Şifremi unuttum?", f_about: "Müşterilerimiz bizim için özeldir. Başarınız misyonumuzdur. Güvenilir ortağınız.", f_legal: "Hukuki Belgeler", f_support: "Destek" },
+    ru: { login: "Вход", signup: "Регистрация", hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal", hDesc: "Расширяйте свой бизнес за границей.", heroBtn: "Начать", email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", forgot: "Забыли пароль?", f_about: "Наши клиенты особенны. Ваш успех - наша миссия. Ваш партнер в торговле.", f_legal: "Юридические документы", f_support: "Поддержка" },
+    zh: { login: "登录", signup: "注册", hTitle: "全球代发货 <br> 未来在于 Eternal", hDesc: "跨越国界扩展您的业务。", heroBtn: "开始", email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", forgot: "忘记密码?", f_about: "客户至上。您的成功是我们的使命。全球贸易伙伴。", f_legal: "法律文件", f_support: "支持" },
+    ar: { login: "دخول", signup: "انضمام", hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال", hDesc: "وسع أعمالك عبر الحدود.", heroBtn: "ابدأ الآن", email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", forgot: "نسيت؟", f_about: "عملاؤنا مميزون. نجاحكم مهمتنا. شريككم في التجارة.", f_legal: "الوثائق القانونية", f_support: "الدعم" }
 };
 
-let curLang="en";
-let currentMode="login";
+let curLang = "en";
+let currentMode = "login";
 
-function updateLanguage(lang){
-curLang=lang;
-document.getElementById('hTitle').innerHTML=langData[lang].hTitle;
-document.getElementById('hDesc').innerText=langData[lang].hDesc;
-document.getElementById('heroBtn').innerText=langData[lang].heroBtn;
-document.getElementById('navLogin').innerText=langData[lang].login;
-document.getElementById('navSignup').innerText=langData[lang].signup;
-renderForm();
+function updateLanguage(lang) {
+    curLang = lang;
+    const t = langData[lang];
+    document.getElementById('hTitle').innerHTML = t.hTitle;
+    document.getElementById('hDesc').innerText = t.hDesc;
+    document.getElementById('heroBtn').innerText = t.heroBtn;
+    document.getElementById('navLogin').innerText = t.login;
+    document.getElementById('navSignup').innerText = t.signup;
+    document.getElementById('f_about').innerText = t.f_about;
+    document.getElementById('f_legal_title').innerText = t.f_legal;
+    document.getElementById('f_support_title').innerText = t.f_support;
+    if(document.getElementById('authModal').style.display === 'flex') renderForm();
 }
 
-function openModal(mode){currentMode=mode;document.getElementById('authModal').style.display='flex';renderForm();}
-function closeModal(){document.getElementById('authModal').style.display='none';}
-function togglePass(){const p=document.getElementById('l_pass');p.type=p.type==="password"?"text":"password";}
-
-function renderForm(){
-const t=langData[curLang];
-const body=document.getElementById('formBody');
-document.getElementById('mTitle').innerText=currentMode==='login'?t.login:t.signup;
-document.getElementById('mActionBtn').innerText=currentMode==='login'?t.login:t.signup;
-if(currentMode==='login'){
-body.innerHTML=`<div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
-<div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"><span class="eye-btn" onclick="togglePass()">👁️</span></div>
-<a style="font-size:0.8rem;color:#3b82f6;cursor:pointer;" onclick="handleForgot()">${t.forgot}</a>`;
-}else{
-body.innerHTML=`<div class="input-group"><label>${t.name}</label><input type="text" id="l_name"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-<div class="input-group"><label>${t.country}</label><input type="text" id="l_country"></div>
-<div class="input-group"><label>${t.city}</label><input type="text" id="l_city"></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-<div class="input-group"><label>${t.gender}</label><select id="l_gender"><option value="m">${t.seller}</option><option value="f">${t.buyer}</option></select></div>
-<div class="input-group"><label>${t.dob}</label><input type="date" id="l_dob"></div></div>
-<div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
-<div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"><span class="eye-btn" onclick="togglePass()">👁️</span></div>`;
-}
+function openModal(mode) {
+    currentMode = mode;
+    document.getElementById('authModal').style.display = 'flex';
+    renderForm();
 }
 
-function handleSubmit(){
-if(currentMode==='login'){
-const email=document.getElementById('l_email').value;
-const pass=document.getElementById('l_pass').value;
-if(!email||!pass){alert("Fill all fields!");return;}
-auth.signInWithEmailAndPassword(email,pass).then(()=>window.location.href="anasayfa.html").catch(e=>alert(e.message));
-}else{
-const name=document.getElementById('l_name').value;
-const country=document.getElementById('l_country').value;
-const city=document.getElementById('l_city').value;
-const email=document.getElementById('l_email').value;
-const pass=document.getElementById('l_pass').value;
-if(!name||!country||!city||!email||!pass){alert("Fill all fields!");return;}
-auth.createUserWithEmailAndPassword(email,pass).then(res=>{
-db.collection("users").doc(res.user.uid).set({name:name,country:country,city:city,email:email,role:"buyer"});
-window.location.href="anasayfa.html";
-}).catch(e=>alert(e.message));
-}
+function closeModal() {
+    document.getElementById('authModal').style.display = 'none';
 }
 
-function handleForgot(){const email=prompt("Emailinizi daxil edin:");if(email)auth.sendPasswordResetEmail(email).then(()=>alert("Link göndərildi!")).catch(e=>alert(e.message));}
+function renderForm() {
+    const t = langData[curLang];
+    const body = document.getElementById('formBody');
+    document.getElementById('mTitle').innerText = currentMode === 'login' ? t.login : t.signup;
+    document.getElementById('mActionBtn').innerText = currentMode === 'login' ? t.login : t.signup;
+    
+    if (currentMode === 'login') {
+        body.innerHTML = `
+            <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
+            <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"></div>
+            <a style="font-size:0.8rem;color:#3b82f6;cursor:pointer;text-decoration:none;" onclick="handleForgot()">${t.forgot}</a>
+        `;
+    } else {
+        body.innerHTML = `
+            <div class="input-group"><label>${t.name}</label><input type="text" id="l_name"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div class="input-group"><label>${t.country}</label><input type="text" id="l_country"></div>
+                <div class="input-group"><label>${t.city}</label><input type="text" id="l_city"></div>
+            </div>
+            <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
+            <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"></div>
+        `;
+    }
+}
+
+function handleSubmit() {
+    const email = document.getElementById('l_email').value;
+    const pass = document.getElementById('l_pass').value;
+
+    if (currentMode === 'login') {
+        if (!email || !pass) { alert("Xanaları doldurun!"); return; }
+        auth.signInWithEmailAndPassword(email, pass)
+            .then(() => { window.location.href = "dashboard.html"; }) // GitHub-dakı fayl adınla eyniləşdirdim
+            .catch(e => alert("Xəta: " + e.message));
+    } else {
+        const name = document.getElementById('l_name').value;
+        if (!name || !email || !pass) { alert("Xanaları doldurun!"); return; }
+        auth.createUserWithEmailAndPassword(email, pass)
+            .then(res => {
+                db.collection("users").doc(res.user.uid).set({ name: name, email: email, role: "buyer" });
+                window.location.href = "dashboard.html";
+            })
+            .catch(e => alert("Xəta: " + e.message));
+    }
+}
+
+function handleForgot() {
+    const email = prompt("Emailinizi daxil edin:");
+    if (email) auth.sendPasswordResetEmail(email).then(() => alert("Şifrə sıfırlama linki göndərildi!")).catch(e => alert(e.message));
+}
 </script>
-
 </body>
 </html>
