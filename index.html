@@ -68,18 +68,35 @@
 </div>
 
 <script>
-// 1. Firebase Config (Sənin məlumatlarınla)
-const firebaseConfig = {
-    apiKey: "AIzaSyC9KKiQYm-yB2w5qaNVlM6J5EZFtasKAAQ",
-    authDomain: "eternal-global.firebaseapp.com",
-    projectId: "sonsuz-kuresel",
-    storageBucket: "eternal-global.appspot.com",
-    appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
+<script>
+  // SƏNİN PROYEKTİNİN AYARLARI
+  const firebaseConfig = {
+    apiKey: "AIzaSyD...", // BURA BAYAQ DÜZƏLTDİYİMİZ O API KEY-İ YAPIŞDIR
+    authDomain: "eternal-global.firebaseapp.com",
+    projectId: "eternal-global", // Layihə adın
+    storageBucket: "eternal-global.appspot.com",
+    messagingSenderId: "1028365979555",
+    appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
+  };
+
+  // Firebase-i başlat
+  firebase.initializeApp(firebaseConfig);
+
+  // Qeydiyyat funksiyası
+  function registerUser(email, password) {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert("Təbriklər! Eternal Global Network-ə xoş gəldiniz.");
+        window.location.href = "dashboard.html"; // Dashboard-a uçuruq!
+      })
+      .catch((error) => {
+        alert("Xəta: " + error.message);
+      });
+  }
+</script>
 // 2. Dil Obyekti (EN, AZ, TR, RU, AR, CN)
 const langData = {
     en: { hTitle: "Global Dropshipping <br> Future is Eternal", hDesc: "Expand your business across borders.", login: "Login", signup: "Join Now", heroBtn: "Get Started", email: "Email", pass: "Password", name: "Full Name", phone: "Phone (+994...)", forgot: "Forgot Password?", role: "Account Type", seller: "Seller", buyer: "Buyer" },
