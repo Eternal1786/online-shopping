@@ -205,17 +205,20 @@ overflow-y: auto; }
     let curLang = 'en';
     let currentMode = 'login';
 
-function updateLanguage(val) {
+function updateLanguage(lang) {
     curLang = val;
-    const t = langData[val];
+    const t = langData[lang];
+    if (!t) return;
 
     if(document.getElementById('hTitle')) document.getElementById('hTitle').innerHTML = t.hTitle;
     if(document.getElementById('hDesc')) document.getElementById('hDesc').innerText = t.hDesc;
-    
+    if(document.getElementById('f_about')) document.getElementById('f_about').innerText = t.f_about;
+    if(document.getElementById('supportTitle')) document.getElementById('supportTitle').innerText = t.f_support;
     // Düymələr
     if(document.getElementById('heroBtn')) document.getElementById('heroBtn').innerText = t.heroBtn || t.hBtn || "Get Started";
     if(document.getElementById('navLogin')) document.getElementById('navLogin').innerText = t.login;
     if(document.getElementById('navSignup')) document.getElementById('navSignup').innerText = t.signup;
+    if(document.getElementById('loginBtn')) document.getElementById('loginBtn').innerText = t.login;
 
     // Sənədlər (ID-ləri sənin koda görə dəqiqləşdirdim)
     const legal = document.getElementById('legalDocsTitle') || document.getElementById('f_legal');
@@ -276,6 +279,7 @@ function updateLanguage(val) {
     }
 
     function handleSubmit() {
+        window.location.href = "dashboard.html";
         const email = document.getElementById('l_email').value;
         const pass = document.getElementById('l_pass').value;
         if (!email || !pass) return alert("Bütün xanaları doldurun!");
