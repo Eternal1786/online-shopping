@@ -1,336 +1,176 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Global Dropshipping Network</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <style>
-        :root { --blue: #3b82f6; --bg: #020617; --card: #0f172a; --border: #1e293b; --text: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
-        
-        /* Naviqasiya */
-        nav { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--blue); text-decoration: none; letter-spacing: 2px; }
-        .nav-right { display: flex; gap: 10px; align-items: center; }
-        
-        /* Düymələr */
-        .btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.3s; }
-        .btn-outline { background: transparent; color: white; border: 1px solid var(--blue); }
-        .btn-primary { background: var(--blue); color: white; }
-
-        /* Hero Hissəsi (Giriş) */
-        .hero { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1), transparent 70%); }
-        .hero h1 { font-size: 3rem; margin-bottom: 15px; background: linear-gradient(to right, #3b82f6, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInUp 1s ease; }
-        .hero p { color: #94a3b8; max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
-        /* Modal Sistemi */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--card); width: 100%; max-width: 450px; padding: 2rem; border-radius: 20px; border: 1px solid var(--border); position: relative; max-height: 90vh; overflow-y: auto;
-overflow-y: auto; }
-        .input-group { margin-bottom: 1rem; text-align: left; position: relative; }
-        label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; background: #020617; border: 1px solid var(--border); border-radius: 10px; color: white; box-sizing: border-box; }
-        .eye-btn { position: absolute; right: 12px; top: 32px; cursor: pointer; opacity: 0.6; }
-        .modal-content { background: var(--card); width: 100%; max-width: 450px; padding: 2rem; border-radius: 20px; border: 1px solid var(--border); position: relative; max-height: 90vh; overflow-y: auto;}
-
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eternal | Global Dropshipping Network</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<style>
+:root { --blue: #3b82f6; --bg: #020617; --card: #0f172a; --border: #1e293b; --text: #f8fafc; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
+nav { background: rgba(15,23,42,0.9); backdrop-filter: blur(12px); padding: 1rem 5%; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:1000; }
+.logo { font-size:1.5rem; font-weight:800; color:var(--blue); text-decoration:none; letter-spacing:2px; }
+.nav-right { display:flex; gap:10px; align-items:center; }
+.btn { padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer; border:none; transition:.3s; }
+.btn-outline { background:transparent; color:white; border:1px solid var(--blue); }
+.btn-primary { background:var(--blue); color:white; }
+.hero { height:80vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 20px; background:radial-gradient(circle at center, rgba(59,130,246,0.1), transparent 70%); }
+.hero h1 { font-size:3rem; margin-bottom:15px; background: linear-gradient(to right,#3b82f6,#93c5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:fadeInUp 1s ease; }
+.hero p { color:#94a3b8; max-width:600px; margin-bottom:30px; font-size:1.1rem; }
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2000; align-items:center; justify-content:center; padding:20px; }
+.modal-content { background:var(--card); width:100%; max-width:450px; padding:2rem; border-radius:20px; border:1px solid var(--border); position:relative; max-height:90vh; overflow-y:auto; }
+.input-group { margin-bottom:1rem; text-align:left; position:relative; }
+label { display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:5px; }
+input,select { width:100%; padding:12px; background:#020617; border:1px solid var(--border); border-radius:10px; color:white; box-sizing:border-box; }
+.eye-btn { position:absolute; right:12px; top:32px; cursor:pointer; opacity:.6; }
+#dashboard{display:none;padding:20px;}
+.vip-plan{border:1px solid var(--blue);padding:15px;margin:10px 0;border-radius:10px;}
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0);} }
+</style>
 </head>
 <body>
 
 <nav>
-    <a href="#" class="logo">ETERNAL</a>
-    <div class="nav-right">
-        <select onchange="updateLanguage(this.value)" id="langSelect" style="background:#0f172a; color:white; border:1px solid #1e293b; padding:5px; border-radius:5px;" >
-            <option value="en">EN</option>
-            <option value="az">AZ</option>
-            <option value="tr">TR</option>
-            <option value="ru">RU</option>
-            <option value="zh">CN</option>
-            <option value="ar">AR</option>
-        </select>
-        <button class="btn btn-outline" id="navLogin" onclick="openModal('login')">Login</button>
-        <button class="btn btn-primary" id="navSignup" onclick="openModal('signup')">Join Now</button>
-    </div>
+<a href="#" class="logo">ETERNAL</a>
+<div class="nav-right">
+<select onchange="updateLanguage(this.value)" id="langSelect" style="background:#0f172a;color:white;border:1px solid #1e293b;padding:5px;border-radius:5px;">
+<option value="en">EN</option>
+<option value="az" selected>AZ</option>
+<option value="tr">TR</option>
+<option value="ru">RU</option>
+<option value="zh">CN</option>
+<option value="ar">AR</option>
+</select>
+<button class="btn btn-outline" id="navLogin" onclick="openModal('login')">Login</button>
+<button class="btn btn-primary" id="navSignup" onclick="openModal('signup')">Join Now</button>
+</div>
 </nav>
 
 <section class="hero">
-    <p id="hDesc">Expand your business across borders with our high-speed network. Connect, trade, and scale without limits.</p>
-    <div style="display:flex; gap:15px;">
-    <button class="btn btn-primary" id="heroBtn" onclick="loginAndGo()">Get Started</button>
-    </div>
-</section>
-    <section class="container mt-5">
-    <h2 id="aboutTitle">Haqqımızda</h2>
-    <p id="aboutText">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır.</p>
-</section>
-<footer style="padding: 40px 5%; background: #0f172a; border-top: 1px solid #1e293b; margin-top: 50px; text-align: left;">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
-        <div>
-            <h3 style="color: #3b82f6;">ETERNAL</h3>
-            <p style="font-size: 0.9rem; color: #94a3b8;">Bizim üçün hər bir müştəri özəldir. Sizin uğurunuz bizim missiyamızdır. Qlobal ticarətdə etibarlı tərəfdaşınız.</p>
-        </div>
-        <div>
-            <h5 id="legalDocsTitle">Hüquqi Sənədlər</h5>
-            <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
-                <li><a href="privacy.html" style="color: #3b82f6; text-decoration: none;">Gizlilik Sözləşməsi</a></li>
-                <li><a href="terms.html" style="color: #3b82f6; text-decoration: none;">İstifadə Şərtləri</a></li>
-            </ul>
-        </div>
-        <div>
-            <h5 id="supportTitle">Dəstək</h5>
-            <p style="font-size: 0.9rem; color: #94a3b8;">Naxçıvan, Azərbaycan<br>support@eternal.global</p>
-        </div>
-    </div>
-    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #1e293b; font-size: 0.75rem; color: #64748b;">
-        © 2026 Eternal Global Network. Bütün hüquqlar qorunur.
-    </div>
-</footer>
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <span onclick="closeModal()" style="position:absolute; right:20px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
-        <h2 id="mTitle" style="text-align:center;">Account</h2>
-        <div id="formBody"></div>
-        <button class="btn btn-primary" id="mActionBtn" onclick="handleSubmit()" style="width:100%; padding:14px; margin-top:10px;">Continue</button>
-        
-        <button onclick="alert('Firebase Console-da Google aktiv edilməlidir!')" style="width:100%; padding:10px; margin-top:10px; background:white; color:black; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; cursor:pointer; border:none;">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="margin-right:10px;">
-            Google
-        </button>
-    </div>
+<h1 id="hTitle">Global Dropshipping <br> Future is Eternal</h1>
+<p id="hDesc">Expand your business across borders.</p>
+<div style="display:flex; gap:15px;">
+<button class="btn btn-primary" id="heroBtn" onclick="openModal('signup')">Get Started</button>
 </div>
-<footer style="padding: 40px 5%; background: #0f172a; border-top: 1px solid #1e293b; margin-top: 50px;">
-<div style="padding: 50px 20px; text-align: center; background: #0f172a;">
-    <h2 id="aboutTitle" style="color: white; margin-bottom: 20px;">Haqqımızda</h2>
-    <p id="f_about" style="max-width: 800px; margin: 0 auto; color: #94a3b8; line-height: 1.8;">
-        Sərhədsiz ticarətin mərkəzi. Bizim missiyamız qlobal bazarda hər bir sahibkar üçün sürətli, təhlükəsiz və limitsiz imkanlar yaratmaqdır.
-    </p>
-</div>        <div>
-            <h4 id="f_legal" style="color: white;">Hüquqi</h4>
-            <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
-                <li><a href="privacy.html" style="color: #3b82f6; text-decoration: none;">Privacy Policy</a></li>
-            </ul>
-      </div>
-    </div>
-</footer>
-    
+</section>
+
+<div id="dashboard">
+<h2>Dashboard</h2>
+<p>Salam, <span id="userName"></span>! Telefon təsdiqlənməyib: <span id="phoneStatus">✖</span></p>
+<div id="phoneVerifyDiv">
+<label>Telefon Kodunu Daxil Et (demo: 1234)</label>
+<input type="text" id="phoneCode" placeholder="1234">
+<button onclick="verifyPhone()" class="btn btn-primary" style="margin-top:10px;">Təsdiq Et</button>
+</div>
+<h3>VIP Planlar</h3>
+<div id="vipPlans"></div>
+</div>
+
+<div id="authModal" class="modal">
+<div class="modal-content">
+<span onclick="closeModal()" style="position:absolute; right:20px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
+<h2 id="mTitle" style="text-align:center;">Account</h2>
+<div id="formBody"></div>
+<button class="btn btn-primary" id="mActionBtn" onclick="handleSubmit()" style="width:100%; padding:14px; margin-top:10px;">Continue</button>
+</div>
+</div>
+
 <script>
-    // Firebase Konfiqurasiyası
-    const firebaseConfig = {
-        apiKey: "",
-        authDomain: "eternal-global.firebaseapp.com",
-        projectId: "sonsuz-kuresel",
-        appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    const langData = {
-    az: {
-        login: "Giriş", signup: "Qeydiyyat",
-        hTitle: "Qlobal Dropshipping <br> Gələcək Eternal-dadır",
-        hDesc: "Sərhədləri aşaraq biznesinizi bizimlə böyüdün.",
-        heroBtn: "Başla",
-        email: "Gmail", pass: "Şifrə", name: "Ad Soyad", country: "Ölkə", city: "Şəhər", gender: "Cinsiyyət", dob: "Doğum Tarixi", role: "Rütbə", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifrəni unutmusan?", male: "Kişi", female: "Qadın",
-        f_legal: "Hüquqi Sənədlər",
-        f_support: "Dəstək Mərkəzi",
-        aboutTitle: "Haqqımızda",
-        f_about: "Sərhədsiz ticarətin mərkəzi. Bizim missiyamız qlobal bazarda hər bir sahibkar üçün sürətli, təhlükəsiz və limitsiz imkanlar yaratmaqdır.",
-        welcome: "Xoş gəldiniz!"
-    },
-    en: {
-        login: "Login", signup: "Join Now",
-        hTitle: "Global Dropshipping <br> Future is Eternal",
-        hDesc: "Expand your business across borders.",
-        heroBtn: "Get Started",
-        email: "Email", pass: "Password", name: "Full Name", country: "Country", city: "City", gender: "Gender", dob: "Birth Date", role: "Role", seller: "Seller", buyer: "Buyer", forgot: "Forgot Password?", male: "Male", female: "Female",
-        f_legal: "Legal Documents",
-        f_support: "Support Center",
-        aboutTitle: "About Us",
-        f_about: "The hub of borderless trade. Our mission is to create fast, secure, and limitless opportunities for every entrepreneur in the global market.",
-        welcome: "Welcome!"
-    },
-    tr: {
-        login: "Giriş", signup: "Kayıt Ol",
-        hTitle: "Küresel Dropshipping <br> Gelecek Eternal'da",
-        hDesc: "İşinizi sınırların ötesine taşıyın.",
-        heroBtn: "Başla",
-        email: "E-posta", pass: "Şifre", name: "Ad Soyad", country: "Ülke", city: "Şehir", gender: "Cinsiyet", dob: "Doğum Tarihi", role: "Rol", seller: "Satıcı", buyer: "Alıcı", forgot: "Şifremi unuttum?", male: "Erkek", female: "Kadın",
-        f_legal: "Hukuki Belgeler",
-        f_support: "Destek Merkezi",
-        aboutTitle: "Hakkımızda",
-        f_about: "Sınırsız ticaretin merkezi. Misyonumuz, küresel pazardaki her girişimci için hızlı, güvenli ve sınırsız fırsatlar yaratmaktır.",
-        welcome: "Hoş geldiniz!"
-    },
-    ru: {
-        login: "Вход", signup: "Регистрация",
-        hTitle: "Глобальный дропшиппинг <br> Будущее за Eternal",
-        hDesc: "Расширяйте свой бизнес за границей.",
-        heroBtn: "Начать",
-        email: "Почта", pass: "Пароль", name: "ФИО", country: "Страна", city: "Город", gender: "Пол", dob: "Дата рожд.", role: "Роль", seller: "Продавец", buyer: "Покупатель", forgot: "Забыли пароль?", male: "Муж", female: "Жен",
-        f_legal: "Юридические документы",
-        f_support: "Центр поддержки",
-        aboutTitle: "О нас",
-        f_about: "Центр международной торговли. Наша миссия — создавать быстрые, безопасные и безграничные возможности для каждого предпринимателя.",
-        welcome: "Добро пожаловать!"
-    },
-    zh: {
-        login: "登录", signup: "注册",
-        hTitle: "全球代发货 <br> 未来在于 Eternal",
-        hDesc: "跨越国界扩展您的业务。",
-        heroBtn: "开始",
-        email: "电子邮件", pass: "密码", name: "姓名", country: "国家", city: "城市", gender: "性别", dob: "生日", role: "角色", seller: "卖家", buyer: "买家", forgot: "忘记密码?", male: "男", female: "女",
-        f_legal: "法律文件",
-        f_support: "支持中心",
-        aboutTitle: "关于我们",
-        f_about: "无国界贸易中心。我们的使命是为全球市场的每一位企业家创造快速、安全、无限的机会。",
-        welcome: "欢迎！"
-    },
-    ar: {
-        login: "دخول", signup: "انضمام",
-        hTitle: "دروبشيبينغ عالمي <br> المستقبل مع إتيرنال",
-        hDesc: "وسع أعمالك عبر الحدود.",
-        heroBtn: "ابدأ الآن",
-        email: "بريد", pass: "كلمة السر", name: "الاسم", country: "بلد", city: "مدينة", gender: "جنس", dob: "ميلاد", role: "دور", seller: "بائع", buyer: "مشتري", forgot: "نسيت؟", male: "ذكر", female: "أنثى",
-        f_legal: "الوثائق القانونية",
-        f_support: "مركز الدعم",
-        aboutTitle: "من نحن",
-        f_about: "مركز التجارة بلا حدود. مهمتنا هي خلق فرص سريعة وآمنة وغير محدودة لكل رائد أعمال في السوق العالمية.",
-        welcome: "أهلاً بك!"
-    }
+// Firebase config
+const firebaseConfig = {
+    apiKey: "",
+    authDomain: "eternal-global.firebaseapp.com",
+    projectId: "sonsuz-kuresel",
+    appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
 };
-   
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-    let curLang = 'en';
-    let currentMode = 'login';
+// LocalStorage fallback (offline)
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let currentUser = null;
+let curLang = 'az';
+let currentMode = 'login';
 
-function updateLanguage(lang) {
-    curLang = lang;
-    const t = langData[lang];
-    if (!t) return;
+function updateLanguage(lang){ curLang=lang; if(document.getElementById('authModal').style.display==='flex') renderForm(); }
+function openModal(mode){ currentMode=mode; document.getElementById('authModal').style.display='flex'; renderForm(); }
+function closeModal(){ document.getElementById('authModal').style.display='none'; }
+function togglePass(){ const p=document.getElementById('l_pass'); if(p)p.type=p.type==='password'?'text':'password'; }
 
-    // Hero hissəsi
-    if (document.getElementById('hTitle'))
-        document.getElementById('hTitle').innerHTML = t.hTitle;
-
-    if (document.getElementById('hDesc'))
-        document.getElementById('hDesc').innerText = t.hDesc;
-
-    // Footer və digər hissələr
-    if (document.getElementById('f_about'))
-        document.getElementById('f_about').innerText = t.f_about;
-
-    if (document.getElementById('supportTitle'))
-        document.getElementById('supportTitle').innerText = t.f_support;
-
-    // Düymələr
-    if (document.getElementById('heroBtn'))
-        document.getElementById('heroBtn').innerText = t.heroBtn || "Get Started";
-
-    if (document.getElementById('navLogin'))
-        document.getElementById('navLogin').innerText = t.login;
-
-    if (document.getElementById('navSignup'))
-        document.getElementById('navSignup').innerText = t.signup;
-
-    // Digər başlıqlar
-    const legal = document.getElementById('legalDocsTitle') || document.getElementById('f_legal');
-    const support = document.getElementById('supportTitle') || document.getElementById('f_support');
-    const about = document.getElementById('aboutTitle');
-
-    if (legal) legal.innerText = t.f_legal || "Legal";
-    if (support) support.innerText = t.f_support || "Support";
-    if (about) about.innerText = t.aboutTitle || "About";
-
-    if (document.getElementById('aboutText'))
-        document.getElementById('aboutText').innerText = t.aboutText;
-
-    // Modal açıqdırsa yenilə
-    if (document.getElementById('authModal') && document.getElementById('authModal').style.display === 'flex') {
-        renderForm();
-    }
-}
-    function openModal(mode) {
-        currentMode = mode;
-        document.getElementById('authModal').style.display = 'flex';
-        renderForm();
-    }
-
-    function closeModal() { document.getElementById('authModal').style.display = 'none'; }
-
-    function togglePass() {
-        const p = document.getElementById('l_pass');
-        p.type = p.type === "password" ? "text" : "password";
-    }
-
-    function renderForm() {
-        const t = langData[curLang];
-        const body = document.getElementById('formBody');
-        document.getElementById('mTitle').innerText = currentMode === 'login' ? t.login : t.signup;
-        document.getElementById('mActionBtn').innerText = currentMode === 'login' ? t.login : t.signup;
-
-        if (currentMode === 'login') {
-            body.innerHTML = `
-                <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
-                <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass">
-                <span class="eye-btn" onclick="togglePass()">👁️</span></div>
-                <a style="font-size:0.8rem; color:#3b82f6; cursor:pointer;" onclick="handleForgot()">${t.forgot}</a>`;
-        } else {
-            body.innerHTML = `
-                <div class="input-group"><label>${t.name}</label><input type="text" id="l_name"></div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <div class="input-group"><label>${t.country}</label><input type="text" id="l_country"></div>
-                    <div class="input-group"><label>${t.city}</label><input type="text" id="l_city"></div>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <div class="input-group"><label>${t.gender}</label><select id="l_gender"><option value="m">${t.male}</option><option value="f">${t.female}</option></select></div>
-                    <div class="input-group"><label>${t.dob}</label><input type="date" id="l_dob"></div>
-                </div>
-                <div class="input-group"><label>${t.role}</label><select id="l_role"><option value="buyer">${t.buyer}</option><option value="seller">${t.seller}</option></select></div>
-                <div class="input-group"><label>${t.email}</label><input type="email" id="l_email"></div>
-                <div class="input-group"><label>${t.pass}</label><input type="password" id="l_pass"><span class="eye-btn" onclick="togglePass()">👁️</span></div>`;
-        }
-    }
-
-   function handleSubmit() {
-    const email = document.getElementById('l_email').value;
-    const pass = document.getElementById('l_pass').value;
-
-    if (!email || !pass) {
-        alert("Bütün xanaları doldurun!");
-        return;
-    }
-
-    if (currentMode === 'login') {
-        auth.signInWithEmailAndPassword(email, pass)
-        .then(() => {
-            alert("Xoş gəldiniz!");
-            window.location.href = "anasayfa.html";
-        })
-        .catch(e => alert(e.message));
-    } else {
-        auth.createUserWithEmailAndPassword(email, pass)
-        .then(() => {
-            alert("Qeydiyyat tamamlandı!");
-            window.location.href = "anasayfa.html";
-        })
-        .catch(e => alert(e.message));
-    }
+function renderForm(){
+const body=document.getElementById('formBody');
+body.innerHTML = currentMode==='login'?
+`<div class="input-group"><label>Email</label><input type="email" id="l_email"></div>
+<div class="input-group"><label>Password</label><input type="password" id="l_pass"><span class="eye-btn" onclick="togglePass()">👁️</span></div>
+<a style="font-size:0.8rem;color:#3b82f6;cursor:pointer;" onclick="handleForgot()">Forgot Password?</a>`:
+`<div class="input-group"><label>Full Name</label><input type="text" id="l_name"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div class="input-group"><label>Country</label><input type="text" id="l_country"></div>
+<div class="input-group"><label>City</label><input type="text" id="l_city"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div class="input-group"><label>Gender</label><select id="l_gender"><option value="m">Male</option><option value="f">Female</option></select></div>
+<div class="input-group"><label>Birth Date</label><input type="date" id="l_dob"></div></div>
+<div class="input-group"><label>Email</label><input type="email" id="l_email"></div>
+<div class="input-group"><label>Password</label><input type="password" id="l_pass"><span class="eye-btn" onclick="togglePass()">👁️</span></div>`;
 }
 
-    function handleForgot() {
-        const email = prompt("Emailinizi daxil edin:");
-        if (email) auth.sendPasswordResetEmail(email).then(() => alert("Link göndərildi!")).catch(e => alert(e.message));
-    }
-    function loginAndGo() {
-    window.location.href = "anasayfa.html";
+function handleSubmit(){
+const email=document.getElementById('l_email').value;
+const pass=document.getElementById('l_pass').value;
+if(!email||!pass){alert("Bütün xanaları doldurun!"); return;}
+if(currentMode==='login'){
+auth.signInWithEmailAndPassword(email, pass)
+.then(() => { currentUser = {email}; showDashboard(); closeModal(); })
+.catch(e=>alert(e.message));
+}else{
+auth.createUserWithEmailAndPassword(email, pass)
+.then(() => { currentUser = {email, phoneVerified:false, VIP:false}; users.push(currentUser); localStorage.setItem('users',JSON.stringify(users)); showDashboard(); closeModal(); })
+.catch(e=>alert(e.message));
 }
-   function handleSubmit() {
-    // Mesaj çıxarırıq
-    alert("Xoş gəldiniz! Yönləndirilirsiniz...");
-    // Səhifəni dəyişirik
-    window.location.href = "anasayfa.html";
+}
+
+function handleForgot(){
+const email=prompt("Emailinizi daxil edin:");
+if(email) auth.sendPasswordResetEmail(email).then(()=>alert("Link göndərildi!")).catch(e=>alert(e.message));
+}
+
+function showDashboard(){
+document.querySelector('nav').style.display='none';
+document.querySelector('.hero').style.display='none';
+document.getElementById('dashboard').style.display='block';
+document.getElementById('userName').innerText=currentUser.email;
+updatePhoneStatus();
+renderVIP();
+}
+
+function updatePhoneStatus(){
+document.getElementById('phoneStatus').innerText=currentUser.phoneVerified?'✔':'✖';
+document.getElementById('phoneVerifyDiv').style.display=currentUser.phoneVerified?'none':'block';
+}
+
+function verifyPhone(){
+const code=document.getElementById('phoneCode').value;
+if(code==='1234'){currentUser.phoneVerified=true; saveUser(); updatePhoneStatus(); alert('Telefon təsdiqləndi!');}
+else alert('Kod səhvdir!');
+}
+
+function saveUser(){
+users = users.map(u=>u.email===currentUser.email?currentUser:u);
+localStorage.setItem('users',JSON.stringify(users));
+}
+
+const vipPlans=[
+{name:"Gold",price:"$50"},
+{name:"Platinum",price:"$100"},
+{name:"Diamond",price:"$200"}
+];
+
+function renderVIP(){
+const div=document.getElementById('vipPlans'); div.innerHTML='';
+vipPlans.forEach(p=>{
+const vipDiv=document.createElement('div'); vipDiv.className='vip-plan';
+vipDiv.innerHTML=`<b>${p.name}</b> - ${p.price} <a href="https://payoneer.com/payment-link" target="_blank" class="btn btn-outline" style="margin-left:10px;">Pay Now</a>`;
+div.appendChild(vipDiv);
+});
 }
 </script>
 
