@@ -1,185 +1,722 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Eternal Global Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    
-    <style>
-        :root {
-            --bg: #020617; --card: #0a1628; --card-hover: #112240; 
-            --blue: #3b82f6; --blue-glow: rgba(59,130,246,0.3);
-            --text: #f8fafc; --muted: #64748b; --border: #1e293b;
-            --green: #10b981; --red: #ef4444;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eternal Global Network | Shop Everything</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#16161f;--card:#1a1a26;--card2:#1e1e2e;
+  --blue:#3b82f6;--blue2:#60a5fa;--gold:#f59e0b;--green:#10b981;--red:#ef4444;
+  --border:#2a2a3d;--border2:#333350;
+  --text:#f1f5f9;--muted:#94a3b8;--muted2:#64748b;
+  --radius:12px;--radius-lg:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
-        /* YAN MENYU (SIDEBAR) */
-        .sidebar {
-            width: 260px; background: var(--card); border-right: 1px solid var(--border);
-            padding: 2rem 1.5rem; display: flex; flex-direction: column;
-        }
-        .logo { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 2rem; letter-spacing: -0.5px; }
-        .logo span { color: var(--blue); }
-        .nav-link {
-            display: flex; align-items: center; gap: 12px; padding: 12px 15px;
-            color: var(--muted); text-decoration: none; border-radius: 8px; margin-bottom: 8px;
-            transition: 0.3s; cursor: pointer;
-        }
-        .nav-link:hover, .nav-link.active {
-            background: rgba(59,130,246,0.1); color: var(--blue);
-        }
-        .logout-btn { margin-top: auto; color: var(--red); border: 1px solid var(--red); background: transparent; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600;}
-        .logout-btn:hover { background: var(--red); color: white; }
+/* ── TOP BAR ── */
+.topbar{background:#131320;border-bottom:1px solid var(--border);padding:6px 4%;display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:var(--muted);}
+.topbar-left{display:flex;gap:20px;}
+.topbar span{display:flex;align-items:center;gap:5px;}
 
-        /* ƏSAS HİSSƏ */
-        .main-content { flex: 1; padding: 2rem 3rem; overflow-y: auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .user-info { display: flex; align-items: center; gap: 15px; background: var(--card); padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); }
-        
-        .btn-primary {
-            background: var(--blue); color: white; border: none; padding: 12px 24px;
-            border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 0 15px var(--blue-glow); transition: 0.3s;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--blue-glow); }
+/* ── NAV ── */
+nav{background:rgba(10,10,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;}
+.nav-main{padding:0.8rem 4%;display:flex;align-items:center;gap:16px;}
+.logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;white-space:nowrap;}
+.search-bar{flex:1;display:flex;max-width:600px;margin:0 auto;}
+.search-bar input{flex:1;padding:10px 16px;background:var(--card2);border:1.5px solid var(--border2);border-right:none;border-radius:var(--radius) 0 0 var(--radius);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;}
+.search-bar input:focus{border-color:var(--blue);}
+.search-bar button{padding:10px 20px;background:var(--blue);border:none;border-radius:0 var(--radius) var(--radius) 0;cursor:pointer;color:white;font-size:1rem;}
+.search-bar button:hover{background:#2563eb;}
+.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.nav-btn{padding:8px 16px;border-radius:var(--radius);font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-size:0.85rem;transition:all 0.2s;}
+.nav-btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.nav-btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+.nav-btn-primary{background:var(--blue);color:white;}
+.nav-btn-primary:hover{background:#2563eb;}
+.cart-btn{position:relative;padding:8px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:1.1rem;color:var(--text);}
+.cart-count{position:absolute;top:-6px;right:-6px;background:var(--red);color:white;font-size:0.65rem;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 
-        /* MƏHSUL ƏLAVƏ ETMƏ FORMU (ƏN VACİB HİSSƏ) */
-        .product-form-container {
-            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-            padding: 2rem; margin-top: 2rem;
-        }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group.full-width { grid-column: span 2; }
-        label { display: block; color: var(--muted); margin-bottom: 8px; font-size: 0.9rem; }
-        input, select, textarea {
-            width: 100%; background: var(--bg); border: 1px solid var(--border);
-            color: white; padding: 12px; border-radius: 8px; outline: none; transition: 0.3s;
-        }
-        input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 10px var(--blue-glow); }
-        
-        /* Video və Şəkil Yükləmə Sahəsi */
-        .upload-area {
-            border: 2px dashed var(--border); border-radius: 12px; padding: 2rem;
-            text-align: center; color: var(--muted); cursor: pointer; transition: 0.3s;
-        }
-        .upload-area:hover { border-color: var(--blue); background: rgba(59,130,246,0.05); }
-        .upload-area i { font-size: 2rem; color: var(--blue); margin-bottom: 10px; }
+/* ── CATEGORIES NAV ── */
+.cat-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 4%;display:flex;gap:0;overflow-x:auto;}
+.cat-nav::-webkit-scrollbar{display:none;}
+.cat-item{padding:10px 18px;font-size:0.83rem;font-weight:500;color:var(--muted);white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
+.cat-item:hover,.cat-item.active{color:var(--text);border-bottom-color:var(--blue);}
 
-        /* Kupon və Kargo Sahəsi */
-        .highlight-box {
-            background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 15px; border-radius: 8px; margin-top: 10px;
-        }
-    </style>
+/* ── HERO SLIDER ── */
+.hero{position:relative;overflow:hidden;background:var(--bg2);}
+.hero-slides{display:flex;transition:transform 0.5s ease;}
+.hero-slide{min-width:100%;padding:60px 6%;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+.hero-slide.s1{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);}
+.hero-slide.s2{background:linear-gradient(135deg,#0f1e0f 0%,#14532d 100%);}
+.hero-slide.s3{background:linear-gradient(135deg,#1c0f00 0%,#431407 100%);}
+.hero-tag{display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:5px 14px;border-radius:50px;font-size:0.78rem;font-weight:600;letter-spacing:1px;margin-bottom:16px;}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:14px;}
+.hero-desc{color:rgba(255,255,255,0.65);font-size:0.95rem;line-height:1.7;margin-bottom:28px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.hero-visual{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.hero-prod-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:14px;text-align:center;width:130px;backdrop-filter:blur(10px);}
+.hero-prod-img{font-size:2.5rem;margin-bottom:8px;}
+.hero-prod-name{font-size:0.75rem;font-weight:600;margin-bottom:4px;}
+.hero-prod-price{font-size:0.8rem;color:var(--gold);font-weight:700;}
+.slide-dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;}
+.dot.active{background:var(--blue);width:24px;border-radius:4px;}
+.slide-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:white;backdrop-filter:blur(5px);transition:all 0.2s;z-index:10;}
+.slide-arrow:hover{background:rgba(255,255,255,0.2);}
+.slide-prev{left:16px;}
+.slide-next{right:16px;}
+
+/* ── PROMO BANNER ── */
+.promo-banner{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.promo-card{padding:20px 24px;display:flex;align-items:center;gap:14px;background:var(--bg2);border-right:1px solid var(--border);transition:background 0.2s;cursor:pointer;}
+.promo-card:last-child{border-right:none;}
+.promo-card:hover{background:var(--card);}
+.promo-icon{font-size:1.8rem;flex-shrink:0;}
+.promo-title{font-weight:700;font-size:0.9rem;margin-bottom:3px;}
+.promo-sub{color:var(--muted);font-size:0.78rem;}
+
+/* ── SECTION ── */
+.section{padding:50px 4%;}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.sec-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;}
+.sec-title span{color:var(--blue);}
+.see-all{color:var(--blue);font-size:0.85rem;font-weight:600;cursor:pointer;}
+.see-all:hover{text-decoration:underline;}
+
+/* ── PRODUCT GRID ── */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transition:all 0.3s;position:relative;}
+.prod-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+.prod-badge{position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:50px;font-size:0.68rem;font-weight:700;letter-spacing:0.5px;z-index:1;}
+.badge-hot{background:#ef4444;color:white;}
+.badge-new{background:#10b981;color:white;}
+.badge-sale{background:#f59e0b;color:#000;}
+.badge-vip{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;}
+.prod-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:var(--bg3);}
+.prod-body{padding:14px;}
+.prod-category{font-size:0.72rem;color:var(--blue);font-weight:600;margin-bottom:4px;letter-spacing:0.5px;}
+.prod-name{font-weight:600;font-size:0.9rem;margin-bottom:6px;line-height:1.4;}
+.prod-seller{font-size:0.75rem;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+.prod-seller-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.prod-rating{display:flex;align-items:center;gap:4px;margin-bottom:10px;}
+.stars{color:var(--gold);font-size:0.8rem;}
+.rating-count{font-size:0.75rem;color:var(--muted);}
+.prod-footer{display:flex;align-items:center;justify-content:space-between;}
+.prod-price{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);}
+.prod-price-old{font-size:0.78rem;color:var(--muted);text-decoration:line-through;margin-left:6px;}
+.prod-discount{font-size:0.75rem;color:var(--green);font-weight:700;}
+.add-cart{width:32px;height:32px;background:var(--blue);border:none;border-radius:8px;cursor:pointer;color:white;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
+.add-cart:hover{background:#2563eb;transform:scale(1.1);}
+
+/* ── HORIZONTAL SCROLL ── */
+.prod-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;}
+.prod-scroll::-webkit-scrollbar{height:4px;}
+.prod-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.prod-scroll .prod-card{min-width:200px;}
+
+/* ── VIP BANNER ── */
+.vip-banner{margin:0 4%;background:linear-gradient(135deg,#1a1000 0%,#2d1f00 50%,#1a1000 100%);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-lg);padding:40px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:30px;position:relative;overflow:hidden;}
+.vip-banner::before{content:'👑';position:absolute;right:160px;top:50%;transform:translateY(-50%);font-size:6rem;opacity:0.08;}
+.vip-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--gold);margin-bottom:8px;}
+.vip-desc{color:rgba(245,158,11,0.7);font-size:0.9rem;line-height:1.6;max-width:500px;}
+.vip-perks{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap;}
+.vip-perk{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:rgba(245,158,11,0.85);font-weight:500;}
+.vip-btn{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;padding:14px 32px;border:none;border-radius:var(--radius);font-weight:800;font-size:0.95rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.vip-btn:hover{transform:scale(1.04);}
+
+/* ── INTEGRATIONS ── */
+.integrations{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 4%;}
+.int-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:30px;}
+.int-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;transition:all 0.3s;cursor:pointer;}
+.int-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.int-icon{font-size:1.8rem;margin-bottom:8px;}
+.int-name{font-weight:700;font-size:0.85rem;margin-bottom:3px;}
+.int-status{font-size:0.72rem;color:var(--green);font-weight:600;}
+
+/* ── CATEGORIES GRID ── */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 12px;text-align:center;cursor:pointer;transition:all 0.3s;}
+.cat-card:hover{border-color:var(--blue);background:rgba(59,130,246,0.05);}
+.cat-card-icon{font-size:2rem;margin-bottom:10px;}
+.cat-card-name{font-size:0.82rem;font-weight:600;}
+.cat-card-count{font-size:0.72rem;color:var(--muted);margin-top:3px;}
+
+/* ── TRENDING ── */
+.trending-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;}
+.trending-left{display:grid;grid-template-rows:1fr 1fr;gap:16px;}
+.trending-big{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;display:flex;gap:20px;align-items:center;cursor:pointer;transition:all 0.3s;}
+.trending-big:hover{border-color:var(--border2);}
+.trending-big-img{font-size:4rem;background:var(--bg3);width:100px;height:100px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.trending-right{display:flex;flex-direction:column;gap:12px;}
+.trending-small{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:all 0.3s;}
+.trending-small:hover{border-color:var(--border2);}
+.trending-small-img{font-size:2rem;background:var(--bg3);width:52px;height:52px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ── SELLERS ── */
+.sellers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.seller-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;}
+.seller-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.seller-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#818cf8);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;margin:0 auto 12px;color:white;font-family:'Syne',sans-serif;}
+.seller-name{font-weight:700;font-size:0.95rem;margin-bottom:4px;}
+.seller-loc{font-size:0.78rem;color:var(--muted);margin-bottom:10px;}
+.seller-stats{display:flex;gap:14px;justify-content:center;}
+.seller-stat{text-align:center;}
+.seller-stat-num{font-weight:700;font-size:0.9rem;color:var(--blue);}
+.seller-stat-label{font-size:0.7rem;color:var(--muted);}
+.seller-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--gold);padding:3px 10px;border-radius:50px;font-size:0.7rem;font-weight:700;margin-bottom:10px;}
+
+/* ── FLASH SALE ── */
+.flash-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 4%;}
+.flash-header{display:flex;align-items:center;gap:20px;margin-bottom:24px;}
+.flash-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;}
+.flash-badge{background:#ef4444;color:white;padding:6px 16px;border-radius:50px;font-size:0.8rem;font-weight:700;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.7;}}
+.countdown{display:flex;gap:8px;align-items:center;}
+.cd-block{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;text-align:center;min-width:48px;}
+.cd-num{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;line-height:1;}
+.cd-label{font-size:0.62rem;color:var(--muted);margin-top:2px;}
+.cd-sep{font-size:1.2rem;font-weight:700;color:var(--muted);}
+
+/* ── FOOTER ── */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:50px 4% 30px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand .logo{font-size:1.4rem;display:block;margin-bottom:14px;}
+.footer-desc{color:var(--muted);font-size:0.85rem;line-height:1.7;margin-bottom:16px;}
+.footer-socials{display:flex;gap:10px;}
+.social-btn{width:36px;height:36px;background:var(--card);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;}
+.social-btn:hover{border-color:var(--blue);}
+.footer-col h4{font-weight:700;font-size:0.9rem;margin-bottom:14px;color:var(--text);}
+.footer-col a{display:block;color:var(--muted);font-size:0.83rem;margin-bottom:8px;cursor:pointer;transition:color 0.2s;}
+.footer-col a:hover{color:var(--text);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-copy{color:var(--muted2);font-size:0.78rem;}
+.footer-payments{display:flex;gap:8px;}
+.pay-badge{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:0.72rem;color:var(--muted);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 20px;font-size:0.85rem;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.35s;max-width:280px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:var(--green);color:var(--green);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero-slide{grid-template-columns:1fr;padding:40px 5%;}
+  .hero-visual{display:none;}
+  .promo-banner{grid-template-columns:1fr;}
+  .promo-card{border-right:none;border-bottom:1px solid var(--border);}
+  .trending-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .topbar{display:none;}
+  .vip-banner{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .nav-main{flex-wrap:wrap;}
+  .search-bar{order:3;flex-basis:100%;}
+}
+</style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="logo">ETERNAL<span>.NET</span></div>
-        <a class="nav-link active"><i class="fas fa-home"></i> Dashboard</a>
-        <a class="nav-link"><i class="fas fa-box-open"></i> Məhsullarım</a>
-        <a class="nav-link"><i class="fas fa-shopping-cart"></i> Sifarişlər</a>
-        <a class="nav-link"><i class="fas fa-ticket-alt"></i> Kuponlar</a>
-        <a class="nav-link"><i class="fas fa-truck"></i> Kargo & İzləmə</a>
-        
-        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Çıxış</button>
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span>🌍 Ship to 150+ countries</span>
+    <span>⚡ Flash Sale: Up to 70% OFF</span>
+    <span>🔒 Buyer Protection on all orders</span>
+  </div>
+  <div>
+    <span>📞 24/7 Support &nbsp;|&nbsp; <a href="index.html" style="color:var(--blue);">Seller Login</a></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-main">
+    <a href="home.html" class="logo">ETERNAL</a>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search products, brands, sellers..." onkeydown="if(event.key==='Enter')doSearch()">
+      <button onclick="doSearch()">🔍</button>
     </div>
-
-    <div class="main-content">
-        <div class="header">
-            <div>
-                <h1 style="font-size: 2rem; margin-bottom: 5px;">Satıcı Paneli</h1>
-                <p style="color: var(--muted);">Yeni məhsulunuzu qlobal şəbəkəyə çıxarın.</p>
-            </div>
-            <div class="user-info">
-                <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--blue);"></i>
-                <span id="userDisplay">Yüklənir...</span>
-            </div>
-        </div>
-
-        <div class="product-form-container">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2><i class="fas fa-plus-circle" style="color: var(--blue); margin-right: 10px;"></i>Yeni Məhsul Yarat</h2>
-                <button class="btn-primary" onclick="alert('Bura Firebase Firestore qoşulacaq!')">Kataloqa Əlavə Et</button>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group full-width">
-                    <label>Məhsulun Adı</label>
-                    <input type="text" placeholder="Məsələn: Premium Wireless Qulaqlıq">
-                </div>
-
-                <div class="form-group full-width">
-                    <label>Detallı Açıqlama (HTML Dəstəkli)</label>
-                    <textarea rows="4" placeholder="Məhsulun özəllikləri, texniki parametrləri və s. istədiyiniz kimi bura yazın..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Qiymət (USD $)</label>
-                    <input type="number" placeholder="0.00">
-                </div>
-
-                <div class="form-group">
-                    <label>Stok Sayı (Ədəd)</label>
-                    <input type="number" placeholder="100">
-                </div>
-
-                <div class="form-group highlight-box" style="border-color: #f59e0b; background: rgba(245, 158, 11, 0.05);">
-                    <label style="color: #f59e0b;"><i class="fas fa-shipping-fast"></i> Kargo & Çatdırılma Müddəti</label>
-                    <input type="text" placeholder="Məsələn: 3-5 İş günü (Express)">
-                    <input type="text" placeholder="Kargo Şirkəti (DHL, FedEx, Eternal Cargo)" style="margin-top: 10px;">
-                </div>
-
-                <div class="form-group highlight-box">
-                    <label style="color: var(--green);"><i class="fas fa-tags"></i> Endirim Kuponu Təyin Et</label>
-                    <input type="text" placeholder="Məs: ETERNAL20 (20% Endirim üçün)">
-                </div>
-
-                <div class="form-group full-width">
-                    <label>Media Yüklə (Video və Şəkillər)</label>
-                    <div class="upload-area">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Video (MP4) və ya Şəkilləri (JPG/PNG) bura sürükləyin</p>
-                        <p style="font-size: 0.8rem; margin-top: 5px;">Maksimum fayl ölçüsü: 50MB</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="nav-actions">
+      <button class="nav-btn nav-btn-outline" onclick="window.location.href='index.html'">Sell</button>
+      <button class="nav-btn nav-btn-outline" onclick="window.location.href='index.html'">Login</button>
+      <button class="nav-btn nav-btn-primary" onclick="window.location.href='index.html'">Join Free</button>
+      <div class="cart-btn" onclick="showToast('Cart coming in dashboard!','success')">🛒<span class="cart-count" id="cartCount">3</span></div>
     </div>
+  </div>
+  <div class="cat-nav">
+    <div class="cat-item active">All</div>
+    <div class="cat-item">📱 Electronics</div>
+    <div class="cat-item">👗 Fashion</div>
+    <div class="cat-item">🏠 Home & Living</div>
+    <div class="cat-item">💄 Beauty</div>
+    <div class="cat-item">⚽ Sports</div>
+    <div class="cat-item">🧸 Toys</div>
+    <div class="cat-item">📚 Books</div>
+    <div class="cat-item">🌱 Health</div>
+    <div class="cat-item">🚗 Auto</div>
+    <div class="cat-item">🐾 Pets</div>
+    <div class="cat-item">🎮 Gaming</div>
+  </div>
+</nav>
 
-    <script>
-        const firebaseConfig = {
-  apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
-  authDomain: "eternal-global.firebaseapp.com",
-  projectId: "eternal-global",
-  storageBucket: "eternal-global.firebasestorage.app",
-  messagingSenderId: "1028365979555",
-  appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416",
-  measurementId: "G-4J79DKDF5V"
-};
-        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-        const auth = firebase.auth();
+<!-- HERO SLIDER -->
+<div class="hero">
+  <div class="hero-slides" id="heroSlides">
+    <!-- SLIDE 1 -->
+    <div class="hero-slide s1">
+      <div>
+        <div class="hero-tag">🚀 NEW ARRIVALS</div>
+        <h1 class="hero-title">Shop the World,<br>Delivered to You</h1>
+        <p class="hero-desc">Discover millions of products from verified global sellers. Fast shipping, buyer protection, best prices.</p>
+        <div class="hero-btns">
+          <button class="nav-btn nav-btn-primary" style="padding:13px 30px;font-size:0.95rem;">Shop Now</button>
+          <button class="nav-btn nav-btn-outline" style="padding:13px 22px;font-size:0.95rem;">Browse Deals</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-prod-card"><div class="hero-prod-img">📱</div><div class="hero-prod-name">Smartphones</div><div class="hero-prod-price">From $89</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">💻</div><div class="hero-prod-name">Laptops</div><div class="hero-prod-price">From $299</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">⌚</div><div class="hero-prod-name">Smartwatches</div><div class="hero-prod-price">From $39</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">🎧</div><div class="hero-prod-name">Headphones</div><div class="hero-prod-price">From $19</div></div>
+      </div>
+    </div>
+    <!-- SLIDE 2 -->
+    <div class="hero-slide s2">
+      <div>
+        <div class="hero-tag" style="background:rgba(16,185,129,0.2);border-color:rgba(16,185,129,0.3);color:#34d399;">🌿 ECO SELLERS</div>
+        <h1 class="hero-title" style="background:linear-gradient(135deg,#fff,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Global Sellers,<br>Local Prices</h1>
+        <p class="hero-desc">Connect directly with manufacturers and wholesalers. Cut the middleman. Save more.</p>
+        <div class="hero-btns">
+          <button class="nav-btn" style="background:#10b981;color:white;padding:13px 30px;font-size:0.95rem;">Explore Sellers</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-prod-card"><div class="hero-prod-img">👟</div><div class="hero-prod-name">Footwear</div><div class="hero-prod-price">From $22</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">👗</div><div class="hero-prod-name">Clothing</div><div class="hero-prod-price">From $8</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">👜</div><div class="hero-prod-name">Bags</div><div class="hero-prod-price">From $15</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">💍</div><div class="hero-prod-name">Jewelry</div><div class="hero-prod-price">From $5</div></div>
+      </div>
+    </div>
+    <!-- SLIDE 3 -->
+    <div class="hero-slide s3">
+      <div>
+        <div class="hero-tag" style="background:rgba(245,158,11,0.2);border-color:rgba(245,158,11,0.3);color:#fbbf24;">👑 VIP MEMBERS</div>
+        <h1 class="hero-title" style="background:linear-gradient(135deg,#fff,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Unlock VIP<br>Exclusive Deals</h1>
+        <p class="hero-desc">Join thousands of VIP members enjoying exclusive discounts, early access, and zero platform fees.</p>
+        <div class="hero-btns">
+          <button class="nav-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;padding:13px 30px;font-size:0.95rem;font-weight:700;border:none;cursor:pointer;border-radius:12px;">Get VIP Access</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🏠</div><div class="hero-prod-name">Home Decor</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $12</div></div>
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🧴</div><div class="hero-prod-name">Skincare</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $9</div></div>
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🎮</div><div class="hero-prod-name">Gaming</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $45</div></div>
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🔧</div><div class="hero-prod-name">Tools</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $18</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-dots">
+    <div class="dot active" onclick="goSlide(0)"></div>
+    <div class="dot" onclick="goSlide(1)"></div>
+    <div class="dot" onclick="goSlide(2)"></div>
+  </div>
+  <div class="slide-arrow slide-prev" onclick="prevSlide()">‹</div>
+  <div class="slide-arrow slide-next" onclick="nextSlide()">›</div>
+</div>
 
-        // Girişi yoxla
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                document.getElementById('userDisplay').innerText = user.email;
-            } else {
-                window.location.href = "index.html";
-            }
-        });
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <div class="promo-card"><span class="promo-icon">🚀</span><div><div class="promo-title">Free Worldwide Shipping</div><div class="promo-sub">On orders over $50</div></div></div>
+  <div class="promo-card"><span class="promo-icon">🔒</span><div><div class="promo-title">Buyer Protection</div><div class="promo-sub">100% refund guarantee</div></div></div>
+  <div class="promo-card"><span class="promo-icon">💳</span><div><div class="promo-title">9 Payment Methods</div><div class="promo-sub">PayPal, Stripe, Crypto & more</div></div></div>
+</div>
 
-        function logout() {
-            auth.signOut().then(() => { window.location.href = "index.html"; });
-        }
-    </script>
+<!-- FLASH SALE -->
+<div class="flash-section">
+  <div class="flash-header">
+    <div class="flash-title">⚡ Flash Sale</div>
+    <div class="flash-badge">LIVE NOW</div>
+    <div class="countdown">
+      <div class="cd-block"><div class="cd-num" id="cd-h">08</div><div class="cd-label">HRS</div></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block"><div class="cd-num" id="cd-m">24</div><div class="cd-label">MIN</div></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block"><div class="cd-num" id="cd-s">00</div><div class="cd-label">SEC</div></div>
+    </div>
+  </div>
+  <div class="prod-scroll">
+    <div class="prod-card" style="min-width:200px" onclick="addToCart(this)">
+      <span class="prod-badge badge-sale">-65%</span>
+      <div class="prod-img">📱</div>
+      <div class="prod-body">
+        <div class="prod-category">ELECTRONICS</div>
+        <div class="prod-name">Wireless Earbuds Pro X</div>
+        <div class="prod-rating"><span class="stars">★★★★★</span><span class="rating-count">(2.4k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$19</span><span class="prod-price-old">$54</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" style="min-width:200px" onclick="addToCart(this)">
+      <span class="prod-badge badge-hot">HOT</span>
+      <div class="prod-img">⌚</div>
+      <div class="prod-body">
+        <div class="prod-category">WEARABLES</div>
+        <div class="prod-name">Smart Fitness Band Ultra</div>
+        <div class="prod-rating"><span class="stars">★★★★☆</span><span class="rating-count">(987)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$34</span><span class="prod-price-old">$89</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" style="min-width:200px" onclick="addToCart(this)">
+      <span class="prod-badge badge-sale">-70%</span>
+      <div class="prod-img">💄</div>
+      <div class="prod-body">
+        <div class="prod-category">BEAUTY</div>
+        <div class="prod-name">Luxury Serum Set Premium</div>
+        <div class="prod-rating"><span class="stars">★★★★★</span><span class="rating-count">(3.1k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$12</span><span class="prod-price-old">$40</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" style="min-width:200px" onclick="addToCart(this)">
+      <span class="prod-badge badge-hot">HOT</span>
+      <div class="prod-img">🏠</div>
+      <div class="prod-body">
+        <div class="prod-category">HOME</div>
+        <div class="prod-name">LED Strip Smart Lights</div>
+        <div class="prod-rating"><span class="stars">★★★★☆</span><span class="rating-count">(1.8k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$8</span><span class="prod-price-old">$22</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" style="min-width:200px" onclick="addToCart(this)">
+      <span class="prod-badge badge-sale">-55%</span>
+      <div class="prod-img">🎮</div>
+      <div class="prod-body">
+        <div class="prod-category">GAMING</div>
+        <div class="prod-name">RGB Gaming Mouse Pro</div>
+        <div class="prod-rating"><span class="stars">★★★★★</span><span class="rating-count">(4.2k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$22</span><span class="prod-price-old">$49</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="sec-header">
+    <div class="sec-title">Shop by <span>Category</span></div>
+    <span class="see-all">View all →</span>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card"><div class="cat-card-icon">📱</div><div class="cat-card-name">Electronics</div><div class="cat-card-count">45,230 items</div></div>
+    <div class="cat-card"><div class="cat-card-icon">👗</div><div class="cat-card-name">Fashion</div><div class="cat-card-count">98,540 items</div></div>
+    <div class="cat-card"><div class="cat-card-icon">🏠</div><div class="cat-card-name">Home & Garden</div><div class="cat-card-count">32,100 items</div></div>
+    <div class="cat-card"><div class="cat-card-icon">💄</div><div class="cat-card-name">Beauty</div><div class="cat-card-count">22,870 items</div></div>
+    <div class="cat-card"><div class="cat-card-icon">⚽</div><div class="cat-card-name">Sports</div><div class="cat-card-count">18,440 items</div></div>
+    <div class="cat-card"><div class="cat-card-icon">🧸</div><div class="cat-card-name">Toys & Kids</div><div class="cat-card-count">14,320 items</div></div>
+    <div class="cat-card"><div class="cat-card-icon">🚗</div><div class="cat-card-name">Auto Parts</div><div class="cat-card-count">9,800 items</div></div>
+    <div class="cat-card"><div class="cat-card-icon">🌱</div><div class="cat-card-name">Health</div><div class="cat-card-count">11,650 items</div></div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section" style="padding-top:0">
+  <div class="sec-header">
+    <div class="sec-title">🔥 <span>Trending</span> Products</div>
+    <span class="see-all">View all →</span>
+  </div>
+  <div class="prod-grid">
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-new">NEW</span>
+      <div class="prod-img">💻</div>
+      <div class="prod-body">
+        <div class="prod-category">ELECTRONICS</div>
+        <div class="prod-name">UltraBook Pro 14" Laptop</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>TechStore AZ</div>
+        <div class="prod-rating"><span class="stars">★★★★★</span><span class="rating-count">(1.2k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$349</span><span class="prod-discount"> -15%</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-vip">VIP</span>
+      <div class="prod-img">👟</div>
+      <div class="prod-body">
+        <div class="prod-category">FASHION</div>
+        <div class="prod-name">Air Running Sneakers X</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>FashionHub TR</div>
+        <div class="prod-rating"><span class="stars">★★★★☆</span><span class="rating-count">(876)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$68</span><span class="prod-price-old">$95</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-hot">HOT</span>
+      <div class="prod-img">🧴</div>
+      <div class="prod-body">
+        <div class="prod-category">BEAUTY</div>
+        <div class="prod-name">Korean Glass Skin Routine</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>BeautyWorld KR</div>
+        <div class="prod-rating"><span class="stars">★★★★★</span><span class="rating-count">(3.8k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$28</span><span class="prod-discount"> -22%</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-new">NEW</span>
+      <div class="prod-img">🪴</div>
+      <div class="prod-body">
+        <div class="prod-category">HOME</div>
+        <div class="prod-name">Smart Plant Watering Kit</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>GreenLife DE</div>
+        <div class="prod-rating"><span class="stars">★★★★☆</span><span class="rating-count">(445)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$24</span><span class="prod-price-old">$38</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-sale">-40%</span>
+      <div class="prod-img">🎧</div>
+      <div class="prod-body">
+        <div class="prod-category">AUDIO</div>
+        <div class="prod-name">Studio Headphones ANC</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>SoundPro US</div>
+        <div class="prod-rating"><span class="stars">★★★★★</span><span class="rating-count">(2.1k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$59</span><span class="prod-price-old">$99</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-vip">VIP</span>
+      <div class="prod-img">🔧</div>
+      <div class="prod-body">
+        <div class="prod-category">TOOLS</div>
+        <div class="prod-name">Pro Cordless Drill Set</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>ToolMaster CN</div>
+        <div class="prod-rating"><span class="stars">★★★★☆</span><span class="rating-count">(678)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$85</span><span class="prod-discount"> -18%</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-hot">HOT</span>
+      <div class="prod-img">🏋️</div>
+      <div class="prod-body">
+        <div class="prod-category">SPORTS</div>
+        <div class="prod-name">Resistance Bands Premium</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>FitZone US</div>
+        <div class="prod-rating"><span class="stars">★★★★★</span><span class="rating-count">(5.2k)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$18</span><span class="prod-price-old">$32</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+    <div class="prod-card" onclick="addToCart(this)">
+      <span class="prod-badge badge-new">NEW</span>
+      <div class="prod-img">🐾</div>
+      <div class="prod-body">
+        <div class="prod-category">PETS</div>
+        <div class="prod-name">Smart Pet GPS Collar</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>PetCare UK</div>
+        <div class="prod-rating"><span class="stars">★★★★☆</span><span class="rating-count">(320)</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$42</span><span class="prod-discount"> -10%</span></div><button class="add-cart">+</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIP BANNER -->
+<div class="vip-banner">
+  <div>
+    <div class="vip-title">👑 Go VIP. Trade Better.</div>
+    <div class="vip-desc">Unlock exclusive seller tools, zero listing fees, priority shipping slots, and members-only product drops.</div>
+    <div class="vip-perks">
+      <div class="vip-perk">✓ 0% Platform Fee</div>
+      <div class="vip-perk">✓ Priority Support</div>
+      <div class="vip-perk">✓ Early Access Deals</div>
+      <div class="vip-perk">✓ Unlimited Listings</div>
+      <div class="vip-perk">✓ Advanced Analytics</div>
+    </div>
+  </div>
+  <button class="vip-btn" onclick="window.location.href='index.html'">Become VIP →</button>
+</div>
+
+<!-- INTEGRATIONS -->
+<div class="integrations">
+  <div class="sec-header">
+    <div class="sec-title">🔗 Platform <span>Integrations</span></div>
+    <span class="see-all">Connect your store →</span>
+  </div>
+  <div style="color:var(--muted);font-size:0.88rem;margin-top:-10px;">Connect your existing store and sync products instantly.</div>
+  <div class="int-grid">
+    <div class="int-card"><div class="int-icon">🛍️</div><div class="int-name">Shopify</div><div class="int-status">✓ Available</div></div>
+    <div class="int-card"><div class="int-icon">📦</div><div class="int-name">Amazon</div><div class="int-status">✓ Available</div></div>
+    <div class="int-card"><div class="int-icon">🛒</div><div class="int-name">WooCommerce</div><div class="int-status">✓ Available</div></div>
+    <div class="int-card"><div class="int-icon">🔶</div><div class="int-name">eBay</div><div class="int-status">✓ Available</div></div>
+    <div class="int-card"><div class="int-icon">🟠</div><div class="int-name">Trendyol</div><div class="int-status">✓ Available</div></div>
+    <div class="int-card"><div class="int-icon">🔵</div><div class="int-name">Hepsiburada</div><div class="int-status">✓ Available</div></div>
+    <div class="int-card"><div class="int-icon">🟡</div><div class="int-name">AliExpress</div><div class="int-status">✓ Available</div></div>
+    <div class="int-card"><div class="int-icon">🟣</div><div class="int-name">Etsy</div><div class="int-status">✓ Available</div></div>
+  </div>
+</div>
+
+<!-- TOP SELLERS -->
+<section class="section">
+  <div class="sec-header">
+    <div class="sec-title">⭐ Top <span>Sellers</span></div>
+    <span class="see-all">All sellers →</span>
+  </div>
+  <div class="sellers-grid">
+    <div class="seller-card">
+      <div class="seller-badge">👑 VIP Seller</div>
+      <div class="seller-avatar">TZ</div>
+      <div class="seller-name">TechZone AZ</div>
+      <div class="seller-loc">📍 Baku, Azerbaijan</div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="seller-stat-num">4.9★</div><div class="seller-stat-label">Rating</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">12K</div><div class="seller-stat-label">Sales</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">340</div><div class="seller-stat-label">Items</div></div>
+      </div>
+    </div>
+    <div class="seller-card">
+      <div class="seller-badge">👑 VIP Seller</div>
+      <div class="seller-avatar" style="background:linear-gradient(135deg,#10b981,#059669)">FH</div>
+      <div class="seller-name">FashionHub TR</div>
+      <div class="seller-loc">📍 Istanbul, Turkey</div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="seller-stat-num">4.8★</div><div class="seller-stat-label">Rating</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">8.4K</div><div class="seller-stat-label">Sales</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">520</div><div class="seller-stat-label">Items</div></div>
+      </div>
+    </div>
+    <div class="seller-card">
+      <div class="seller-avatar" style="background:linear-gradient(135deg,#ef4444,#b91c1c)">SP</div>
+      <div class="seller-name">SoundPro US</div>
+      <div class="seller-loc">📍 New York, USA</div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="seller-stat-num">4.7★</div><div class="seller-stat-label">Rating</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">5.1K</div><div class="seller-stat-label">Sales</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">89</div><div class="seller-stat-label">Items</div></div>
+      </div>
+    </div>
+    <div class="seller-card">
+      <div class="seller-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">TC</div>
+      <div class="seller-name">ToolMaster CN</div>
+      <div class="seller-loc">📍 Shenzhen, China</div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="seller-stat-num">4.9★</div><div class="seller-stat-label">Rating</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">22K</div><div class="seller-stat-label">Sales</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">780</div><div class="seller-stat-label">Items</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">ETERNAL</span>
+      <p class="footer-desc">Next-generation global dropshipping and marketplace platform. Buy and sell across 150+ countries with full buyer protection.</p>
+      <div class="footer-socials">
+        <div class="social-btn">𝕏</div>
+        <div class="social-btn">f</div>
+        <div class="social-btn">in</div>
+        <div class="social-btn">▶</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a onclick="window.location.href='index.html'">About Us</a>
+      <a>Careers</a>
+      <a>Press</a>
+      <a onclick="window.location.href='index.html'">Privacy Policy</a>
+      <a>Terms of Service</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Sellers</h4>
+      <a onclick="window.location.href='index.html'">Start Selling</a>
+      <a onclick="window.location.href='dashboard.html'">Seller Dashboard</a>
+      <a>VIP Plans</a>
+      <a>Integrations</a>
+      <a>Seller Academy</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a>Help Center</a>
+      <a>Buyer Protection</a>
+      <a>Shipping Info</a>
+      <a>Returns</a>
+      <a>Contact Us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Eternal Global Network. All rights reserved.</div>
+    <div class="footer-payments">
+      <span class="pay-badge">PayPal</span>
+      <span class="pay-badge">Payoneer</span>
+      <span class="pay-badge">Stripe</span>
+      <span class="pay-badge">Visa</span>
+      <span class="pay-badge">USDT</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// SLIDER
+let currentSlide = 0;
+const totalSlides = 3;
+function goSlide(n){
+  currentSlide = n;
+  document.getElementById('heroSlides').style.transform = `translateX(-${n*100}%)`;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+function nextSlide(){ goSlide((currentSlide+1)%totalSlides); }
+function prevSlide(){ goSlide((currentSlide-1+totalSlides)%totalSlides); }
+setInterval(nextSlide, 5000);
+
+// COUNTDOWN
+let endTime = Date.now() + 8*3600000 + 24*60000;
+function updateCountdown(){
+  const diff = Math.max(0, endTime - Date.now());
+  const h = Math.floor(diff/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  const s = Math.floor((diff%60000)/1000);
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+// CART
+let cartItems = 3;
+function addToCart(el){
+  cartItems++;
+  document.getElementById('cartCount').textContent = cartItems;
+  showToast('Added to cart! 🛒','success');
+}
+
+// SEARCH
+function doSearch(){
+  const q = document.getElementById('searchInput').value.trim();
+  if(q) showToast(`Searching: "${q}"...`,'success');
+}
+
+// TOAST
+function showToast(msg,type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast '+(type||'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// CAT ITEMS
+document.querySelectorAll('.cat-item').forEach(el=>{
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.cat-item').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
