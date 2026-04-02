@@ -1,77 +1,1019 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Seller Dashboard</title>
-    <style>
-        :root { --blue: #3b82f6; --bg: #020617; --card: #1e293b; --gold: #fbbf24; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; display: flex; }
-        
-        /* Sidebar */
-        .sidebar { width: 250px; background: #0f172a; height: 100vh; padding: 20px; border-right: 1px solid #1e293b; position: fixed; }
-        .logo { font-size: 22px; font-weight: 900; color: var(--blue); margin-bottom: 40px; }
-        .menu-item { padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 8px; transition: 0.3s; color: #94a3b8; }
-        .menu-item:hover, .menu-item.active { background: var(--blue); color: white; }
-        .vip-badge { background: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eternal — Seller Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<style>
+:root{
+  --bg:#080810;--bg2:#0d0d1a;--bg3:#111120;
+  --card:#13131f;--card2:#181826;--card3:#1c1c2e;
+  --blue:#3b82f6;--blue2:#60a5fa;--blue-glow:rgba(59,130,246,0.2);
+  --green:#10b981;--gold:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+  --border:#1e1e32;--border2:#2a2a42;--border3:#333355;
+  --text:#f1f5f9;--muted:#94a3b8;--muted2:#64748b;
+  --radius:10px;--radius-lg:16px;
+  --sidebar:240px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+input,select,textarea{font-family:'DM Sans',sans-serif;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--border2);}
 
-        /* Main Content */
-        .main { margin-left: 290px; padding: 40px; width: 100%; }
-        .stats { display: flex; gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: var(--card); padding: 20px; border-radius: 15px; flex: 1; border: 1px solid #334155; }
-        
-        /* Product Section */
-        .btn-add { background: var(--blue); color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .btn-vip { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-    </style>
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+.sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);}
+.logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;}
+.sidebar-user{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.user-ava{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#818cf8);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;}
+.user-name{font-weight:600;font-size:0.85rem;}
+.user-role{font-size:0.72rem;color:var(--muted);}
+.vip-tag{background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));border:1px solid rgba(245,158,11,0.3);color:var(--gold);padding:2px 8px;border-radius:50px;font-size:0.65rem;font-weight:700;margin-top:2px;display:inline-block;}
+.sidebar-nav{padding:12px 10px;flex:1;}
+.nav-section{font-size:0.68rem;font-weight:700;letter-spacing:1.5px;color:var(--muted2);padding:10px 8px 6px;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius);cursor:pointer;font-size:0.86rem;font-weight:500;color:var(--muted);transition:all 0.2s;margin-bottom:2px;}
+.nav-item:hover{background:var(--card3);color:var(--text);}
+.nav-item.active{background:rgba(59,130,246,0.12);color:var(--blue);}
+.nav-icon{font-size:1rem;width:20px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--red);color:white;font-size:0.65rem;padding:2px 7px;border-radius:50px;font-weight:700;}
+.sidebar-bottom{padding:12px 10px;border-top:1px solid var(--border);}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:50;}
+.page-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.icon-btn{width:36px;height:36px;background:var(--card3);border:1px solid var(--border2);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.95rem;transition:all 0.2s;position:relative;}
+.icon-btn:hover{border-color:var(--border3);}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--red);border-radius:50%;}
+.content{padding:24px;flex:1;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:24px;overflow-x:auto;}
+.tab{padding:8px 18px;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--muted);white-space:nowrap;transition:all 0.2s;}
+.tab:hover{color:var(--text);}
+.tab.active{background:var(--blue);color:white;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* ── STATS CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.stat-card:hover{border-color:var(--border2);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat-card.blue::before{background:var(--blue);}
+.stat-card.green::before{background:var(--green);}
+.stat-card.gold::before{background:var(--gold);}
+.stat-card.purple::before{background:var(--purple);}
+.stat-label{font-size:0.75rem;color:var(--muted);margin-bottom:6px;font-weight:500;}
+.stat-value{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;margin-bottom:4px;}
+.stat-change{font-size:0.75rem;display:flex;align-items:center;gap:4px;}
+.stat-change.up{color:var(--green);}
+.stat-change.down{color:var(--red);}
+.stat-icon{position:absolute;right:16px;top:16px;font-size:1.5rem;opacity:0.4;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px;}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.card-title{font-weight:700;font-size:0.95rem;}
+.card-action{color:var(--blue);font-size:0.8rem;cursor:pointer;font-weight:600;}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-full{grid-column:1/-1;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:0.78rem;color:var(--muted);font-weight:500;}
+.form-group input,.form-group select{padding:10px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-size:0.88rem;outline:none;transition:border-color 0.2s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--blue);}
+.form-group select option{background:var(--card);}
+
+/* ── HIGHLIGHT BOXES ── */
+.highlight-box{border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+.hb-green{background:rgba(16,185,129,0.06);border:1.5px solid rgba(16,185,129,0.25);}
+.hb-blue{background:rgba(59,130,246,0.06);border:1.5px solid rgba(59,130,246,0.25);}
+.hb-gold{background:rgba(245,158,11,0.06);border:1.5px solid rgba(245,158,11,0.25);}
+.hb-red{background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.25);}
+.hb-title{font-size:0.78rem;font-weight:700;letter-spacing:0.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.hb-green .hb-title{color:var(--green);}
+.hb-blue .hb-title{color:var(--blue2);}
+.hb-gold .hb-title{color:var(--gold);}
+.hb-red .hb-title{color:var(--red);}
+
+/* ── DRAG DROP ── */
+.drag-drop{border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:32px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;}
+.drag-drop:hover,.drag-drop.dragover{border-color:var(--blue);background:rgba(59,130,246,0.04);}
+.drag-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.drag-icon{font-size:2.5rem;margin-bottom:10px;opacity:0.6;}
+.drag-text{font-weight:600;font-size:0.9rem;margin-bottom:4px;}
+.drag-sub{font-size:0.78rem;color:var(--muted);}
+.media-preview{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.media-thumb{width:80px;height:80px;border-radius:var(--radius);background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.8rem;position:relative;overflow:hidden;}
+.media-thumb .remove{position:absolute;top:2px;right:2px;background:var(--red);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.media-thumb img{width:100%;height:100%;object-fit:cover;}
+.video-thumb{background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.3);}
+
+/* ── HTML EDITOR ── */
+.editor-toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:var(--bg3);border:1px solid var(--border2);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;}
+.editor-btn{padding:5px 10px;background:var(--card2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.78rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.editor-btn:hover{background:var(--blue);border-color:var(--blue);}
+.editor-textarea{width:100%;min-height:160px;padding:14px;background:var(--bg3);border:1px solid var(--border2);border-radius:0 0 var(--radius) var(--radius);color:var(--text);font-size:0.88rem;resize:vertical;outline:none;line-height:1.6;}
+.editor-textarea:focus{border-color:var(--blue);}
+.editor-preview{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:14px;min-height:80px;font-size:0.88rem;line-height:1.6;color:var(--muted2);margin-top:10px;}
+
+/* ── COUPON ── */
+.coupon-input-row{display:flex;gap:10px;align-items:flex-end;}
+.coupon-code-display{background:rgba(16,185,129,0.08);border:2px dashed rgba(16,185,129,0.4);border-radius:var(--radius);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.coupon-code-text{font-family:monospace;font-size:1.1rem;font-weight:700;color:var(--green);letter-spacing:2px;}
+.copy-btn{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:var(--green);padding:5px 12px;border-radius:6px;font-size:0.78rem;cursor:pointer;font-weight:600;}
+
+/* ── CARGO ── */
+.cargo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.cargo-company-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;}
+.cargo-option{border:1.5px solid var(--border2);border-radius:var(--radius);padding:10px;text-align:center;cursor:pointer;transition:all 0.2s;font-size:0.8rem;font-weight:600;}
+.cargo-option:hover{border-color:var(--blue);}
+.cargo-option.selected{border-color:var(--blue);background:rgba(59,130,246,0.08);color:var(--blue2);}
+.cargo-icon{font-size:1.3rem;margin-bottom:4px;}
+.delivery-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:var(--green);padding:6px 14px;border-radius:50px;font-size:0.8rem;font-weight:700;}
+
+/* ── PRODUCT TABLE ── */
+.prod-table{width:100%;border-collapse:collapse;}
+.prod-table th{font-size:0.73rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:0.5px;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.prod-table td{padding:12px;border-bottom:1px solid var(--border);font-size:0.85rem;vertical-align:middle;}
+.prod-table tr:hover td{background:rgba(255,255,255,0.02);}
+.prod-table tr:last-child td{border-bottom:none;}
+.prod-thumb{width:42px;height:42px;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.status-badge{padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:700;}
+.status-active{background:rgba(16,185,129,0.12);color:var(--green);}
+.status-draft{background:rgba(148,163,184,0.12);color:var(--muted);}
+.status-sold{background:rgba(59,130,246,0.12);color:var(--blue2);}
+.status-vip{background:rgba(245,158,11,0.12);color:var(--gold);}
+.action-btn{padding:5px 12px;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);transition:all 0.2s;}
+.action-btn:hover{border-color:var(--blue);color:var(--blue);}
+.action-btn.danger:hover{border-color:var(--red);color:var(--red);}
+
+/* ── VIP PLANS ── */
+.vip-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.vip-plan{border:1.5px solid var(--border2);border-radius:var(--radius-lg);padding:22px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;}
+.vip-plan:hover{transform:translateY(-3px);}
+.vip-plan.popular{border-color:var(--gold);background:rgba(245,158,11,0.04);}
+.plan-popular-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;padding:3px 14px;border-radius:50px;font-size:0.68rem;font-weight:800;white-space:nowrap;}
+.plan-icon{font-size:2rem;margin-bottom:10px;}
+.plan-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;margin-bottom:4px;}
+.plan-price{font-size:1.8rem;font-weight:800;color:var(--gold);margin-bottom:4px;}
+.plan-period{font-size:0.75rem;color:var(--muted);margin-bottom:14px;}
+.plan-features{text-align:left;margin-bottom:16px;}
+.plan-feat{font-size:0.8rem;color:var(--muted2);padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;}
+.plan-feat:last-child{border-bottom:none;}
+.plan-feat.ok{color:var(--text);}
+.plan-feat.ok::before{content:'✓';color:var(--green);font-weight:700;}
+.plan-feat.no{opacity:0.35;}
+.plan-feat.no::before{content:'✗';color:var(--red);}
+.plan-btn{width:100%;padding:11px;border:1.5px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text);font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;font-size:0.9rem;}
+.plan-btn:hover{background:var(--blue);border-color:var(--blue);}
+.vip-plan.popular .plan-btn{background:var(--gold);border-color:var(--gold);color:#000;}
+.vip-plan.popular .plan-btn:hover{background:#d97706;}
+
+/* ── ORDERS ── */
+.order-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.order-row:last-child{border-bottom:none;}
+.order-icon{font-size:1.6rem;width:44px;height:44px;background:var(--bg3);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.order-info{flex:1;}
+.order-name{font-weight:600;font-size:0.88rem;margin-bottom:2px;}
+.order-meta{font-size:0.75rem;color:var(--muted);}
+.order-amount{font-weight:700;font-size:0.95rem;color:var(--green);white-space:nowrap;}
+
+/* ── TRACKING ── */
+.tracking-steps{display:flex;align-items:center;gap:0;margin:16px 0;}
+.track-step{flex:1;text-align:center;position:relative;}
+.track-step:not(:last-child)::after{content:'';position:absolute;top:14px;right:-50%;width:100%;height:2px;background:var(--border2);}
+.track-step.done:not(:last-child)::after{background:var(--green);}
+.track-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:0.7rem;margin:0 auto 6px;position:relative;z-index:1;}
+.track-step.done .track-dot{border-color:var(--green);background:rgba(16,185,129,0.15);color:var(--green);}
+.track-step.current .track-dot{border-color:var(--blue);background:rgba(59,130,246,0.15);color:var(--blue);}
+.track-label{font-size:0.7rem;color:var(--muted);}
+.track-step.done .track-label,.track-step.current .track-label{color:var(--text);}
+
+/* ── ADMIN SECTION ── */
+.admin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.admin-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:center;gap:14px;}
+.admin-stat-icon{font-size:1.8rem;width:48px;height:48px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.admin-stat-icon.blue{background:rgba(59,130,246,0.1);}
+.admin-stat-icon.green{background:rgba(16,185,129,0.1);}
+.admin-stat-icon.gold{background:rgba(245,158,11,0.1);}
+.admin-stat-icon.red{background:rgba(239,68,68,0.1);}
+.admin-stat-num{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;}
+.admin-stat-label{font-size:0.75rem;color:var(--muted);}
+.user-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.user-row:last-child{border-bottom:none;}
+.user-ava2{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#818cf8);display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;}
+.user-info{flex:1;}
+.user-name2{font-weight:600;font-size:0.85rem;}
+.user-meta{font-size:0.73rem;color:var(--muted);}
+
+/* ── BTN ── */
+.btn{padding:10px 20px;border-radius:var(--radius);font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-size:0.88rem;transition:all 0.2s;display:inline-flex;align-items:center;gap:7px;}
+.btn-primary{background:var(--blue);color:white;}
+.btn-primary:hover{background:#2563eb;}
+.btn-success{background:var(--green);color:white;}
+.btn-success:hover{background:#059669;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#d97706);color:#000;font-weight:700;}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+.btn-sm{padding:7px 14px;font-size:0.8rem;}
+.btn-danger{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.2);}
+.btn-danger:hover{background:var(--red);color:white;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border3);border-radius:var(--radius);padding:12px 18px;font-size:0.85rem;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.35s;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:var(--green);color:var(--green);}
+.toast.error{border-color:var(--red);color:var(--red);}
+
+/* ── CHART BAR ── */
+.mini-chart{display:flex;align-items:flex-end;gap:6px;height:60px;margin-top:10px;}
+.bar{flex:1;background:var(--blue);border-radius:3px 3px 0 0;opacity:0.7;transition:opacity 0.2s;cursor:pointer;}
+.bar:hover{opacity:1;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{display:none;}
+  .main{margin-left:0;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .vip-plans{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .cargo-grid{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="logo">ETERNAL</div>
-    <div class="menu-item active">🏠 Dashboard</div>
-    <div class="menu-item">📦 Products</div>
-    <div class="menu-item">⚡ Alibaba Sync <span class="vip-badge">VIP</span></div>
-    <div class="menu-item">📊 Analytics</div>
-    <div class="menu-item" style="margin-top: 50px; color: var(--gold);">💎 Upgrade to VIP</div>
+  <div class="sidebar-logo">
+    <a href="home.html" class="logo">ETERNAL</a>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-ava">EG</div>
+    <div>
+      <div class="user-name">Eternal Seller</div>
+      <div class="user-role">Satıcı Hesabı</div>
+      <div class="vip-tag">👑 VIP</div>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Ana Panel</div>
+    <div class="nav-item active" onclick="showTab('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="showTab('products',this)"><span class="nav-icon">📦</span>Məhsullarım</div>
+    <div class="nav-item" onclick="showTab('add-product',this)"><span class="nav-icon">➕</span>Məhsul Əlavə Et</div>
+    <div class="nav-item" onclick="showTab('orders',this)"><span class="nav-icon">🛒</span>Sifarişlər<span class="nav-badge">7</span></div>
+    <div class="nav-item" onclick="showTab('cargo',this)"><span class="nav-icon">🚚</span>Kargo & İzləmə</div>
+
+    <div class="nav-section">Marketinq</div>
+    <div class="nav-item" onclick="showTab('coupons',this)"><span class="nav-icon">🎟️</span>Kuponlar</div>
+    <div class="nav-item" onclick="showTab('vip',this)"><span class="nav-icon">👑</span>VIP Planlar</div>
+
+    <div class="nav-section">İnteqrasiyalar</div>
+    <div class="nav-item" onclick="showTab('integrations',this)"><span class="nav-icon">🔗</span>Platformalar</div>
+
+    <div class="nav-section">Sistem</div>
+    <div class="nav-item" onclick="showTab('admin',this)"><span class="nav-icon">⚙️</span>Admin Panel</div>
+    <div class="nav-item" onclick="showTab('analytics',this)"><span class="nav-icon">📈</span>Analitika</div>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="nav-item" onclick="window.location.href='index.html'"><span class="nav-icon">🏠</span>Ana Səhifə</div>
+    <div class="nav-item" style="color:var(--red)" onclick="logout()"><span class="nav-icon">🚪</span>Çıxış</div>
+  </div>
 </div>
 
+<!-- MAIN -->
 <div class="main">
-    <h1>Xoş Gəldin, <span id="user-display">Seller</span>!</h1>
-    
-    <div class="stats">
-        <div class="stat-card">
-            <div style="color: #94a3b8;">Total Sales</div>
-            <div style="font-size: 24px; font-weight: bold;">$0.00</div>
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-right">
+      <div class="icon-btn">🔔<span class="notif-dot"></span></div>
+      <div class="icon-btn">💬</div>
+      <div class="icon-btn" onclick="window.location.href='home.html'">🌐</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- DASHBOARD TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-dashboard" class="tab-content active">
+      <div class="stats-row">
+        <div class="stat-card blue">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Bu ay gəlir</div>
+          <div class="stat-value">$4,820</div>
+          <div class="stat-change up">↑ 18% ötən aya nisbət</div>
         </div>
-        <div class="stat-card">
-            <div style="color: #94a3b8;">Active Products</div>
-            <div style="font-size: 24px; font-weight: bold;">0 / 50</div>
+        <div class="stat-card green">
+          <div class="stat-icon">📦</div>
+          <div class="stat-label">Ümumi satış</div>
+          <div class="stat-value">342</div>
+          <div class="stat-change up">↑ 24 bu həftə</div>
         </div>
-        <div class="stat-card">
-            <div style="color: #94a3b8;">Store Rating</div>
-            <div style="font-size: 24px; font-weight: bold;">N/A</div>
+        <div class="stat-card gold">
+          <div class="stat-icon">🛍️</div>
+          <div class="stat-label">Aktiv məhsul</div>
+          <div class="stat-value">47</div>
+          <div class="stat-change up">↑ 5 yeni</div>
         </div>
+        <div class="stat-card purple">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-label">Orta reytinq</div>
+          <div class="stat-value">4.8</div>
+          <div class="stat-change up">↑ Əla</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📈 Son 7 günün satışları</div></div>
+          <div class="mini-chart">
+            <div class="bar" style="height:40%" title="B.e.: 8 satış"></div>
+            <div class="bar" style="height:60%" title="Ç.a.: 12 satış"></div>
+            <div class="bar" style="height:45%" title="Ç.: 9 satış"></div>
+            <div class="bar" style="height:80%" title="C.a.: 16 satış"></div>
+            <div class="bar" style="height:55%" title="C.: 11 satış"></div>
+            <div class="bar" style="height:95%" title="Ş.: 19 satış"></div>
+            <div class="bar" style="height:70%" title="B.: 14 satış"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;">
+            <span style="font-size:0.7rem;color:var(--muted)">B.e.</span><span style="font-size:0.7rem;color:var(--muted)">Ç.a.</span><span style="font-size:0.7rem;color:var(--muted)">Ç.</span><span style="font-size:0.7rem;color:var(--muted)">C.a.</span><span style="font-size:0.7rem;color:var(--muted)">C.</span><span style="font-size:0.7rem;color:var(--muted)">Ş.</span><span style="font-size:0.7rem;color:var(--muted)">B.</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🕐 Son sifarişlər</div></div>
+          <div class="order-row"><div class="order-icon">📱</div><div class="order-info"><div class="order-name">Wireless Earbuds</div><div class="order-meta">Dubai • 2 saat əvvəl</div></div><div class="order-amount">$19</div></div>
+          <div class="order-row"><div class="order-icon">👟</div><div class="order-info"><div class="order-name">Nike Sneakers</div><div class="order-meta">Istanbul • 4 saat əvvəl</div></div><div class="order-amount">$68</div></div>
+          <div class="order-row"><div class="order-icon">💻</div><div class="order-info"><div class="order-name">Laptop Stand</div><div class="order-meta">Baku • dünən</div></div><div class="order-amount">$34</div></div>
+        </div>
+      </div>
     </div>
 
-    <div style="display:flex; justify-content: space-between; align-items: center;">
-        <h2>Məhsul İdarəetməsi</h2>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- PRODUCTS TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-products" class="tab-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+        <div style="font-size:0.85rem;color:var(--muted)">47 məhsul tapıldı</div>
+        <button class="btn btn-primary btn-sm" onclick="showTab('add-product',null)">+ Məhsul əlavə et</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="prod-table">
+          <thead>
+            <tr><th>Məhsul</th><th>Qiymət</th><th>Stok</th><th>Status</th><th>Satış</th><th>Əməliyyat</th></tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:10px"><div class="prod-thumb">📱</div><div><div style="font-weight:600;font-size:0.85rem">Wireless Earbuds Pro</div><div style="font-size:0.73rem;color:var(--muted)">ID: #E001</div></div></div></td>
+              <td style="font-weight:700">$19</td><td>234</td>
+              <td><span class="status-badge status-active">Aktiv</span></td><td style="color:var(--green);font-weight:600">1,240</td>
+              <td><button class="action-btn" onclick="showTab('add-product',null)">Düzəlt</button> <button class="action-btn danger" onclick="deleteRow(this)">Sil</button></td>
+            </tr>
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:10px"><div class="prod-thumb">👟</div><div><div style="font-weight:600;font-size:0.85rem">Air Running Shoes</div><div style="font-size:0.73rem;color:var(--muted)">ID: #F002</div></div></div></td>
+              <td style="font-weight:700">$68</td><td>89</td>
+              <td><span class="status-badge status-vip">VIP</span></td><td style="color:var(--green);font-weight:600">876</td>
+              <td><button class="action-btn" onclick="showTab('add-product',null)">Düzəlt</button> <button class="action-btn danger" onclick="deleteRow(this)">Sil</button></td>
+            </tr>
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:10px"><div class="prod-thumb">💻</div><div><div style="font-weight:600;font-size:0.85rem">UltraBook Stand Pro</div><div style="font-size:0.73rem;color:var(--muted)">ID: #E003</div></div></div></td>
+              <td style="font-weight:700">$34</td><td>0</td>
+              <td><span class="status-badge status-sold">Tükənib</span></td><td style="color:var(--green);font-weight:600">2,100</td>
+              <td><button class="action-btn" onclick="showTab('add-product',null)">Düzəlt</button> <button class="action-btn danger" onclick="deleteRow(this)">Sil</button></td>
+            </tr>
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:10px"><div class="prod-thumb">🏠</div><div><div style="font-weight:600;font-size:0.85rem">LED Smart Lights</div><div style="font-size:0.73rem;color:var(--muted)">ID: #H004</div></div></div></td>
+              <td style="font-weight:700">$8</td><td>450</td>
+              <td><span class="status-badge status-draft">Draft</span></td><td style="color:var(--muted);font-weight:600">0</td>
+              <td><button class="action-btn" onclick="showTab('add-product',null)">Yayımla</button> <button class="action-btn danger" onclick="deleteRow(this)">Sil</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- ADD PRODUCT TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-add-product" class="tab-content">
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;">
         <div>
-            <button class="btn-vip">⚡ VIP Sync</button>
-            <button class="btn-add">+ Yeni Məhsul</button>
+          <!-- BASIC INFO -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">📝 Əsas Məlumat</div></div>
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label>Məhsul adı *</label>
+                <input type="text" placeholder="Məs: Premium Wireless Earbuds V2">
+              </div>
+              <div class="form-group">
+                <label>Kateqoriya</label>
+                <select><option>Electronics</option><option>Fashion</option><option>Home & Living</option><option>Beauty</option><option>Sports</option><option>Toys</option><option>Auto</option><option>Health</option></select>
+              </div>
+              <div class="form-group">
+                <label>Brend (isteğe bağlı)</label>
+                <input type="text" placeholder="Məs: Sony, Nike, Generic...">
+              </div>
+              <div class="form-group">
+                <label>Qiymət ($)</label>
+                <input type="number" placeholder="0.00" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label>Stok miqdarı</label>
+                <input type="number" placeholder="0" min="0">
+              </div>
+              <div class="form-group">
+                <label>SKU / Məhsul kodu</label>
+                <input type="text" placeholder="EG-2024-001">
+              </div>
+              <div class="form-group">
+                <label>Çəki (gram)</label>
+                <input type="number" placeholder="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- DESCRIPTION HTML EDITOR -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📄 Məhsul Açıqlaması</div>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-outline btn-sm" onclick="togglePreview()">👁 Önizləmə</button>
+              </div>
+            </div>
+            <div class="editor-toolbar">
+              <button class="editor-btn" onclick="insertTag('b')"><b>B</b></button>
+              <button class="editor-btn" onclick="insertTag('i')"><i>I</i></button>
+              <button class="editor-btn" onclick="insertTag('u')"><u>U</u></button>
+              <button class="editor-btn" onclick="insertTag('h2')">H2</button>
+              <button class="editor-btn" onclick="insertTag('h3')">H3</button>
+              <button class="editor-btn" onclick="insertTag('p')">§</button>
+              <button class="editor-btn" onclick="insertList('ul')">• List</button>
+              <button class="editor-btn" onclick="insertList('ol')">1. List</button>
+              <button class="editor-btn" onclick="insertTag('mark')">🖊 Mark</button>
+              <button class="editor-btn" onclick="insertTag('code')">{'<>'}</button>
+              <button class="editor-btn" onclick="insertLink()">🔗 Link</button>
+              <button class="editor-btn" onclick="insertTable()">⊞ Table</button>
+            </div>
+            <textarea class="editor-textarea" id="descEditor" oninput="updatePreview()" placeholder="Məhsulunuz haqqında ətraflı, HTML dəstəkli mətn yazın...&#10;&#10;Məs: &lt;h2&gt;Məhsul xüsusiyyətləri&lt;/h2&gt;&#10;&lt;ul&gt;&#10;  &lt;li&gt;Xüsusiyyət 1&lt;/li&gt;&#10;  &lt;li&gt;Xüsusiyyət 2&lt;/li&gt;&#10;&lt;/ul&gt;"></textarea>
+            <div id="editorPreview" style="display:none">
+              <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px;font-weight:600;">ÖNIZLƏMƏ:</div>
+              <div class="editor-preview" id="previewContent"></div>
+            </div>
+          </div>
+
+          <!-- MEDIA UPLOAD -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">🖼️ Media & Video Yüklə</div></div>
+            <div class="drag-drop" id="dragDrop" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+              <input type="file" id="fileInput" multiple accept="image/*,video/*" onchange="handleFiles(this.files)">
+              <div class="drag-icon">📁</div>
+              <div class="drag-text">Şəkil və videoları buraya sürüşdür</div>
+              <div class="drag-sub">PNG, JPG, WebP, MP4 • Maks. 50MB • Çox fayl dəstəklənir</div>
+            </div>
+            <div class="media-preview" id="mediaPreview"></div>
+          </div>
         </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+          <!-- CARGO -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">🚚 Kargo & Çatdırılma</div></div>
+            <div class="highlight-box hb-blue">
+              <div class="hb-title">📦 Kargo Şirkəti Seç</div>
+              <div class="cargo-company-list">
+                <div class="cargo-option selected" onclick="selectCargo(this)"><div class="cargo-icon">🌍</div>DHL</div>
+                <div class="cargo-option" onclick="selectCargo(this)"><div class="cargo-icon">📮</div>FedEx</div>
+                <div class="cargo-option" onclick="selectCargo(this)"><div class="cargo-icon">🚛</div>UPS</div>
+                <div class="cargo-option" onclick="selectCargo(this)"><div class="cargo-icon">✈️</div>AzərPost</div>
+                <div class="cargo-option" onclick="selectCargo(this)"><div class="cargo-icon">🟡</div>PTT</div>
+                <div class="cargo-option" onclick="selectCargo(this)"><div class="cargo-icon">🔵</div>CDEK</div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:12px">
+              <label>Çatdırılma müddəti</label>
+              <select id="deliveryTime" onchange="updateDelivery()">
+                <option>1-2 iş günü (Express)</option>
+                <option selected>3-5 iş günü (Standart)</option>
+                <option>7-14 iş günü (Ekonom)</option>
+                <option>14-30 iş günü (Beynəlxalq)</option>
+              </select>
+            </div>
+            <div class="delivery-badge" id="deliveryBadge">🕒 3-5 iş günü çatdırılma</div>
+            <div style="margin-top:12px">
+              <div class="form-group">
+                <label>Kargo qiyməti ($)</label>
+                <input type="number" placeholder="0 = Pulsuz" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label>Göndərmə ölkəsi</label>
+                <input type="text" placeholder="Azərbaycan, Türkiyə...">
+              </div>
+            </div>
+          </div>
+
+          <!-- COUPON -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">🎟️ Kupon / Endirim Kodu</div></div>
+            <div class="highlight-box hb-green">
+              <div class="hb-title">🏷️ KUPON SİSTEMİ</div>
+              <div class="form-group" style="margin-bottom:10px">
+                <label>Kupon kodu</label>
+                <div class="coupon-input-row">
+                  <input type="text" id="couponCode" placeholder="ETERNAL20" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+                  <button class="btn btn-outline btn-sm" onclick="generateCoupon()">🎲 Yarat</button>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+                <div class="form-group">
+                  <label>Endirim (%)</label>
+                  <input type="number" id="discountPct" placeholder="20" min="1" max="100">
+                </div>
+                <div class="form-group">
+                  <label>Bitmə tarixi</label>
+                  <input type="date" id="couponExpiry">
+                </div>
+              </div>
+              <button class="btn btn-success btn-sm" style="width:100%" onclick="applyCoupon()">✓ Kuponu Aktivləşdir</button>
+              <div class="coupon-code-display" id="couponDisplay" style="display:none">
+                <div>
+                  <div class="coupon-code-text" id="couponDisplayText">ETERNAL20</div>
+                  <div style="font-size:0.72rem;color:var(--muted);margin-top:3px" id="couponDisplaySub">20% endirim</div>
+                </div>
+                <button class="copy-btn" onclick="copyCoupon()">📋 Kopyala</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRICE & PUBLISH -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">💰 Qiymət & Yayım</div></div>
+            <div class="highlight-box hb-gold">
+              <div class="hb-title">👑 VIP GÖRÜNƏBİLİRLİK</div>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.85rem">
+                <input type="checkbox" id="vipOnly"> Bu məhsul yalnız VIP alıcılara görünsün
+              </label>
+            </div>
+            <div class="form-group" style="margin-bottom:12px">
+              <label>Məhsul statusu</label>
+              <select><option>Aktiv - Dərhal yayımla</option><option>Draft - Sonra yayımla</option><option>VIP - Yalnız VIP</option></select>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-outline" style="flex:1" onclick="showToast('Draft saxlanıldı','success')">💾 Draft</button>
+              <button class="btn btn-primary" style="flex:1" onclick="publishProduct()">🚀 Yayımla</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div style="margin-top: 20px; background: var(--card); padding: 40px; border-radius: 15px; text-align: center; border: 1px dashed #475569;">
-        <p style="color: #94a3b8;">Hələ ki məhsulunuz yoxdur. Satışa başlamaq üçün ilk məhsulunuzu əlavə edin.</p>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- ORDERS TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-orders" class="tab-content">
+      <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card blue"><div class="stat-label">Yeni sifariş</div><div class="stat-value" style="font-size:1.5rem">7</div></div>
+        <div class="stat-card gold"><div class="stat-label">Hazırlanır</div><div class="stat-value" style="font-size:1.5rem">12</div></div>
+        <div class="stat-card purple"><div class="stat-label">Göndərilib</div><div class="stat-value" style="font-size:1.5rem">34</div></div>
+        <div class="stat-card green"><div class="stat-label">Tamamlandı</div><div class="stat-value" style="font-size:1.5rem">289</div></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="prod-table">
+          <thead>
+            <tr><th>Sifariş №</th><th>Məhsul</th><th>Alıcı</th><th>Ölkə</th><th>Məbləğ</th><th>Status</th><th>Əməliyyat</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-family:monospace;font-size:0.8rem">#ORD-7821</td><td>Wireless Earbuds</td><td>Aynur M.</td><td>🇦🇿 AZ</td><td style="color:var(--green);font-weight:700">$19</td><td><span class="status-badge status-active">Yeni</span></td><td><button class="action-btn" onclick="showTab('cargo',null)">Kargo</button></td></tr>
+            <tr><td style="font-family:monospace;font-size:0.8rem">#ORD-7820</td><td>Air Running Shoes</td><td>Mehmet K.</td><td>🇹🇷 TR</td><td style="color:var(--green);font-weight:700">$68</td><td><span class="status-badge" style="background:rgba(245,158,11,0.12);color:var(--gold)">Hazırlanır</span></td><td><button class="action-btn" onclick="showTab('cargo',null)">İzlə</button></td></tr>
+            <tr><td style="font-family:monospace;font-size:0.8rem">#ORD-7819</td><td>LED Smart Lights</td><td>Anna R.</td><td>🇷🇺 RU</td><td style="color:var(--green);font-weight:700">$8</td><td><span class="status-badge status-sold">Göndərilib</span></td><td><button class="action-btn" onclick="showTab('cargo',null)">İzlə</button></td></tr>
+            <tr><td style="font-family:monospace;font-size:0.8rem">#ORD-7818</td><td>Laptop Stand Pro</td><td>Wei L.</td><td>🇨🇳 CN</td><td style="color:var(--green);font-weight:700">$34</td><td><span class="status-badge status-active">Tamamlandı ✓</span></td><td><button class="action-btn">Qiymətləndir</button></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- CARGO TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-cargo" class="tab-content">
+      <div class="card">
+        <div class="card-header"><div class="card-title">📦 Sifariş İzləmə</div></div>
+        <div style="display:flex;gap:10px;margin-bottom:20px">
+          <input type="text" placeholder="Sifariş № daxil et: #ORD-7821" style="flex:1;padding:10px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;">
+          <button class="btn btn-primary" onclick="trackOrder()">🔍 İzlə</button>
+        </div>
+        <div id="trackingResult" style="display:none">
+          <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div><div style="font-weight:700">#ORD-7820 — Air Running Shoes</div><div style="font-size:0.8rem;color:var(--muted)">Alıcı: Mehmet K. • Istanbul, TR</div></div>
+              <div class="delivery-badge">🚛 DHL • 3-5 iş günü</div>
+            </div>
+          </div>
+          <div class="tracking-steps">
+            <div class="track-step done"><div class="track-dot">✓</div><div class="track-label">Sifariş alındı</div></div>
+            <div class="track-step done"><div class="track-dot">✓</div><div class="track-label">Hazırlandı</div></div>
+            <div class="track-step current"><div class="track-dot">🚛</div><div class="track-label">Yolda</div></div>
+            <div class="track-step"><div class="track-dot">📦</div><div class="track-label">Anbarda</div></div>
+            <div class="track-step"><div class="track-dot">🏠</div><div class="track-label">Çatdırıldı</div></div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--muted);text-align:center;margin-top:12px">Gözlənilən çatdırılma: <strong style="color:var(--text)">5-7 Aprel 2025</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">🚚 Kargo Şirkətləri</div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div class="highlight-box hb-blue" style="text-align:center;cursor:pointer">
+            <div style="font-size:2rem;margin-bottom:6px">🌍</div>
+            <div style="font-weight:700">DHL Express</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-top:3px">1-3 iş günü</div>
+            <div style="color:var(--blue2);font-size:0.8rem;font-weight:600;margin-top:4px">$12 / kg</div>
+          </div>
+          <div class="highlight-box hb-gold" style="text-align:center;cursor:pointer">
+            <div style="font-size:2rem;margin-bottom:6px">📮</div>
+            <div style="font-weight:700">FedEx</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-top:3px">2-4 iş günü</div>
+            <div style="color:var(--gold);font-size:0.8rem;font-weight:600;margin-top:4px">$9 / kg</div>
+          </div>
+          <div class="highlight-box hb-green" style="text-align:center;cursor:pointer">
+            <div style="font-size:2rem;margin-bottom:6px">✈️</div>
+            <div style="font-weight:700">AzərPost</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-top:3px">5-10 iş günü</div>
+            <div style="color:var(--green);font-size:0.8rem;font-weight:600;margin-top:4px">$3 / kg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- COUPONS TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-coupons" class="tab-content">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🎟️ Yeni Kupon Yarat</div></div>
+          <div class="highlight-box hb-green">
+            <div class="hb-title">🏷️ KUPON KONFİQURASİYASI</div>
+            <div class="form-group" style="margin-bottom:10px">
+              <label>Kupon kodu</label>
+              <div style="display:flex;gap:8px">
+                <input type="text" id="newCouponCode" placeholder="ETERNAL20" oninput="this.value=this.value.toUpperCase()" style="flex:1;padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;">
+                <button class="btn btn-outline btn-sm" onclick="genNewCoupon()">🎲</button>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div class="form-group">
+                <label>Endirim növü</label>
+                <select id="discountType" style="padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;width:100%">
+                  <option value="percent">Faiz (%)</option>
+                  <option value="fixed">Sabit ($)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Dəyər</label>
+                <input type="number" id="discountVal" placeholder="20" min="1" style="padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;width:100%">
+              </div>
+              <div class="form-group">
+                <label>Min. alış ($)</label>
+                <input type="number" placeholder="0" style="padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;width:100%">
+              </div>
+              <div class="form-group">
+                <label>Bitmə tarixi</label>
+                <input type="date" style="padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;width:100%">
+              </div>
+            </div>
+            <button class="btn btn-success" style="width:100%" onclick="createCoupon()">✓ Kupon Yarat</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📋 Aktiv Kuponlar</div></div>
+          <div id="couponsList">
+            <div class="coupon-code-display" style="margin-bottom:10px">
+              <div><div class="coupon-code-text">ETERNAL20</div><div style="font-size:0.72rem;color:var(--muted);margin-top:3px">20% • 31 May 2025-ə qədər • 124 istifadə</div></div>
+              <button class="copy-btn" onclick="copyCouponText('ETERNAL20')">📋</button>
+            </div>
+            <div class="coupon-code-display" style="margin-bottom:10px;background:rgba(59,130,246,0.06);border-color:rgba(59,130,246,0.3)">
+              <div><div class="coupon-code-text" style="color:var(--blue2)">SUMMER10</div><div style="font-size:0.72rem;color:var(--muted);margin-top:3px">$10 sabit • 15 İyun 2025 • 56 istifadə</div></div>
+              <button class="copy-btn" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3);color:var(--blue2)" onclick="copyCouponText('SUMMER10')">📋</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- VIP TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-vip" class="tab-content">
+      <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02));border-color:rgba(245,158,11,0.25);text-align:center;padding:30px;margin-bottom:24px">
+        <div style="font-size:3rem;margin-bottom:10px">👑</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--gold);margin-bottom:6px">Eternal VIP Proqramı</div>
+        <div style="color:rgba(245,158,11,0.7);font-size:0.9rem">Satışlarınızı artırın, xərclərini azaldın</div>
+      </div>
+      <div class="vip-plans">
+        <div class="vip-plan">
+          <div class="plan-icon">🥉</div>
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">$9</div>
+          <div class="plan-period">/ay</div>
+          <div class="plan-features">
+            <div class="plan-feat ok">50 məhsul limiti</div>
+            <div class="plan-feat ok">5% platform komisyonu</div>
+            <div class="plan-feat ok">Standart dəstək</div>
+            <div class="plan-feat no">Kupon sistemi</div>
+            <div class="plan-feat no">Analitika</div>
+            <div class="plan-feat no">Prioritet görünürlük</div>
+          </div>
+          <button class="plan-btn" onclick="subscribePlan('Starter','$9')">Seç</button>
+        </div>
+        <div class="vip-plan popular">
+          <div class="plan-popular-tag">⭐ ƏN POPULYAR</div>
+          <div class="plan-icon">🥇</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">$29</div>
+          <div class="plan-period">/ay</div>
+          <div class="plan-features">
+            <div class="plan-feat ok">Limitsiz məhsul</div>
+            <div class="plan-feat ok">2% platform komisyonu</div>
+            <div class="plan-feat ok">Prioritet dəstək</div>
+            <div class="plan-feat ok">Kupon sistemi</div>
+            <div class="plan-feat ok">Tam analitika</div>
+            <div class="plan-feat no">Xüsusi nümayəndə</div>
+          </div>
+          <button class="plan-btn" onclick="subscribePlan('Pro','$29')">Seç</button>
+        </div>
+        <div class="vip-plan">
+          <div class="plan-icon">💎</div>
+          <div class="plan-name">Diamond</div>
+          <div class="plan-price">$79</div>
+          <div class="plan-period">/ay</div>
+          <div class="plan-features">
+            <div class="plan-feat ok">Limitsiz hər şey</div>
+            <div class="plan-feat ok">0% platform komisyonu</div>
+            <div class="plan-feat ok">24/7 Xüsusi dəstək</div>
+            <div class="plan-feat ok">Kupon + Fleş satış</div>
+            <div class="plan-feat ok">AI analitika</div>
+            <div class="plan-feat ok">Şəxsi nümayəndə</div>
+          </div>
+          <button class="plan-btn" onclick="subscribePlan('Diamond','$79')">Seç</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- INTEGRATIONS TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-integrations" class="tab-content">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+        <div class="card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px"><div style="font-size:2rem">🛍️</div><div><div style="font-weight:700">Shopify</div><div style="font-size:0.8rem;color:var(--muted)">Məhsullarınızı sync edin</div></div></div><input type="text" placeholder="Shopify mağaza URL-i" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;margin-bottom:10px;font-family:'DM Sans',sans-serif"><button class="btn btn-primary btn-sm" style="width:100%" onclick="connectPlatform('Shopify')">🔗 Qoş</button></div>
+        <div class="card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px"><div style="font-size:2rem">📦</div><div><div style="font-weight:700">Amazon</div><div style="font-size:0.8rem;color:var(--muted)">Amazon Seller Central</div></div></div><input type="text" placeholder="Amazon Seller ID" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;margin-bottom:10px;font-family:'DM Sans',sans-serif"><button class="btn btn-primary btn-sm" style="width:100%" onclick="connectPlatform('Amazon')">🔗 Qoş</button></div>
+        <div class="card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px"><div style="font-size:2rem">🛒</div><div><div style="font-weight:700">WooCommerce</div><div style="font-size:0.8rem;color:var(--muted)">WordPress plugin</div></div></div><input type="text" placeholder="Site URL + API Key" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;margin-bottom:10px;font-family:'DM Sans',sans-serif"><button class="btn btn-primary btn-sm" style="width:100%" onclick="connectPlatform('WooCommerce')">🔗 Qoş</button></div>
+        <div class="card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px"><div style="font-size:2rem">🟠</div><div><div style="font-weight:700">Trendyol</div><div style="font-size:0.8rem;color:var(--muted)">Türkiyə bazarı</div></div></div><input type="text" placeholder="Trendyol Satıcı ID" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);outline:none;margin-bottom:10px;font-family:'DM Sans',sans-serif"><button class="btn btn-primary btn-sm" style="width:100%" onclick="connectPlatform('Trendyol')">🔗 Qoş</button></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- ADMIN TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-admin" class="tab-content">
+      <div class="highlight-box hb-red" style="margin-bottom:20px">
+        <div class="hb-title">⚠️ ADMİN PANELİ — Yalnız sistem administratorları üçün</div>
+      </div>
+      <div class="admin-grid" style="margin-bottom:20px">
+        <div class="admin-stat"><div class="admin-stat-icon blue">👥</div><div><div class="admin-stat-num">12,450</div><div class="admin-stat-label">Ümumi istifadəçi</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon green">🛍️</div><div><div class="admin-stat-num">8,234</div><div class="admin-stat-label">Aktiv satıcı</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon gold">👑</div><div><div class="admin-stat-num">1,892</div><div class="admin-stat-label">VIP üzv</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon red">⚠️</div><div><div class="admin-stat-num">47</div><div class="admin-stat-label">Açıq şikayət</div></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">👥 Son Qeydiyyatlar</div><div class="card-action">Hamısını gör</div></div>
+          <div class="user-row"><div class="user-ava2">AH</div><div class="user-info"><div class="user-name2">Anar Həsənov</div><div class="user-meta">Satıcı • Bakı • 2 saat əvvəl</div></div><span class="status-badge status-active" style="font-size:0.7rem">Aktiv</span></div>
+          <div class="user-row"><div class="user-ava2" style="background:linear-gradient(135deg,#10b981,#059669)">MK</div><div class="user-info"><div class="user-name2">Mehmet Kaya</div><div class="user-meta">Alıcı • Istanbul • 5 saat əvvəl</div></div><span class="status-badge status-active" style="font-size:0.7rem">Aktiv</span></div>
+          <div class="user-row"><div class="user-ava2" style="background:linear-gradient(135deg,#f59e0b,#d97706)">WL</div><div class="user-info"><div class="user-name2">Wei Liu</div><div class="user-meta">Satıcı • Shanghai • dünən</div></div><span class="status-badge status-vip" style="font-size:0.7rem">VIP</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚙️ Sistem Əməliyyatları</div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="btn btn-outline" style="justify-content:flex-start" onclick="showToast('Bütün cache təmizləndi','success')">🗑️ Cache Təmizlə</button>
+            <button class="btn btn-outline" style="justify-content:flex-start" onclick="showToast('Yedək alınır...','success')">💾 Verilənlər Bazası Yedəyi</button>
+            <button class="btn btn-outline" style="justify-content:flex-start" onclick="showToast('Hesabat göndərildi','success')">📊 Aylıq Hesabat Göndər</button>
+            <button class="btn btn-danger" style="justify-content:flex-start" onclick="showToast('Xidmət müvəqqəti dayandırıldı','error')">🚨 Xidməti Dayandır</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- ANALYTICS TAB -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="tab-analytics" class="tab-content">
+      <div class="stats-row">
+        <div class="stat-card blue"><div class="stat-icon">👁️</div><div class="stat-label">Baxış (bu ay)</div><div class="stat-value">24,890</div><div class="stat-change up">↑ 32%</div></div>
+        <div class="stat-card green"><div class="stat-icon">🛒</div><div class="stat-label">Konversiya</div><div class="stat-value">3.8%</div><div class="stat-change up">↑ 0.5%</div></div>
+        <div class="stat-card gold"><div class="stat-icon">💰</div><div class="stat-label">Orta sifariş</div><div class="stat-value">$42</div><div class="stat-change up">↑ $5</div></div>
+        <div class="stat-card purple"><div class="stat-icon">↩️</div><div class="stat-label">İade nisbəti</div><div class="stat-value">1.2%</div><div class="stat-change down">↓ Aşağı = Yaxşı</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">🌍 Ölkə üzrə satış</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:30px;text-align:center">🇦🇿</span><span style="width:100px;font-size:0.85rem">Azərbaycan</span><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:45%;background:var(--blue);height:100%;border-radius:4px"></div></div><span style="font-size:0.82rem;font-weight:700;width:40px;text-align:right">45%</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:30px;text-align:center">🇹🇷</span><span style="width:100px;font-size:0.85rem">Türkiyə</span><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:28%;background:var(--green);height:100%;border-radius:4px"></div></div><span style="font-size:0.82rem;font-weight:700;width:40px;text-align:right">28%</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:30px;text-align:center">🇷🇺</span><span style="width:100px;font-size:0.85rem">Rusiya</span><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:15%;background:var(--purple);height:100%;border-radius:4px"></div></div><span style="font-size:0.82rem;font-weight:700;width:40px;text-align:right">15%</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:30px;text-align:center">🌍</span><span style="width:100px;font-size:0.85rem">Digər</span><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:12%;background:var(--gold);height:100%;border-radius:4px"></div></div><span style="font-size:0.82rem;font-weight:700;width:40px;text-align:right">12%</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<div class="toast" id="toast"></div>
 
 <script>
-    // Qeydiyyatdan gələn məlumatı bura çıxarırıq
-    const userEmail = localStorage.getItem('userEmail') || "User";
-    document.getElementById('user-display').innerText = userEmail.split('@')[0];
-</script>
+// Firebase
+const firebaseConfig={apiKey:"AIzaSyC9KKiQYm-yB2w5qaNVlM6J5EZFtasKAAQ",authDomain:"eternal-global.firebaseapp.com",projectId:"eternal-global",storageBucket:"eternal-global.appspot.com",messagingSenderId:"1028365979555",appId:"1:1028365979555:web:ff7100da1ed4c9d66ad416"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(); const db=firebase.firestore();
 
+// TAB NAVIGATION
+function showTab(tabName, navEl){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const el = document.getElementById('tab-'+tabName);
+  if(el) el.classList.add('active');
+  if(navEl) navEl.classList.add('active');
+  const titles={'dashboard':'Dashboard','products':'Məhsullarım','add-product':'Məhsul Əlavə Et','orders':'Sifarişlər','cargo':'Kargo & İzləmə','coupons':'Kuponlar','vip':'VIP Planlar','integrations':'İnteqrasiyalar','admin':'Admin Panel','analytics':'Analitika'};
+  document.getElementById('pageTitle').textContent = titles[tabName] || tabName;
+}
+
+// MEDIA UPLOAD
+function handleDragOver(e){ e.preventDefault(); document.getElementById('dragDrop').classList.add('dragover'); }
+function handleDragLeave(e){ document.getElementById('dragDrop').classList.remove('dragover'); }
+function handleDrop(e){ e.preventDefault(); document.getElementById('dragDrop').classList.remove('dragover'); handleFiles(e.dataTransfer.files); }
+function handleFiles(files){
+  const preview = document.getElementById('mediaPreview');
+  Array.from(files).forEach(file=>{
+    const thumb = document.createElement('div');
+    thumb.className = 'media-thumb' + (file.type.startsWith('video') ? ' video-thumb' : '');
+    if(file.type.startsWith('image')){
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      thumb.appendChild(img);
+    } else {
+      thumb.textContent = file.type.startsWith('video') ? '🎬' : '📄';
+    }
+    const rm = document.createElement('button');
+    rm.className = 'remove'; rm.textContent = '✕';
+    rm.onclick = (e)=>{ e.stopPropagation(); preview.removeChild(thumb); };
+    thumb.appendChild(rm);
+    preview.appendChild(thumb);
+  });
+  showToast(`${files.length} fayl yükləndi ✓`,'success');
+}
+
+// HTML EDITOR
+function insertTag(tag){
+  const ta = document.getElementById('descEditor');
+  const sel = ta.value.substring(ta.selectionStart, ta.selectionEnd);
+  const ins = sel ? `<${tag}>${sel}</${tag}>` : `<${tag}></${tag}>`;
+  const pos = ta.selectionStart;
+  ta.value = ta.value.substring(0,pos) + ins + ta.value.substring(ta.selectionEnd);
+  updatePreview();
+}
+function insertList(type){
+  const ta = document.getElementById('descEditor');
+  const ins = `\n<${type}>\n  <li>Element 1</li>\n  <li>Element 2</li>\n</${type}>\n`;
+  ta.value += ins; updatePreview();
+}
+function insertLink(){
+  const url = prompt('URL daxil et:','https://');
+  if(url){ const ta=document.getElementById('descEditor'); ta.value+=`<a href="${url}">Link mətni</a>`; updatePreview(); }
+}
+function insertTable(){
+  const ta=document.getElementById('descEditor');
+  ta.value+=`\n<table border="1">\n  <tr><th>Başlıq 1</th><th>Başlıq 2</th></tr>\n  <tr><td>Dəyər 1</td><td>Dəyər 2</td></tr>\n</table>\n`;
+  updatePreview();
+}
+function updatePreview(){
+  document.getElementById('previewContent').innerHTML = document.getElementById('descEditor').value;
+}
+function togglePreview(){
+  const p = document.getElementById('editorPreview');
+  p.style.display = p.style.display==='none' ? 'block' : 'none';
+  updatePreview();
+}
+
+// COUPON
+function generateCoupon(){
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code='ETERNAL';
+  for(let i=0;i<4;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('couponCode').value=code;
+}
+function applyCoupon(){
+  const code=document.getElementById('couponCode')?.value;
+  const pct=document.getElementById('discountPct')?.value;
+  if(!code){ showToast('Kupon kodu daxil et','error'); return; }
+  const disp=document.getElementById('couponDisplay');
+  document.getElementById('couponDisplayText').textContent=code;
+  document.getElementById('couponDisplaySub').textContent=(pct||'0')+'% endirim';
+  disp.style.display='flex';
+  showToast('Kupon aktivləşdirildi! ✓','success');
+}
+function copyCoupon(){
+  const code=document.getElementById('couponDisplayText')?.textContent;
+  navigator.clipboard?.writeText(code).then(()=>showToast('Kopyalandı: '+code,'success'));
+}
+function genNewCoupon(){
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code=''; for(let i=0;i<8;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('newCouponCode').value=code;
+}
+function createCoupon(){
+  const code=document.getElementById('newCouponCode')?.value;
+  const val=document.getElementById('discountVal')?.value;
+  const type=document.getElementById('discountType')?.value;
+  if(!code||!val){ showToast('Bütün xanaları doldurun','error'); return; }
+  const disp=type==='percent'?val+'%':'$'+val;
+  const el=document.createElement('div');
+  el.className='coupon-code-display'; el.style.marginBottom='10px';
+  el.innerHTML=`<div><div class="coupon-code-text">${code}</div><div style="font-size:0.72rem;color:var(--muted);margin-top:3px">${disp} endirim • 0 istifadə</div></div><button class="copy-btn" onclick="copyCouponText('${code}')">📋</button>`;
+  document.getElementById('couponsList').prepend(el);
+  showToast('Kupon yaradıldı: '+code,'success');
+}
+function copyCouponText(code){
+  navigator.clipboard?.writeText(code).then(()=>showToast('Kopyalandı: '+code,'success'));
+}
+
+// CARGO
+function selectCargo(el){
+  document.querySelectorAll('.cargo-option').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function updateDelivery(){
+  const val=document.getElementById('deliveryTime')?.value||'';
+  const badge=document.getElementById('deliveryBadge');
+  if(badge) badge.textContent='🕒 '+val;
+}
+function trackOrder(){
+  document.getElementById('trackingResult').style.display='block';
+  showToast('Sifariş tapıldı ✓','success');
+}
+
+// PUBLISH
+function publishProduct(){
+  showToast('Məhsul uğurla yayımlandı! 🚀','success');
+  setTimeout(()=>showTab('products',null),1500);
+}
+
+// SUBSCRIBE
+function subscribePlan(name,price){
+  showToast(`${name} planı seçildi: ${price}/ay 👑`,'success');
+}
+
+// INTEGRATIONS
+function connectPlatform(name){
+  showToast(`${name} qoşuldu! 🔗`,'success');
+}
+
+// TABLE DELETE
+function deleteRow(btn){
+  const row=btn.closest('tr');
+  row.style.opacity='0'; row.style.transition='opacity 0.3s';
+  setTimeout(()=>row.remove(),300);
+  showToast('Məhsul silindi','error');
+}
+
+// LOGOUT
+function logout(){
+  auth.signOut().then(()=>{ window.location.href='index.html'; });
+}
+
+// TOAST
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+(type||'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// Auto-check auth
+auth.onAuthStateChanged(user=>{
+  if(user){ document.querySelector('.user-name').textContent=user.displayName||user.email?.split('@')[0]||'Satıcı'; }
+});
+</script>
 </body>
 </html>
