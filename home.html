@@ -3,99 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal | Dashboard</title>
+    <title>Dashboard | Eternal Global Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    
     <style>
-        body { 
-            background-color: #020617; 
-            color: white; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; 
-            display: flex;
+        :root {
+            --bg: #020617; --card: #0a1628; --card-hover: #112240; 
+            --blue: #3b82f6; --blue-glow: rgba(59,130,246,0.3);
+            --text: #f8fafc; --muted: #64748b; --border: #1e293b;
+            --green: #10b981; --red: #ef4444;
         }
-        /* Sidebar (Yan Menyu) */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+        /* YAN MENYU (SIDEBAR) */
         .sidebar {
-            width: 250px;
-            background: #0f172a;
-            height: 100vh;
-            border-right: 1px solid #1e293b;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
+            width: 260px; background: var(--card); border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem; display: flex; flex-direction: column;
         }
-        .sidebar h2 { color: #3b82f6; font-size: 1.5rem; margin-bottom: 30px; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 2rem; letter-spacing: -0.5px; }
+        .logo span { color: var(--blue); }
         .nav-link {
-            color: #94a3b8;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            transition: 0.3s;
+            display: flex; align-items: center; gap: 12px; padding: 12px 15px;
+            color: var(--muted); text-decoration: none; border-radius: 8px; margin-bottom: 8px;
+            transition: 0.3s; cursor: pointer;
         }
-        .nav-link:hover { background: #1e293b; color: white; }
-        .nav-link.active { background: #3b82f6; color: white; }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(59,130,246,0.1); color: var(--blue);
+        }
+        .logout-btn { margin-top: auto; color: var(--red); border: 1px solid var(--red); background: transparent; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600;}
+        .logout-btn:hover { background: var(--red); color: white; }
 
-        /* Main Content (Əsas Hissə) */
-        .main-content { flex: 1; padding: 40px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        /* ƏSAS HİSSƏ */
+        .main-content { flex: 1; padding: 2rem 3rem; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .user-info { display: flex; align-items: center; gap: 15px; background: var(--card); padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); }
         
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .stat-card {
-            background: #0f172a;
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #1e293b;
+        .btn-primary {
+            background: var(--blue); color: white; border: none; padding: 12px 24px;
+            border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 0 15px var(--blue-glow); transition: 0.3s;
         }
-        .stat-card h3 { margin: 0; color: #94a3b8; font-size: 0.9rem; }
-        .stat-card p { font-size: 1.8rem; font-weight: bold; margin: 10px 0 0 0; color: #3b82f6; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--blue-glow); }
 
-        .logout-btn {
-            margin-top: auto;
-            padding: 12px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+        /* MƏHSUL ƏLAVƏ ETMƏ FORMU (ƏN VACİB HİSSƏ) */
+        .product-form-container {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 2rem; margin-top: 2rem;
+        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group.full-width { grid-column: span 2; }
+        label { display: block; color: var(--muted); margin-bottom: 8px; font-size: 0.9rem; }
+        input, select, textarea {
+            width: 100%; background: var(--bg); border: 1px solid var(--border);
+            color: white; padding: 12px; border-radius: 8px; outline: none; transition: 0.3s;
+        }
+        input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 10px var(--blue-glow); }
+        
+        /* Video və Şəkil Yükləmə Sahəsi */
+        .upload-area {
+            border: 2px dashed var(--border); border-radius: 12px; padding: 2rem;
+            text-align: center; color: var(--muted); cursor: pointer; transition: 0.3s;
+        }
+        .upload-area:hover { border-color: var(--blue); background: rgba(59,130,246,0.05); }
+        .upload-area i { font-size: 2rem; color: var(--blue); margin-bottom: 10px; }
+
+        /* Kupon və Kargo Sahəsi */
+        .highlight-box {
+            background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 15px; border-radius: 8px; margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h2>ETERNAL</h2>
-        <a href="#" class="nav-link active">Panel</a>
-        <a href="#" class="nav-link">Sifarişlərim</a>
-        <a href="#" class="nav-link">Məhsullar</a>
-        <a href="#" class="nav-link">Profil</a>
-        <button class="logout-btn" onclick="location.href='index.html'">Çıxış et</button>
+        <div class="logo">ETERNAL<span>.NET</span></div>
+        <a class="nav-link active"><i class="fas fa-home"></i> Dashboard</a>
+        <a class="nav-link"><i class="fas fa-box-open"></i> Məhsullarım</a>
+        <a class="nav-link"><i class="fas fa-shopping-cart"></i> Sifarişlər</a>
+        <a class="nav-link"><i class="fas fa-ticket-alt"></i> Kuponlar</a>
+        <a class="nav-link"><i class="fas fa-truck"></i> Kargo & İzləmə</a>
+        
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Çıxış</button>
     </div>
 
     <div class="main-content">
         <div class="header">
-            <h1>Xoş gəldiniz, İstifadəçi!</h1>
-            <div style="background: #1e293b; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;">Status: Aktiv</div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Ümumi Balans</h3>
-                <p>$0.00</p>
+            <div>
+                <h1 style="font-size: 2rem; margin-bottom: 5px;">Satıcı Paneli</h1>
+                <p style="color: var(--muted);">Yeni məhsulunuzu qlobal şəbəkəyə çıxarın.</p>
             </div>
-            <div class="stat-card">
-                <h3>Aktiv Sifarişlər</h3>
-                <p>0</p>
-            </div>
-            <div class="stat-card">
-                <h3>Tamamlananlar</h3>
-                <p>0</p>
+            <div class="user-info">
+                <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--blue);"></i>
+                <span id="userDisplay">Yüklənir...</span>
             </div>
         </div>
 
-        <div style="margin-top: 40px; background: #0f172a; padding: 30px; border-radius: 15px; border: 1px solid #1e293b; text-align: center;">
-            <p style="color: #94a3b8;">Hələ ki, heç bir aktiv fəaliyyətiniz yoxdur. <br> Başlamaq üçün məhsul kataloquna baxa bilərsiniz.</p>
+        <div class="product-form-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2><i class="fas fa-plus-circle" style="color: var(--blue); margin-right: 10px;"></i>Yeni Məhsul Yarat</h2>
+                <button class="btn-primary" onclick="alert('Bura Firebase Firestore qoşulacaq!')">Kataloqa Əlavə Et</button>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>Məhsulun Adı</label>
+                    <input type="text" placeholder="Məsələn: Premium Wireless Qulaqlıq">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Detallı Açıqlama (HTML Dəstəkli)</label>
+                    <textarea rows="4" placeholder="Məhsulun özəllikləri, texniki parametrləri və s. istədiyiniz kimi bura yazın..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Qiymət (USD $)</label>
+                    <input type="number" placeholder="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Stok Sayı (Ədəd)</label>
+                    <input type="number" placeholder="100">
+                </div>
+
+                <div class="form-group highlight-box" style="border-color: #f59e0b; background: rgba(245, 158, 11, 0.05);">
+                    <label style="color: #f59e0b;"><i class="fas fa-shipping-fast"></i> Kargo & Çatdırılma Müddəti</label>
+                    <input type="text" placeholder="Məsələn: 3-5 İş günü (Express)">
+                    <input type="text" placeholder="Kargo Şirkəti (DHL, FedEx, Eternal Cargo)" style="margin-top: 10px;">
+                </div>
+
+                <div class="form-group highlight-box">
+                    <label style="color: var(--green);"><i class="fas fa-tags"></i> Endirim Kuponu Təyin Et</label>
+                    <input type="text" placeholder="Məs: ETERNAL20 (20% Endirim üçün)">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Media Yüklə (Video və Şəkillər)</label>
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Video (MP4) və ya Şəkilləri (JPG/PNG) bura sürükləyin</p>
+                        <p style="font-size: 0.8rem; margin-top: 5px;">Maksimum fayl ölçüsü: 50MB</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <script>
+        const firebaseConfig = {
+  apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
+  authDomain: "eternal-global.firebaseapp.com",
+  projectId: "eternal-global",
+  storageBucket: "eternal-global.firebasestorage.app",
+  messagingSenderId: "1028365979555",
+  appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416",
+  measurementId: "G-4J79DKDF5V"
+};
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const auth = firebase.auth();
+
+        // Girişi yoxla
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('userDisplay').innerText = user.email;
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        function logout() {
+            auth.signOut().then(() => { window.location.href = "index.html"; });
+        }
+    </script>
 </body>
 </html>
