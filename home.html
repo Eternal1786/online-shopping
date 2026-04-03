@@ -710,13 +710,82 @@ function showToast(msg,type=''){
   setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-// CAT ITEMS
+// CAT ITEMS - Sənin köhnə kodunun sonu buradır
 document.querySelectorAll('.cat-item').forEach(el=>{
   el.addEventListener('click',function(){
     document.querySelectorAll('.cat-item').forEach(x=>x.classList.remove('active'));
     this.classList.add('active');
   });
 });
+
+// --- FİREBASE VƏ ETERNAL NETWORK SİSTEMİ (TAM HAZIR) ---
+const firebaseConfig = {
+  apiKey: "AIzaSyC9KKiQYm-yB2w5qaNVlM6J5EZFtasKAAQ",
+  authDomain: "eternal-global.firebaseapp.com",
+  projectId: "eternal-global",
+  storageBucket: "eternal-global.appspot.com",
+  messagingSenderId: "1028365979555",
+  appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
+};
+
+// Firebase-i başladırıq
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// ƏSAS GİRİŞ VƏ QEYDİYYAT FUNKSİYASI
+async function mainAuth() {
+  const email = document.getElementById('m_email')?.value?.trim();
+  const pass = document.getElementById('m_pass')?.value;
+  
+  if(!email || !pass) { 
+      alert('Zəhmət olmasa bütün xanaları doldurun!');
+      return; 
+  }
+
+  // GİRİŞ MODU (LOGIN)
+  if(typeof currentMode !== 'undefined' && currentMode === 'login') {
+    auth.signInWithEmailAndPassword(email, pass)
+      .then(res => {
+        alert('Xoş gəldiniz! Home səhifəsinə yönləndirilirsiniz...');
+        setTimeout(() => { window.location.href = "home.html"; }, 1000);
+      })
+      .catch(e => alert("Giriş xətası: " + e.message));
+  } 
+  // QEYDİYYAT MODU (SIGNUP)
+  else {
+    const name = document.getElementById('m_name')?.value;
+    const phone = document.getElementById('m_phone')?.value;
+    
+    auth.createUserWithEmailAndPassword(email, pass)
+      .then(res => {
+        return db.collection("users").doc(res.user.uid).set({
+          fullname: name || '',
+          email: email,
+          phone: phone || '',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => res);
+      })
+      .then(res => {
+        alert('Hesab uğurla yaradıldı! Satıcı Panelinə keçid edilir...');
+        setTimeout(() => { window.location.href = "home.html"; }, 1000);
+      })
+      .catch(e => alert("Qeydiyyat xətası: " + e.message));
+  }
+}
+
+// GOOGLE İLƏ GİRİŞ
+function googleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(res => {
+      alert('Google ilə giriş uğurludur!');
+      setTimeout(() => { window.location.href = "home.html"; }, 1000);
+    })
+    .catch(e => alert(e.message));
+}
 </script>
 </body>
 </html>
