@@ -718,5 +718,63 @@ document.querySelectorAll('.cat-item').forEach(el=>{
   });
 });
 </script>
+  <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
+  authDomain: "eternal-global.firebaseapp.com",
+  projectId: "eternal-global"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+const userData = JSON.parse(localStorage.getItem('eternal_user') || '{}');
+
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "index (2).html"; return; }
+  
+  // NAVİQASİYA PANELİNİ YENİLƏ (AD VƏ PANEL DÜYMƏSİ)
+  const navRight = document.querySelector('.nav-right');
+  let panelBtn = userData.role === 'seller' ? `<a href="Dashboard (1).html" style="color:var(--gold); font-weight:700; margin-right:15px;">Panel ⚙️</a>` : "";
+  
+  if(navRight) {
+    navRight.innerHTML = `
+      ${panelBtn}
+      <span style="color:var(--blue2); margin-right:10px;">👋 ${userData.name || 'Alıcı'}</span>
+      <button onclick="logout()" style="background:none; border:1px solid var(--red); color:var(--red); padding:5px 10px; border-radius:5px; cursor:pointer;">Çıxış</button>
+    `;
+  }
+});
+
+function logout() {
+  auth.signOut().then(() => { localStorage.clear(); window.location.href = 'index (2).html'; });
+}
+
+// CART LOGIC
+let cartCount = parseInt(localStorage.getItem('eternal_cart')) || 0;
+document.getElementById('cartCount').textContent = cartCount;
+
+function addToCart() {
+  cartCount++;
+  localStorage.setItem('eternal_cart', cartCount);
+  document.getElementById('cartCount').textContent = cartCount;
+  showToast('Səbətə əlavə olundu!', 'success');
+}
+
+// SLIDER VƏ DİGƏR FUNKSİYALAR (SƏNİN KODLARIN)
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+function nextSlide(){
+  slides[currentSlide].classList.remove('active');
+  currentSlide = (currentSlide + 1) % slides.length;
+  slides[currentSlide].classList.add('active');
+}
+setInterval(nextSlide, 5000);
+
+function showToast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(()=> t.className = 'toast', 3000);
+}
+</script>
 </body>
 </html>
