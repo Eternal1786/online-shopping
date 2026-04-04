@@ -906,5 +906,62 @@ window.onload = ()=>{
   };
 };
 </script>
+  <script>
+// ============================================================
+// FİREBASE KONFİQURASİYASI
+// ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
+  authDomain: "eternal-global.firebaseapp.com",
+  projectId: "eternal-global",
+  storageBucket: "eternal-global.appspot.com",
+  messagingSenderId: "1028365979555",
+  appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
+};
+
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// SƏHİFƏ YÜKLƏNƏNDƏ ROLU YOXLA
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    const doc = await db.collection("users").doc(user.uid).get();
+    const data = doc.data() || { role: 'buyer', fullname: user.email };
+    localStorage.setItem('eternal_user', JSON.stringify({
+      uid: user.uid, email: user.email, role: data.role, name: data.fullname 
+    }));
+    // Roluna görə yönləndirmə
+    window.location.href = data.role === 'seller' ? "Dashboard (1).html" : "home (2).html";
+  }
+});
+
+// QEYDİYYAT VƏ GİRİŞ FUNKSİYASI
+window.mainAuth = async () => {
+  const email = document.getElementById('m_email')?.value?.trim();
+  const pass = document.getElementById('m_pass')?.value;
+  if (!email || !pass) return alert("Xanaları doldurun!");
+
+  if (currentMode === 'login') {
+    auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+  } else {
+    const name = document.getElementById('m_name')?.value || 'İstifadəçi';
+    auth.createUserWithEmailAndPassword(email, pass)
+      .then(res => {
+        return db.collection("users").doc(res.user.uid).set({
+          fullname: name, email: email, role: currentRole,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }).catch(e => alert(e.message));
+  }
+};
+
+window.googleLogin = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(e => alert(e.message));
+};
+
+window.onload = () => { renderForm(); };
+</script>
 </body>
 </html>
