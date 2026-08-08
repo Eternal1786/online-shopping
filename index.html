@@ -1,967 +1,1055 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eternal Global Network | Next-Gen Dropshipping</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<title>Eternal Global Network | Shop Everything</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --blue:#3b82f6; --blue-dark:#1d4ed8; --blue-glow:rgba(59,130,246,0.3);
-  --bg:#020617; --card:#0a1628; --card2:#0f172a; --border:#1e293b;
-  --border2:#2d3f5e; --text:#f8fafc; --muted:#64748b; --muted2:#94a3b8;
-  --green:#10b981; --gold:#f59e0b; --red:#ef4444;
-  --radius:14px; --radius-sm:8px;
-}
+:root{--bg:#0a0a0f;--bg2:#111118;--bg3:#16161f;--card:#1a1a26;--card2:#1e1e2e;--blue:#3b82f6;--blue2:#60a5fa;--gold:#f59e0b;--green:#10b981;--red:#ef4444;--border:#2a2a3d;--border2:#333350;--text:#f1f5f9;--muted:#94a3b8;--muted2:#64748b;--radius:12px;--radius-lg:18px;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;}
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:var(--bg);}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
-
-/* NAV */
-nav{background:rgba(2,6,23,0.92);backdrop-filter:blur(20px);padding:0.9rem 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;}
-.logo{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:3px;}
-.nav-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.nav-links{display:flex;gap:20px;margin-right:10px;}
-.nav-links a{color:var(--muted2);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.2s;}
-.nav-links a:hover{color:var(--text);}
-
-/* BUTTONS */
-.btn{padding:10px 22px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;border:none;transition:all 0.25s;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;}
-.btn-outline{background:transparent;color:white;border:1px solid var(--border2);}
-.btn-outline:hover{border-color:var(--blue);color:var(--blue);}
-.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:white;box-shadow:0 0 20px var(--blue-glow);}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 0 30px var(--blue-glow);}
-.btn-google{background:white;color:#111;width:100%;margin-top:8px;font-weight:600;}
-.btn-google:hover{background:#f1f5f9;}
-.btn-sm{padding:7px 14px;font-size:0.8rem;}
-
-/* LANG */
-select.lang-sel{background:var(--card2);color:white;border:1px solid var(--border);padding:6px 10px;border-radius:var(--radius-sm);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;}
-
-/* HERO */
-.hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 20px;position:relative;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 30%, rgba(59,130,246,0.12), transparent 70%);pointer-events:none;}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:0.2;pointer-events:none;}
-.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:800;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,#f8fafc 30%,#3b82f6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative;}
-.hero p{color:var(--muted2);max-width:580px;margin-bottom:35px;font-size:1.05rem;line-height:1.7;position:relative;}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);color:#93c5fd;padding:6px 14px;border-radius:50px;font-size:0.78rem;font-weight:600;margin-bottom:24px;letter-spacing:1px;}
-
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.stat{background:var(--bg);padding:2rem;text-align:center;}
-.stat-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.stat-label{color:var(--muted2);font-size:0.82rem;margin-top:4px;}
-
-/* FEATURES */
-.section{padding:80px 5%;}
-.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,4vw,2.5rem);font-weight:800;text-align:center;margin-bottom:12px;}
-.section-sub{color:var(--muted2);text-align:center;margin-bottom:50px;font-size:0.95rem;}
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
-.feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;transition:all 0.3s;position:relative;overflow:hidden;}
-.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0;transition:opacity 0.3s;}
-.feature-card:hover{border-color:var(--border2);transform:translateY(-3px);}
-.feature-card:hover::before{opacity:1;}
-.feature-icon{font-size:2rem;margin-bottom:14px;}
-.feature-title{font-weight:700;font-size:1rem;margin-bottom:8px;}
-.feature-desc{color:var(--muted2);font-size:0.85rem;line-height:1.6;}
-
-/* PAYMENTS */
-.payments-section{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 5%;}
-.pay-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:40px;}
-.pay-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.8rem;display:flex;align-items:center;gap:12px;font-weight:600;font-size:0.9rem;transition:all 0.3s;}
-.pay-card:hover{border-color:var(--blue);box-shadow:0 0 20px var(--blue-glow);}
-.pay-icon{font-size:1.5rem;}
-
-/* HOW IT WORKS */
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-top:50px;}
-.step{text-align:center;}
-.step-num{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;margin:0 auto 16px;}
-.step-title{font-weight:700;margin-bottom:8px;}
-.step-desc{color:var(--muted2);font-size:0.85rem;line-height:1.6;}
-
-/* MODAL */
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:2000;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
-.modal.active{display:flex;}
-.modal-content{background:var(--card2);width:100%;max-width:480px;padding:2.2rem;border-radius:20px;border:1px solid var(--border2);position:relative;max-height:90vh;overflow-y:auto;}
-.modal-close{position:absolute;right:18px;top:14px;cursor:pointer;font-size:22px;color:var(--muted);background:none;border:none;line-height:1;}
-.modal-close:hover{color:var(--text);}
-.modal-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;text-align:center;margin-bottom:6px;}
-.modal-sub{color:var(--muted2);font-size:0.85rem;text-align:center;margin-bottom:20px;}
-
-/* TABS */
-.auth-tabs{display:flex;background:var(--bg);border-radius:var(--radius-sm);padding:4px;margin-bottom:20px;border:1px solid var(--border);}
-.auth-tab{flex:1;padding:8px;text-align:center;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.85rem;transition:all 0.2s;color:var(--muted2);}
-.auth-tab.active{background:var(--blue);color:white;}
-
-/* ROLE SELECTOR */
-.role-selector{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.role-card{border:2px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;}
-.role-card.active{border-color:var(--blue);background:rgba(59,130,246,0.08);}
-.role-card-icon{font-size:1.6rem;margin-bottom:6px;}
-.role-card-label{font-weight:700;font-size:0.9rem;}
-.role-card-desc{color:var(--muted2);font-size:0.75rem;margin-top:3px;}
-
-/* FORM */
-.input-group{margin-bottom:14px;position:relative;}
-.input-group label{display:block;font-size:0.78rem;color:var(--muted2);margin-bottom:5px;font-weight:500;}
-.input-group input,.input-group select{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);color:white;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;transition:border-color 0.2s;outline:none;}
-.input-group input:focus,.input-group select:focus{border-color:var(--blue);}
-.input-group select option{background:var(--card2);}
-.eye-btn{position:absolute;right:12px;top:34px;cursor:pointer;font-size:1rem;color:var(--muted);background:none;border:none;}
-.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.divider{display:flex;align-items:center;gap:12px;margin:14px 0;color:var(--muted);}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.form-note{font-size:0.75rem;color:var(--muted2);text-align:center;margin-top:12px;}
-.form-note a{color:var(--blue);cursor:pointer;text-decoration:none;}
-.forgot-link{color:var(--blue);cursor:pointer;font-size:0.78rem;text-decoration:none;display:block;text-align:right;margin-top:-8px;margin-bottom:10px;}
-
-/* POLICY MODAL */
-.policy-content{color:var(--muted2);font-size:0.85rem;line-height:1.7;}
-.policy-content h3{color:var(--text);font-size:0.95rem;margin:16px 0 6px;}
-
-/* ABOUT MODAL */
-.about-content{color:var(--muted2);font-size:0.9rem;line-height:1.7;}
-.about-content h3{color:var(--text);font-size:1.05rem;font-family:'Syne',sans-serif;margin:16px 0 6px;}
-
-/* FOOTER */
-footer{background:var(--card);border-top:1px solid var(--border);padding:40px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
-.footer-logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;}
-.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
-.footer-links a{color:var(--muted2);text-decoration:none;font-size:0.82rem;cursor:pointer;transition:color 0.2s;}
-.footer-links a:hover{color:var(--text);}
-.footer-copy{color:var(--muted);font-size:0.78rem;}
-
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--card2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px 20px;font-size:0.85rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.4s;max-width:300px;}
+.topbar{background:#131320;border-bottom:1px solid var(--border);padding:6px 4%;display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:var(--muted);}
+.topbar-left{display:flex;gap:20px;}
+.topbar span{display:flex;align-items:center;gap:5px;}
+nav{background:rgba(10,10,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;}
+.nav-main{padding:0.8rem 4%;display:flex;align-items:center;gap:16px;}
+.logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;white-space:nowrap;}
+.search-bar{flex:1;display:flex;max-width:600px;margin:0 auto;}
+.search-bar input{flex:1;padding:10px 16px;background:var(--card2);border:1.5px solid var(--border2);border-right:none;border-radius:var(--radius) 0 0 var(--radius);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;}
+.search-bar input:focus{border-color:var(--blue);}
+.search-bar button{padding:10px 20px;background:var(--blue);border:none;border-radius:0 var(--radius) var(--radius) 0;cursor:pointer;color:white;font-size:1rem;}
+.search-bar button:hover{background:#2563eb;}
+.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.nav-btn{padding:8px 16px;border-radius:var(--radius);font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-size:0.85rem;transition:all 0.2s;}
+.nav-btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.nav-btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+.nav-btn-primary{background:var(--blue);color:white;}
+.nav-btn-primary:hover{background:#2563eb;}
+.cart-btn{position:relative;padding:8px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:1.1rem;color:var(--text);}
+.cart-count{position:absolute;top:-6px;right:-6px;background:var(--red);color:white;font-size:0.65rem;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.user-pill{display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:6px 14px;font-size:0.85rem;}
+.user-pill .u-name{color:var(--blue2);font-weight:600;}
+.cat-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 4%;display:flex;gap:0;overflow-x:auto;}
+.cat-nav::-webkit-scrollbar{display:none;}
+.cat-item{padding:10px 18px;font-size:0.83rem;font-weight:500;color:var(--muted);white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
+.cat-item:hover,.cat-item.active{color:var(--text);border-bottom-color:var(--blue);}
+.hero{position:relative;overflow:hidden;background:var(--bg2);}
+.hero-slides{display:flex;transition:transform 0.5s ease;}
+.hero-slide{min-width:100%;padding:60px 6%;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+.hero-slide.s1{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);}
+.hero-slide.s2{background:linear-gradient(135deg,#0f1e0f 0%,#14532d 100%);}
+.hero-slide.s3{background:linear-gradient(135deg,#1c0f00 0%,#431407 100%);}
+.hero-tag{display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:5px 14px;border-radius:50px;font-size:0.78rem;font-weight:600;letter-spacing:1px;margin-bottom:16px;}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:14px;}
+.hero-desc{color:rgba(255,255,255,0.65);font-size:0.95rem;line-height:1.7;margin-bottom:28px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.hero-visual{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.hero-prod-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:14px;text-align:center;width:130px;backdrop-filter:blur(10px);}
+.hero-prod-img{font-size:2.5rem;margin-bottom:8px;}
+.hero-prod-name{font-size:0.75rem;font-weight:600;margin-bottom:4px;}
+.hero-prod-price{font-size:0.8rem;color:var(--gold);font-weight:700;}
+.slide-dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;}
+.dot.active{background:var(--blue);width:24px;border-radius:4px;}
+.slide-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:white;backdrop-filter:blur(5px);transition:all 0.2s;z-index:10;}
+.slide-arrow:hover{background:rgba(255,255,255,0.2);}
+.slide-prev{left:16px;}
+.slide-next{right:16px;}
+.promo-banner{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.promo-card{padding:20px 24px;display:flex;align-items:center;gap:14px;background:var(--bg2);border-right:1px solid var(--border);transition:background 0.2s;cursor:pointer;}
+.promo-card:last-child{border-right:none;}
+.promo-card:hover{background:var(--card);}
+.promo-icon{font-size:1.8rem;flex-shrink:0;}
+.promo-title{font-weight:700;font-size:0.9rem;margin-bottom:3px;}
+.promo-sub{color:var(--muted);font-size:0.78rem;}
+.section{padding:50px 4%;}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.sec-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;}
+.sec-title span{color:var(--blue);}
+.see-all{color:var(--blue);font-size:0.85rem;font-weight:600;cursor:pointer;}
+.see-all:hover{text-decoration:underline;}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transition:all 0.3s;position:relative;}
+.prod-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+.prod-badge{position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:50px;font-size:0.68rem;font-weight:700;letter-spacing:0.5px;z-index:1;}
+.badge-hot{background:#ef4444;color:white;}
+.badge-new{background:#10b981;color:white;}
+.badge-sale{background:#f59e0b;color:#000;}
+.badge-vip{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;}
+.prod-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:var(--bg3);position:relative;}
+.wish-btn{position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;transition:all 0.2s;backdrop-filter:blur(4px);}
+.wish-btn:hover{background:rgba(239,68,68,0.3);border-color:var(--red);}
+.wish-btn.active{color:var(--red);background:rgba(239,68,68,0.2);border-color:var(--red);}
+.prod-body{padding:14px;}
+.prod-category{font-size:0.72rem;color:var(--blue);font-weight:600;margin-bottom:4px;letter-spacing:0.5px;}
+.prod-name{font-weight:600;font-size:0.9rem;margin-bottom:6px;line-height:1.4;}
+.prod-seller{font-size:0.75rem;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+.prod-seller-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.prod-rating{display:flex;align-items:center;gap:4px;margin-bottom:10px;}
+.stars{color:var(--gold);font-size:0.8rem;}
+.rating-count{font-size:0.75rem;color:var(--muted);}
+.prod-footer{display:flex;align-items:center;justify-content:space-between;}
+.prod-price{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);}
+.prod-price-old{font-size:0.78rem;color:var(--muted);text-decoration:line-through;margin-left:6px;}
+.prod-discount{font-size:0.75rem;color:var(--green);font-weight:700;}
+.add-cart{width:32px;height:32px;background:var(--blue);border:none;border-radius:8px;cursor:pointer;color:white;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
+.add-cart:hover{background:#2563eb;transform:scale(1.1);}
+.prod-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;}
+.prod-scroll::-webkit-scrollbar{height:4px;}
+.prod-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.prod-scroll .prod-card{min-width:200px;}
+.vip-banner{margin:0 4%;background:linear-gradient(135deg,#1a1000 0%,#2d1f00 50%,#1a1000 100%);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-lg);padding:40px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:30px;position:relative;overflow:hidden;}
+.vip-banner::before{content:'👑';position:absolute;right:160px;top:50%;transform:translateY(-50%);font-size:6rem;opacity:0.08;}
+.vip-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--gold);margin-bottom:8px;}
+.vip-desc{color:rgba(245,158,11,0.7);font-size:0.9rem;line-height:1.6;max-width:500px;}
+.vip-perks{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap;}
+.vip-perk{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:rgba(245,158,11,0.85);font-weight:500;}
+.vip-btn{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;padding:14px 32px;border:none;border-radius:var(--radius);font-weight:800;font-size:0.95rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.vip-btn:hover{transform:scale(1.04);}
+.integrations{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 4%;}
+.int-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:30px;}
+.int-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;transition:all 0.3s;cursor:pointer;}
+.int-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.int-icon{font-size:1.8rem;margin-bottom:8px;}
+.int-name{font-weight:700;font-size:0.85rem;margin-bottom:3px;}
+.int-status{font-size:0.72rem;color:var(--green);font-weight:600;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 12px;text-align:center;cursor:pointer;transition:all 0.3s;}
+.cat-card:hover{border-color:var(--blue);background:rgba(59,130,246,0.05);}
+.cat-card-icon{font-size:2rem;margin-bottom:10px;}
+.cat-card-name{font-size:0.82rem;font-weight:600;}
+.cat-card-count{font-size:0.72rem;color:var(--muted);margin-top:3px;}
+.sellers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.seller-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;}
+.seller-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.seller-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#818cf8);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;margin:0 auto 12px;color:white;font-family:'Syne',sans-serif;}
+.seller-name{font-weight:700;font-size:0.95rem;margin-bottom:4px;}
+.seller-loc{font-size:0.78rem;color:var(--muted);margin-bottom:10px;}
+.seller-stats{display:flex;gap:14px;justify-content:center;}
+.seller-stat{text-align:center;}
+.seller-stat-num{font-weight:700;font-size:0.9rem;color:var(--blue);}
+.seller-stat-label{font-size:0.7rem;color:var(--muted);}
+.seller-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--gold);padding:3px 10px;border-radius:50px;font-size:0.7rem;font-weight:700;margin-bottom:10px;}
+.flash-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 4%;}
+.flash-header{display:flex;align-items:center;gap:20px;margin-bottom:24px;flex-wrap:wrap;}
+.flash-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;}
+.flash-badge{background:#ef4444;color:white;padding:6px 16px;border-radius:50px;font-size:0.8rem;font-weight:700;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.7;}}
+.countdown{display:flex;gap:8px;align-items:center;}
+.cd-block{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;text-align:center;min-width:48px;}
+.cd-num{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;line-height:1;}
+.cd-label{font-size:0.62rem;color:var(--muted);margin-top:2px;}
+.cd-sep{font-size:1.2rem;font-weight:700;color:var(--muted);}
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.cart-overlay.open{opacity:1;pointer-events:auto;}
+.cart-sidebar{position:fixed;top:0;right:0;width:380px;max-width:90vw;height:100%;background:var(--bg2);border-left:1px solid var(--border);z-index:2001;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;}
+.cart-sidebar.open{transform:translateX(0);}
+.cart-head{padding:20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.cart-head h3{font-family:'Syne',sans-serif;font-size:1.1rem;}
+.cart-close{background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;}
+.cart-close:hover{color:var(--text);}
+.cart-body{flex:1;overflow-y:auto;padding:16px;}
+.cart-empty{text-align:center;color:var(--muted);padding:40px 20px;}
+.cart-empty-icon{font-size:3rem;margin-bottom:10px;}
+.cart-item{display:flex;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;align-items:center;}
+.cart-item-img{width:50px;height:50px;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
+.cart-item-info{flex:1;min-width:0;}
+.cart-item-name{font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cart-item-price{font-size:0.8rem;color:var(--gold);font-weight:700;margin-top:2px;}
+.cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.cart-item-qty button{width:24px;height:24px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);cursor:pointer;font-size:0.8rem;}
+.cart-item-qty span{font-size:0.8rem;font-weight:600;min-width:20px;text-align:center;}
+.cart-item-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;margin-left:4px;}
+.cart-item-rm:hover{color:var(--red);}
+.cart-foot{padding:16px;border-top:1px solid var(--border);}
+.cart-total{display:flex;justify-content:space-between;font-size:1rem;font-weight:700;margin-bottom:12px;}
+.cart-total span:last-child{color:var(--gold);font-family:'Syne',sans-serif;}
+.cart-checkout{width:100%;padding:12px;background:var(--blue);border:none;border-radius:var(--radius);color:white;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.cart-checkout:hover{background:#2563eb;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:3000;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:600px;width:100%;max-height:90vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;background:var(--bg3);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:1.2rem;z-index:5;}
+.modal-close:hover{color:var(--text);border-color:var(--red);}
+.modal-img{height:220px;display:flex;align-items:center;justify-content:center;font-size:5rem;background:var(--bg3);border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+.modal-body{padding:24px;}
+.modal-cat{font-size:0.75rem;color:var(--blue);font-weight:700;letter-spacing:1px;margin-bottom:6px;}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+.modal-desc{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:16px;}
+.modal-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+.modal-price{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;}
+.modal-price-old{font-size:1rem;color:var(--muted);text-decoration:line-through;margin-left:8px;}
+.modal-actions{display:flex;gap:10px;}
+.modal-btn{flex:1;padding:12px;border-radius:var(--radius);font-weight:700;font-size:0.9rem;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
+.modal-btn-primary{background:var(--blue);color:white;}
+.modal-btn-primary:hover{background:#2563eb;}
+.modal-btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.modal-btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:50px 4% 30px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand .logo{font-size:1.4rem;display:block;margin-bottom:14px;}
+.footer-desc{color:var(--muted);font-size:0.85rem;line-height:1.7;margin-bottom:16px;}
+.footer-socials{display:flex;gap:10px;}
+.social-btn{width:36px;height:36px;background:var(--card);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;}
+.social-btn:hover{border-color:var(--blue);}
+.footer-col h4{font-weight:700;font-size:0.9rem;margin-bottom:14px;color:var(--text);}
+.footer-col a{display:block;color:var(--muted);font-size:0.83rem;margin-bottom:8px;cursor:pointer;transition:color 0.2s;}
+.footer-col a:hover{color:var(--text);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-copy{color:var(--muted2);font-size:0.78rem;}
+.footer-payments{display:flex;gap:8px;}
+.pay-badge{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:0.72rem;color:var(--muted);}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 20px;font-size:0.85rem;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.35s;max-width:280px;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.success{border-color:var(--green);color:var(--green);}
 .toast.error{border-color:var(--red);color:var(--red);}
-
-/* RESPONSIVE */
-@media(max-width:600px){
-  .nav-links{display:none;}
-  .input-row{grid-template-columns:1fr;}
-  footer{flex-direction:column;text-align:center;}
+.no-results{text-align:center;padding:60px 20px;color:var(--muted);}
+.no-results-icon{font-size:3rem;margin-bottom:12px;}
+@media(max-width:768px){
+.hero-slide{grid-template-columns:1fr;padding:40px 5%;}
+.hero-visual{display:none;}
+.promo-banner{grid-template-columns:1fr;}
+.promo-card{border-right:none;border-bottom:1px solid var(--border);}
+.footer-grid{grid-template-columns:1fr 1fr;}
+.topbar{display:none;}
+.vip-banner{grid-template-columns:1fr;}
+.cart-sidebar{width:100%;}
 }
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-.hero>*{animation:fadeUp 0.6s ease both;}
-.hero .badge{animation-delay:0.1s;}
-.hero h1{animation-delay:0.2s;}
-.hero p{animation-delay:0.3s;}
-.hero-btns{animation-delay:0.4s;}
+@media(max-width:480px){
+.nav-main{flex-wrap:wrap;}
+.search-bar{order:3;flex-basis:100%;}
+.nav-actions{width:100%;justify-content:flex-end;margin-top:8px;}
+}
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span>🌍 150+ ölkəyə çatdırılma</span>
+    <span>⚡ Flash Sale: 70%-ə qədər endirim</span>
+    <span>🔒 Bütün sifarişlərdə alıcı qoruması</span>
+  </div>
+  <div>
+    <span>📞 24/7 Dəstək &nbsp;|&nbsp; <a href="#" style="color:var(--blue);">Satıcı Girişi</a></span>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo">ETERNAL</a>
-  <div class="nav-links">
-    <a href="#features" id="nl-features">Features</a>
-    <a href="#payments" id="nl-payments">Payments</a>
-    <a href="#how" id="nl-how">How it works</a>
-    <a href="#" onclick="openAbout()" id="nl-about">About</a>
-    <a href="#" onclick="openPolicy()" id="nl-policy">Privacy</a>
+  <div class="nav-main">
+    <a href="home.html" class="logo">ETERNAL</a>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Məhsul, brend və ya satıcı axtar..." onkeydown="if(event.key==='Enter')doSearch()">
+      <button onclick="doSearch()">🔍</button>
+    </div>
+    <div class="nav-actions" id="navActions">
+      <button class="nav-btn nav-btn-outline" onclick="goSell()">Sat</button>
+      <button class="nav-btn nav-btn-outline" id="loginBtn" onclick="goLogin()">Daxil ol</button>
+      <button class="nav-btn nav-btn-primary" id="joinBtn" onclick="goJoin()">Qeydiyyat</button>
+      <div class="cart-btn" onclick="toggleCart()">🛒<span class="cart-count" id="cartCount">0</span></div>
+    </div>
   </div>
-  <div class="nav-right">
-    <select class="lang-sel" id="langSelect" onchange="changeLang(this.value)">
-      <option value="en">🌐 EN</option>
-      <option value="az">🇦🇿 AZ</option>
-      <option value="tr">🇹🇷 TR</option>
-      <option value="ru">🇷🇺 RU</option>
-      <option value="zh">🇨🇳 CN</option>
-      <option value="ar">🇸🇦 AR</option>
-    </select>
-    <button class="btn btn-outline btn-sm" id="navLogin" onclick="openModal('login')">Login</button>
-    <button class="btn btn-primary btn-sm" id="navSignup" onclick="openModal('signup')">Join Now</button>
+  <div class="cat-nav" id="catNav">
+    <div class="cat-item active" data-cat="all">Hamısı</div>
+    <div class="cat-item" data-cat="Electronics">📱 Elektronika</div>
+    <div class="cat-item" data-cat="Fashion">👗 Moda</div>
+    <div class="cat-item" data-cat="Home">🏠 Ev & Bağ</div>
+    <div class="cat-item" data-cat="Beauty">💄 Gözəllik</div>
+    <div class="cat-item" data-cat="Sports">⚽ İdman</div>
+    <div class="cat-item" data-cat="Toys">🧸 Oyuncaqlar</div>
+    <div class="cat-item" data-cat="Books">📚 Kitablar</div>
+    <div class="cat-item" data-cat="Health">🌱 Sağlamlıq</div>
+    <div class="cat-item" data-cat="Auto">🚗 Avto</div>
+    <div class="cat-item" data-cat="Pets">🐾 Heyvanlar</div>
+    <div class="cat-item" data-cat="Gaming">🎮 Oyun</div>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="badge" id="heroBadge">🌍 NEXT-GEN GLOBAL DROPSHIPPING</div>
-  <h1 id="hTitle">Global Dropshipping<br>Future is Eternal</h1>
-  <p id="hDesc">Expand your business across borders with our AI-driven global network. Connect buyers and sellers worldwide.</p>
-  <div class="hero-btns">
-    <button class="btn btn-primary" id="heroBtn" onclick="openModal('signup')" style="padding:14px 36px;font-size:1rem;">Get Started Free</button>
-    <button class="btn btn-outline" id="heroLearn" onclick="openAbout()" style="padding:14px 28px;font-size:1rem;">Learn More</button>
+<!-- HERO SLIDER -->
+<div class="hero">
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide s1">
+      <div>
+        <div class="hero-tag">🚀 YENİ MƏHSULLAR</div>
+        <h1 class="hero-title">Dünyanı Al,<br>Sənə Gəlsin</h1>
+        <p class="hero-desc">Təsdiqlənmiş qlobal satıcılardan milyonlarla məhsul kəşf et. Sürətli çatdırılma, alıcı qoruması, ən yaxşı qiymətlər.</p>
+        <div class="hero-btns">
+          <button class="nav-btn nav-btn-primary" style="padding:13px 30px;font-size:0.95rem;" onclick="scrollToProducts()">İndi Alış-veriş et</button>
+          <button class="nav-btn nav-btn-outline" style="padding:13px 22px;font-size:0.95rem;" onclick="scrollToFlash()">Endirimlərə bax</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-prod-card"><div class="hero-prod-img">📱</div><div class="hero-prod-name">Smartfonlar</div><div class="hero-prod-price">$89-dan</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">💻</div><div class="hero-prod-name">Noutbuklar</div><div class="hero-prod-price">$299-dan</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">⌚</div><div class="hero-prod-name">Ağıllı Saatlar</div><div class="hero-prod-price">$39-dan</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">🎧</div><div class="hero-prod-name">Qulaqlıqlar</div><div class="hero-prod-price">$19-dan</div></div>
+      </div>
+    </div>
+    <div class="hero-slide s2">
+      <div>
+        <div class="hero-tag" style="background:rgba(16,185,129,0.2);border-color:rgba(16,185,129,0.3);color:#34d399;">🌿 EKO SATICILAR</div>
+        <h1 class="hero-title" style="background:linear-gradient(135deg,#fff,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Qlobal Satıcılar,<br>Yerli Qiymətlər</h1>
+        <p class="hero-desc">Birbaşa istehsalçılar və topdansatışçılarla əlaqə qur. Vasitəçini kəs. Daha çox qazan.</p>
+        <div class="hero-btns">
+          <button class="nav-btn" style="background:#10b981;color:white;padding:13px 30px;font-size:0.95rem;" onclick="scrollToSellers()">Satıcıları kəşf et</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-prod-card"><div class="hero-prod-img">👟</div><div class="hero-prod-name">Ayaqqabılar</div><div class="hero-prod-price">$22-dan</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">👗</div><div class="hero-prod-name">Geyim</div><div class="hero-prod-price">$8-dan</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">👜</div><div class="hero-prod-name">Çantalar</div><div class="hero-prod-price">$15-dan</div></div>
+        <div class="hero-prod-card"><div class="hero-prod-img">💍</div><div class="hero-prod-name">Zinət əşyaları</div><div class="hero-prod-price">$5-dan</div></div>
+      </div>
+    </div>
+    <div class="hero-slide s3">
+      <div>
+        <div class="hero-tag" style="background:rgba(245,158,11,0.2);border-color:rgba(245,158,11,0.3);color:#fbbf24;">👑 VIP ÜZVLƏR</div>
+        <h1 class="hero-title" style="background:linear-gradient(135deg,#fff,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">VIP-ə Qoşul,<br>Özəl Endirimlər Al</h1>
+        <p class="hero-desc">Minlərlə VIP üzvə qoşul — eksklüziv endirimlər, erkən giriş və sıfır platforma haqqı.</p>
+        <div class="hero-btns">
+          <button class="nav-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;padding:13px 30px;font-size:0.95rem;font-weight:700;border:none;cursor:pointer;border-radius:12px;" onclick="showToast('VIP səhifəsi tezliklə!','success')">VIP Girişi Al</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🏠</div><div class="hero-prod-name">Ev Dekoru</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $12</div></div>
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🧴</div><div class="hero-prod-name">Dəriyə qulluq</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $9</div></div>
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🎮</div><div class="hero-prod-name">Oyun</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $45</div></div>
+        <div class="hero-prod-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)"><div class="hero-prod-img">🔧</div><div class="hero-prod-name">Alətlər</div><div class="hero-prod-price" style="color:#fbbf24">VIP: $18</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-dots">
+    <div class="dot active" onclick="goSlide(0)"></div>
+    <div class="dot" onclick="goSlide(1)"></div>
+    <div class="dot" onclick="goSlide(2)"></div>
+  </div>
+  <div class="slide-arrow slide-prev" onclick="prevSlide()">‹</div>
+  <div class="slide-arrow slide-next" onclick="nextSlide()">›</div>
+</div>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <div class="promo-card"><span class="promo-icon">🚀</span><div><div class="promo-title">Pulsuz Dünya Çatdırılması</div><div class="promo-sub">$50+ sifarişlərdə</div></div></div>
+  <div class="promo-card"><span class="promo-icon">🔒</span><div><div class="promo-title">Alıcı Qoruması</div><div class="promo-sub">100% geri ödəniş zəmanəti</div></div></div>
+  <div class="promo-card"><span class="promo-icon">💳</span><div><div class="promo-title">9 Ödəniş Üsulu</div><div class="promo-sub">PayPal, Stripe, Crypto və daha çox</div></div></div>
+</div>
+
+<!-- FLASH SALE -->
+<div class="flash-section" id="flashSection">
+  <div class="flash-header">
+    <div class="flash-title">⚡ Flash Sale</div>
+    <div class="flash-badge">CANLI</div>
+    <div class="countdown">
+      <div class="cd-block"><div class="cd-num" id="cd-h">08</div><div class="cd-label">SAAT</div></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block"><div class="cd-num" id="cd-m">24</div><div class="cd-label">DƏQ</div></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block"><div class="cd-num" id="cd-s">00</div><div class="cd-label">SAN</div></div>
+    </div>
+  </div>
+  <div class="prod-scroll" id="flashGrid"></div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section" id="catSection">
+  <div class="sec-header">
+    <div class="sec-title">Kateqoriya üzrə <span>Alış-veriş</span></div>
+    <span class="see-all" onclick="filterProducts('all')">Hamısını gör →</span>
+  </div>
+  <div class="cat-grid" id="catGrid"></div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section" style="padding-top:0" id="productsSection">
+  <div class="sec-header">
+    <div class="sec-title">🔥 <span>Trend</span> Məhsullar</div>
+    <span class="see-all" onclick="filterProducts('all')">Hamısını gör →</span>
+  </div>
+  <div class="prod-grid" id="productGrid"></div>
+  <div class="no-results" id="noResults" style="display:none;">
+    <div class="no-results-icon">🔍</div>
+    <div style="font-size:1.1rem;font-weight:700;margin-bottom:6px;">Məhsul tapılmadı</div>
+    <div>Başqa açar söz və ya kateqoriya sınayın.</div>
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stat"><div class="stat-num">150+</div><div class="stat-label" id="stat1">Countries</div></div>
-  <div class="stat"><div class="stat-num">50K+</div><div class="stat-label" id="stat2">Active Sellers</div></div>
-  <div class="stat"><div class="stat-num">$2M+</div><div class="stat-label" id="stat3">Monthly Volume</div></div>
-  <div class="stat"><div class="stat-num">99.9%</div><div class="stat-label" id="stat4">Uptime</div></div>
+<!-- VIP BANNER -->
+<div class="vip-banner">
+  <div>
+    <div class="vip-title">👑 VIP ol. Daha Yaxşı Ticarət et.</div>
+    <div class="vip-desc">Eksklüziv satıcı alətləri, sıfır siyahı haqqı, prioritet çatdırılma slotları və yalnız üzvlərə məxsus məhsul buraxılışlarını aç.</div>
+    <div class="vip-perks">
+      <div class="vip-perk">✓ 0% Platforma Haqqı</div>
+      <div class="vip-perk">✓ Prioritet Dəstək</div>
+      <div class="vip-perk">✓ Erkən Giriş Endirimləri</div>
+      <div class="vip-perk">✓ Limitsiz Siyahı</div>
+      <div class="vip-perk">✓ Ətraflı Analitika</div>
+    </div>
+  </div>
+  <button class="vip-btn" onclick="showToast('VIP səhifəsi tezliklə!','success')">VIP ol →</button>
 </div>
 
-<!-- FEATURES -->
-<section class="section" id="features">
-  <div class="badge" style="margin:0 auto 16px;">⚡ PLATFORM FEATURES</div>
-  <div class="section-title" id="featTitle">Everything You Need to Scale</div>
-  <div class="section-sub" id="featSub">Built for modern dropshippers, wholesalers, and global traders.</div>
-  <div class="features-grid">
-    <div class="feature-card"><div class="feature-icon">🤖</div><div class="feature-title" id="f1t">AI-Powered Analytics</div><div class="feature-desc" id="f1d">Smart insights to optimize your sales, track trends, and predict demand.</div></div>
-    <div class="feature-card"><div class="feature-icon">🌐</div><div class="feature-title" id="f2t">Multi-Language Support</div><div class="feature-desc" id="f2d">Full platform in 6 languages. Reach customers globally without barriers.</div></div>
-    <div class="feature-card"><div class="feature-icon">💳</div><div class="feature-title" id="f3t">Global Payments</div><div class="feature-desc" id="f3d">Accept payments via PayPal, Payoneer, Stripe, bank transfer and more.</div></div>
-    <div class="feature-card"><div class="feature-icon">🔗</div><div class="feature-title" id="f4t">Platform Integrations</div><div class="feature-desc" id="f4d">Connect Shopify, WooCommerce, Amazon, eBay, Trendyol and 50+ platforms.</div></div>
-    <div class="feature-card"><div class="feature-icon">🛡️</div><div class="feature-title" id="f5t">Buyer & Seller Protection</div><div class="feature-desc" id="f5d">Full escrow system and dispute resolution for safe transactions.</div></div>
-    <div class="feature-card"><div class="feature-icon">👑</div><div class="feature-title" id="f6t">VIP Membership</div><div class="feature-desc" id="f6d">Unlock premium features, lower fees, and priority support with VIP plans.</div></div>
+<!-- INTEGRATIONS -->
+<div class="integrations">
+  <div class="sec-header">
+    <div class="sec-title">🔗 Platforma <span>İnteqrasiyaları</span></div>
+    <span class="see-all">Mağazanı bağla →</span>
   </div>
+  <div style="color:var(--muted);font-size:0.88rem;margin-top:-10px;">Mövcud mağazanı bağla və məhsulları ani sinxronlaşdır.</div>
+  <div class="int-grid" id="intGrid"></div>
+</div>
+
+<!-- TOP SELLERS -->
+<section class="section" id="sellersSection">
+  <div class="sec-header">
+    <div class="sec-title">⭐ Ən Yaxşı <span>Satıcılar</span></div>
+    <span class="see-all">Bütün satıcılar →</span>
+  </div>
+  <div class="sellers-grid" id="sellersGrid"></div>
 </section>
-
-<!-- PAYMENTS -->
-<div class="payments-section" id="payments">
-  <div class="section-title" id="payTitle">Accepted Payment Methods</div>
-  <div class="section-sub" id="paySub">Transact securely in any currency, any method, anywhere.</div>
-  <div class="pay-grid">
-    <div class="pay-card"><span class="pay-icon">🅿️</span> PayPal</div>
-    <div class="pay-card"><span class="pay-icon">💚</span> Payoneer</div>
-    <div class="pay-card"><span class="pay-icon">🔵</span> Stripe</div>
-    <div class="pay-card"><span class="pay-icon">🏦</span> Bank Transfer (AZ)</div>
-    <div class="pay-card"><span class="pay-icon">🏦</span> Bank Transfer (TR)</div>
-    <div class="pay-card"><span class="pay-icon">🏦</span> Bank Transfer (RU)</div>
-    <div class="pay-card"><span class="pay-icon">🏦</span> Bank Transfer (CN)</div>
-    <div class="pay-card"><span class="pay-icon">🏦</span> Bank Transfer (AR)</div>
-    <div class="pay-card"><span class="pay-icon">₿</span> Crypto (USDT)</div>
-  </div>
-</div>
-
-<!-- HOW IT WORKS -->
-<section class="section" id="how">
-  <div class="section-title" id="howTitle">How It Works</div>
-  <div class="section-sub" id="howSub">Get started in minutes and scale globally.</div>
-  <div class="steps">
-    <div class="step"><div class="step-num">1</div><div class="step-title" id="s1t">Create Account</div><div class="step-desc" id="s1d">Sign up as a buyer or seller with phone verification.</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-title" id="s2t">Connect Platforms</div><div class="step-desc" id="s2d">Link your existing stores or create a new storefront.</div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-title" id="s3t">List Products</div><div class="step-desc" id="s3d">Add products with pricing, images, and shipping details.</div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-title" id="s4t">Start Earning</div><div class="step-desc" id="s4d">Receive orders, manage payments, and scale your business.</div></div>
-  </div>
-</section>
-
-<!-- AUTH MODAL -->
-<div id="authModal" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title" id="mTitle">Welcome</div>
-    <div class="modal-sub" id="mSub">Join the global dropshipping network</div>
-    <div class="auth-tabs" id="authTabs">
-      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Login</div>
-      <div class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Register</div>
-    </div>
-    <div id="formBody"></div>
-    <div id="recaptcha-container"></div>
-    <button class="btn btn-primary" id="mActionBtn" style="width:100%;margin-top:12px;padding:13px;" onclick="mainAuth()">Continue</button>
-    <div class="divider" id="orDivider">OR</div>
-    <button class="btn btn-google" onclick="googleLogin()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google"> Google
-    </button>
-    <div class="form-note" id="formNote"></div>
-  </div>
-</div>
-
-<!-- POLICY MODAL -->
-<div id="policyModal" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closePolicy()">✕</button>
-    <div class="modal-title" id="polTitle">Privacy Policy</div>
-    <div class="policy-content" id="polContent">
-      <h3>1. Data Collection</h3>
-      <p>We collect personal information such as name, email address, phone number, and location when you register on Eternal Global Network. This data is used solely for account management and service delivery.</p>
-      <h3>2. Data Usage</h3>
-      <p>Your data is never sold to third parties. We use it to provide platform services, send important notifications, and improve user experience.</p>
-      <h3>3. Payment Security</h3>
-      <p>All payment information is encrypted. We do not store full card details. Transactions are processed through certified payment providers.</p>
-      <h3>4. Cookies</h3>
-      <p>We use cookies to keep you logged in and improve performance. You can disable cookies in your browser settings.</p>
-      <h3>5. Your Rights</h3>
-      <p>You have the right to access, update, or delete your personal data at any time by contacting our support team.</p>
-      <h3>6. Contact</h3>
-      <p>For privacy concerns, email: privacy@eternal-global.com</p>
-    </div>
-  </div>
-</div>
-
-<!-- ABOUT MODAL -->
-<div id="aboutModal" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closeAbout()">✕</button>
-    <div class="modal-title" id="abtTitle">About Us</div>
-    <div class="about-content" id="abtContent">
-      <h3>🌍 Who We Are</h3>
-      <p>Eternal Global Network is a next-generation B2B and B2C dropshipping platform connecting buyers and sellers across 150+ countries. Founded with the mission to democratize global trade.</p>
-      <h3>🚀 Our Mission</h3>
-      <p>We believe every entrepreneur deserves access to global markets. Our platform removes barriers of language, currency, and geography — making world trade accessible to all.</p>
-      <h3>💡 What We Offer</h3>
-      <p>From AI-powered analytics to multi-currency payments, platform integrations with major e-commerce players, and a VIP membership system — we provide everything a modern trader needs.</p>
-      <h3>🤝 Our Team</h3>
-      <p>We are a diverse team of engineers, traders, and entrepreneurs from Azerbaijan, Turkey, Russia, and beyond — united by our passion for global commerce.</p>
-      <h3>📬 Contact</h3>
-      <p>Email: hello@eternal-global.com<br>Support: support@eternal-global.com</p>
-    </div>
-  </div>
-</div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">ETERNAL</div>
-  <div class="footer-links">
-    <a onclick="openAbout()" id="fl-about">About Us</a>
-    <a onclick="openPolicy()" id="fl-policy">Privacy Policy</a>
-    <a href="#features" id="fl-feat">Features</a>
-    <a href="#payments" id="fl-pay">Payments</a>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">ETERNAL</span>
+      <p class="footer-desc">Növbəti nəsil qlobal dropshipping və marketplace platforması. 150+ ölkədə al və sat — tam alıcı qoruması ilə.</p>
+      <div class="footer-socials">
+        <div class="social-btn">𝕏</div>
+        <div class="social-btn">f</div>
+        <div class="social-btn">in</div>
+        <div class="social-btn">▶</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Şirkət</h4>
+      <a href="#">Haqqımızda</a>
+      <a href="#">Karyera</a>
+      <a href="#">Mətbuat</a>
+      <a href="#">Məxfilik Siyasəti</a>
+      <a href="#">Xidmət Şərtləri</a>
+    </div>
+    <div class="footer-col">
+      <h4>Satıcılar üçün</h4>
+      <a href="#">Satmağa başla</a>
+      <a href="#" id="dashLink">Satıcı Paneli</a>
+      <a href="#">VIP Planlar</a>
+      <a href="#">İnteqrasiyalar</a>
+      <a href="#">Satıcı Akademiyası</a>
+    </div>
+    <div class="footer-col">
+      <h4>Dəstək</h4>
+      <a href="#">Yardım Mərkəzi</a>
+      <a href="#">Alıcı Qoruması</a>
+      <a href="#">Çatdırılma Məlumatı</a>
+      <a href="#">Qaytarma</a>
+      <a href="#">Bizimlə Əlaqə</a>
+    </div>
   </div>
-  <div class="footer-copy">© 2025 Eternal Global Network. All rights reserved.</div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Eternal Global Network. Bütün hüquqlar qorunur.</div>
+    <div class="footer-payments">
+      <span class="pay-badge">PayPal</span>
+      <span class="pay-badge">Payoneer</span>
+      <span class="pay-badge">Stripe</span>
+      <span class="pay-badge">Visa</span>
+      <span class="pay-badge">USDT</span>
+    </div>
+  </div>
 </footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-head">
+    <h3>🛒 Səbətiniz</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty">
+      <div class="cart-empty-icon">🛒</div>
+      <div>Səbətiniz boşdur</div>
+      <div style="font-size:0.8rem;margin-top:4px;">Məhsulları bura əlavə edin</div>
+    </div>
+  </div>
+  <div class="cart-foot" id="cartFoot" style="display:none;">
+    <div class="cart-total"><span>Cəmi:</span><span id="cartTotal">$0</span></div>
+    <button class="cart-checkout" onclick="checkout()">Sifarişi tamamla</button>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-img" id="modalImg">📱</div>
+    <div class="modal-body">
+      <div class="modal-cat" id="modalCat">ELECTRONICS</div>
+      <div class="modal-title" id="modalTitle">Məhsul Adı</div>
+      <div class="modal-desc" id="modalDesc">Məhsul təsviri burada göstəriləcək.</div>
+      <div class="modal-row">
+        <span class="modal-price" id="modalPrice">$0</span>
+        <span class="modal-price-old" id="modalOldPrice"></span>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" id="modalAddBtn" onclick="addToCartFromModal()">🛒 Səbətə əlavə et</button>
+        <button class="modal-btn modal-btn-outline" onclick="addToWishlistFromModal()">❤️ İstək siyahısı</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDK (optional) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
 <script>
-// ============================================================
-// FIREBASE CONFIG
-// ============================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
-  authDomain: "eternal-global.firebaseapp.com",
-  projectId: "eternal-global",
-  storageBucket: "eternal-global.firebasestorage.app",
-  messagingSenderId: "1028365979555",
-  appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416",
-  measurementId: "G-4J79DKDF5V"
-};
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+// =========================
+// DATA
+// =========================
+const categories = [
+  {icon:'📱',name:'Elektronika',cat:'Electronics',count:'45,230'},
+  {icon:'👗',name:'Moda',cat:'Fashion',count:'98,540'},
+  {icon:'🏠',name:'Ev & Bağ',cat:'Home',count:'32,100'},
+  {icon:'💄',name:'Gözəllik',cat:'Beauty',count:'22,870'},
+  {icon:'⚽',name:'İdman',cat:'Sports',count:'18,440'},
+  {icon:'🧸',name:'Oyuncaqlar',cat:'Toys',count:'14,320'},
+  {icon:'🚗',name:'Avto Ehtiyat',cat:'Auto',count:'9,800'},
+  {icon:'🌱',name:'Sağlamlıq',cat:'Health',count:'11,650'},
+];
 
-// ============================================================
-// COUNTRY / CITY DATA
-// ============================================================
-const countryCities = {
-  "Azerbaijan":["Baku","Ganja","Sumqayit","Mingachevir","Lankaran","Sheki","Nakhchivan"],
-  "Turkey":["Istanbul","Ankara","Izmir","Bursa","Antalya","Adana","Konya"],
-  "Russia":["Moscow","Saint Petersburg","Novosibirsk","Yekaterinburg","Kazan","Nizhny Novgorod"],
-  "China":["Beijing","Shanghai","Guangzhou","Shenzhen","Chengdu","Hangzhou","Wuhan"],
-  "United Arab Emirates":["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah"],
-  "Saudi Arabia":["Riyadh","Jeddah","Mecca","Medina","Dammam","Khobar"],
-  "Germany":["Berlin","Munich","Hamburg","Frankfurt","Cologne","Stuttgart"],
-  "United Kingdom":["London","Manchester","Birmingham","Leeds","Glasgow","Liverpool"],
-  "United States":["New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia"],
-  "France":["Paris","Lyon","Marseille","Toulouse","Nice","Nantes"],
-  "Italy":["Rome","Milan","Naples","Turin","Palermo","Bologna"],
-  "Spain":["Madrid","Barcelona","Valencia","Seville","Bilbao","Malaga"],
-  "Netherlands":["Amsterdam","Rotterdam","The Hague","Utrecht","Eindhoven"],
-  "Poland":["Warsaw","Cracow","Lodz","Wroclaw","Poznan","Gdansk"],
-  "Ukraine":["Kyiv","Kharkiv","Odessa","Dnipro","Donetsk","Lviv"],
-  "Kazakhstan":["Almaty","Nur-Sultan","Shymkent","Karaganda","Aktobe"],
-  "Georgia":["Tbilisi","Batumi","Kutaisi","Rustavi","Gori"],
-  "Pakistan":["Karachi","Lahore","Islamabad","Faisalabad","Rawalpindi"],
-  "India":["Mumbai","Delhi","Bangalore","Hyderabad","Chennai","Kolkata"],
-  "Other":["Other"]
-};
+const products = [
+  {id:1,name:'Simsiz Qulaqlıq Pro X',cat:'Electronics',icon:'📱',price:19,old:54,badge:'sale',seller:'TechStore AZ',rating:'★★★★★',reviews:'2.4k',desc:'Aktiv səs-küy ləğvi, 30 saat batareya, Bluetooth 5.3.'},
+  {id:2,name:'Ağıllı Fitness Band Ultra',cat:'Wearables',icon:'⌚',price:34,old:89,badge:'hot',seller:'FitZone US',rating:'★★★★☆',reviews:'987',desc:'Ürək döyüntüsü, SpO2, yuxu izləmə, 14 gün batareya.'},
+  {id:3,name:'Lüks Serum Set Premium',cat:'Beauty',icon:'💄',price:12,old:40,badge:'sale',seller:'BeautyWorld KR',rating:'★★★★★',reviews:'3.1k',desc:'Koreya üz qulluq rutini, 5 addımlıq set.'},
+  {id:4,name:'LED Strip Ağıllı İşıqlar',cat:'Home',icon:'🏠',price:8,old:22,badge:'hot',seller:'GreenLife DE',rating:'★★★★☆',reviews:'1.8k',desc:'WiFi + Alexa + Google Home dəstəyi, 16M rəng.'},
+  {id:5,name:'RGB Oyun Siçanı Pro',cat:'Gaming',icon:'🎮',price:22,old:49,badge:'sale',seller:'GameHub CN',rating:'★★★★★',reviews:'4.2k',desc:'12,000 DPI, proqramlaşdırılmış düymələr, RGB işıqlandırma.'},
+  {id:6,name:'UltraBook Pro 14" Noutbuk',cat:'Electronics',icon:'💻',price:349,old:410,badge:'new',seller:'TechStore AZ',rating:'★★★★★',reviews:'1.2k',desc:'M2 çip, 16GB RAM, 512GB SSD, 18 saat batareya.'},
+  {id:7,name:'Air İdman Ayaqqabısı X',cat:'Fashion',icon:'👟',price:68,old:95,badge:'vip',seller:'FashionHub TR',rating:'★★★★☆',reviews:'876',desc:'Ultra yüngül, hava keçirən, 5 rəng seçimi.'},
+  {id:8,name:'Koreya Şüşə Dəri Rutini',cat:'Beauty',icon:'🧴',price:28,old:36,badge:'hot',seller:'BeautyWorld KR',rating:'★★★★★',reviews:'3.8k',desc:'10 addımlıq K-dəriyə qulluq dəsti.'},
+  {id:9,name:'Ağıllı Bitki Suvarma Dəsti',cat:'Home',icon:'🪴',price:24,old:38,badge:'new',seller:'GreenLife DE',rating:'★★★★☆',reviews:'445',desc:'Avtomatik suvarma, tətbiq nəzarəti, 30 günlük batareya.'},
+  {id:10,name:'Studio Qulaqlıq ANC',cat:'Electronics',icon:'🎧',price:59,old:99,badge:'sale',seller:'SoundPro US',rating:'★★★★★',reviews:'2.1k',desc:'40mm drayverlər, ANC, 35 saat oynatma.'},
+  {id:11,name:'Pro Akkusuz Drel Dəsti',cat:'Home',icon:'🔧',price:85,old:104,badge:'vip',seller:'ToolMaster CN',rating:'★★★★☆',reviews:'678',desc:'20V, 2 batareya, 50 ədəd bit dəsti.'},
+  {id:12,name:'Müqavimət Lentləri Premium',cat:'Sports',icon:'🏋️',price:18,old:32,badge:'hot',seller:'FitZone US',rating:'★★★★★',reviews:'5.2k',desc:'5 müqavimət səviyyəsi, qapı bağlayıcı, çanta.'},
+  {id:13,name:'Ağıllı Heyvan GPS Boyunbağı',cat:'Pets',icon:'🐾',price:42,old:47,badge:'new',seller:'PetCare UK',rating:'★★★★☆',reviews:'320',desc:'Real vaxt izləmə, coğrafi hasar, suya davamlı.'},
+  {id:14,name:'Mekanik Klaviatura RGB',cat:'Gaming',icon:'⌨️',price:65,old:89,badge:'sale',seller:'GameHub CN',rating:'★★★★★',reviews:'1.5k',desc:'Red switch, tam proqramlaşdırma, PBT keycaps.'},
+  {id:15,name:'4K Drone Mini',cat:'Electronics',icon:'🚁',price:199,old:279,badge:'hot',seller:'TechStore AZ',rating:'★★★★☆',reviews:'890',desc:'4K kamera, 3 ox gimbal, 25 dəqiqə uçuş.'},
+  {id:16,name:'Yoga Mat Premium',cat:'Sports',icon:'🧘',price:32,old:45,badge:'new',seller:'FitZone US',rating:'★★★★★',reviews:'2.1k',desc:'Təbii kauçuk, 6mm qalınlıq, kaymaz səth.'},
+];
 
-function getCountryOptions(){
-  return Object.keys(countryCities).map(c=>`<option value="${c}">${c}</option>`).join('');
-}
-function getCityOptions(country){
-  const cities = countryCities[country] || ["Other"];
-  return cities.map(c=>`<option value="${c}">${c}</option>`).join('');
-}
-function updateCities(){
-  const country = document.getElementById('m_country')?.value;
-  const cityEl = document.getElementById('m_city');
-  if(cityEl && country) cityEl.innerHTML = getCityOptions(country);
-}
+const integrations = [
+  {icon:'🛍️',name:'Shopify',status:'✓ Aktiv'},
+  {icon:'📦',name:'Amazon',status:'✓ Aktiv'},
+  {icon:'🛒',name:'WooCommerce',status:'✓ Aktiv'},
+  {icon:'🔶',name:'eBay',status:'✓ Aktiv'},
+  {icon:'🟠',name:'Trendyol',status:'✓ Aktiv'},
+  {icon:'🔵',name:'Hepsiburada',status:'✓ Aktiv'},
+  {icon:'🟡',name:'AliExpress',status:'✓ Aktiv'},
+  {icon:'🟣',name:'Etsy',status:'✓ Aktiv'},
+];
 
-// ============================================================
-// LANGUAGE DATA
-// ============================================================
-const langData = {
-  en:{
-    hTitle:"Global Dropshipping<br>Future is Eternal",hDesc:"Expand your business across borders with our AI-driven global network.",
-    heroBtn:"Get Started Free",heroLearn:"Learn More",heroBadge:"🌍 NEXT-GEN GLOBAL DROPSHIPPING",
-    login:"Login",signup:"Register",
-    email:"Email Address",pass:"Password",name:"Full Name",phone:"Phone Number (+994...)",
-    country:"Country",city:"City",
-    forgot:"Forgot password?",role:"Account Type",seller:"Seller",buyer:"Buyer",
-    sellerDesc:"I sell products",buyerDesc:"I buy products",
-    mTitleLogin:"Welcome Back",mSubLogin:"Login to your account",
-    mTitleReg:"Create Account",mSubReg:"Join thousands of global traders",
-    orDivider:"OR",actionLogin:"Login",actionReg:"Create Account",
-    noteLogin:"Don't have an account? <a onclick=\"switchTab('signup')\">Register</a>",
-    noteReg:"Already have an account? <a onclick=\"switchTab('login')\">Login</a>",
-    featTitle:"Everything You Need to Scale",featSub:"Built for modern dropshippers, wholesalers, and global traders.",
-    payTitle:"Accepted Payment Methods",paySub:"Transact securely in any currency, any method, anywhere.",
-    howTitle:"How It Works",howSub:"Get started in minutes and scale globally.",
-    polTitle:"Privacy Policy",abtTitle:"About Us",
-    stat1:"Countries",stat2:"Active Sellers",stat3:"Monthly Volume",stat4:"Uptime",
-    f1t:"AI-Powered Analytics",f1d:"Smart insights to optimize your sales.",
-    f2t:"Multi-Language Support",f2d:"Full platform in 6 languages.",
-    f3t:"Global Payments",f3d:"PayPal, Payoneer, Stripe, bank and more.",
-    f4t:"Platform Integrations",f4d:"Shopify, WooCommerce, Amazon, eBay and 50+ platforms.",
-    f5t:"Buyer & Seller Protection",f5d:"Full escrow and dispute resolution.",
-    f6t:"VIP Membership",f6d:"Unlock premium features and lower fees.",
-    s1t:"Create Account",s1d:"Sign up with phone verification.",
-    s2t:"Connect Platforms",s2d:"Link your existing stores.",
-    s3t:"List Products",s3d:"Add products with pricing and images.",
-    s4t:"Start Earning",s4d:"Receive orders and scale your business.",
-    nlFeatures:"Features",nlPayments:"Payments",nlHow:"How it works",nlAbout:"About",nlPolicy:"Privacy",
-    flAbout:"About Us",flPolicy:"Privacy Policy",flFeat:"Features",flPay:"Payments",
-    abtContent:`<h3>🌍 Who We Are</h3><p>Eternal Global Network is a next-generation dropshipping platform connecting buyers and sellers across 150+ countries.</p><h3>🚀 Our Mission</h3><p>We believe every entrepreneur deserves access to global markets.</p><h3>💡 What We Offer</h3><p>AI analytics, multi-currency payments, and integrations with major e-commerce platforms.</p><h3>📬 Contact</h3><p>Email: hello@eternal-global.com</p>`,
-    polContent:`<h3>1. Data Collection</h3><p>We collect name, email, phone, and location for account management.</p><h3>2. Data Usage</h3><p>Your data is never sold. Used only for platform services.</p><h3>3. Payment Security</h3><p>All payment info is encrypted. We use certified payment providers.</p><h3>4. Your Rights</h3><p>Contact us to access, update, or delete your data.</p>`
-  },
-  az:{
-    hTitle:"Qlobal Dropshipping<br>Gələcək Eternal-dadır",hDesc:"Sərhədləri aşaraq biznesinizi bizimlə böyüdün.",
-    heroBtn:"Pulsuz Başla",heroLearn:"Ətraflı",heroBadge:"🌍 NÖVBƏTİ NƏSİL DROPSHIPPING",
-    login:"Giriş",signup:"Qeydiyyat",
-    email:"Gmail / Email",pass:"Şifrə",name:"Ad Soyad",phone:"Telefon (+994...)",
-    country:"Ölkə",city:"Şəhər",
-    forgot:"Şifrəni unutmusan?",role:"Hesab növü",seller:"Satıcı",buyer:"Alıcı",
-    sellerDesc:"Məhsul satıram",buyerDesc:"Məhsul alıram",
-    mTitleLogin:"Xoş Gəldiniz",mSubLogin:"Hesabınıza daxil olun",
-    mTitleReg:"Hesab Yarat",mSubReg:"Minlərlə tacirə qoşul",
-    orDivider:"VƏ YA",actionLogin:"Daxil Ol",actionReg:"Hesab Yarat",
-    noteLogin:"Hesabın yoxdur? <a onclick=\"switchTab('signup')\">Qeydiyyat</a>",
-    noteReg:"Artıq hesabın var? <a onclick=\"switchTab('login')\">Giriş</a>",
-    featTitle:"Böyümək üçün hər şey",featSub:"Müasir dropshipper, topdançı və ticarətçilər üçün.",
-    payTitle:"Ödəniş üsulları",paySub:"İstənilən valyutada, istənilən üsulla təhlükəsiz ödəniş.",
-    howTitle:"Necə İşləyir",howSub:"Dəqiqələr ərzində başla, qlobal böyü.",
-    polTitle:"Gizlilik Siyasəti",abtTitle:"Haqqımızda",
-    stat1:"Ölkə",stat2:"Aktiv Satıcı",stat3:"Aylıq Həcm",stat4:"İşə Hazırlıq",
-    f1t:"AI Analitika",f1d:"Satışlarınızı optimallaşdırmaq üçün ağıllı təhlil.",
-    f2t:"6 Dil Dəstəyi",f2d:"Tam platforma 6 dildə. Dünyaya ulaşın.",
-    f3t:"Qlobal Ödənişlər",f3d:"PayPal, Payoneer, Stripe, bank köçürməsi.",
-    f4t:"Platforma Inteqrasiyaları",f4d:"Shopify, WooCommerce, Amazon, eBay və daha 50+.",
-    f5t:"Alıcı və Satıcı Qoruması",f5d:"Tam eskrou sistemi və mübahisə həlli.",
-    f6t:"VIP Üzvlük",f6d:"Premium xüsusiyyətlər və aşağı komissiyalar.",
-    s1t:"Hesab Yarat",s1d:"Telefon doğrulaması ilə qeydiyyatdan keç.",
-    s2t:"Platformaları Bağla",s2d:"Mövcud mağazalarınızı əlavə edin.",
-    s3t:"Məhsul Əlavə Et",s3d:"Qiymət və şəkillər ilə məhsullarınızı yükləyin.",
-    s4t:"Qazanmağa Başla",s4d:"Sifarişlər al, ödənişlər idarə et.",
-    nlFeatures:"Xüsusiyyətlər",nlPayments:"Ödənişlər",nlHow:"Necə işləyir",nlAbout:"Haqqımızda",nlPolicy:"Gizlilik",
-    flAbout:"Haqqımızda",flPolicy:"Gizlilik Siyasəti",flFeat:"Xüsusiyyətlər",flPay:"Ödənişlər",
-    abtContent:`<h3>🌍 Biz kimik</h3><p>Eternal Global Network 150+ ölkədə alıcı və satıcıları birləşdirən yeni nəsil dropshipping platformasıdır.</p><h3>🚀 Missiyamız</h3><p>Hər sahibkar qlobal bazarlara çıxmağı haqq edir.</p><h3>📬 Əlaqə</h3><p>Email: hello@eternal-global.com</p>`,
-    polContent:`<h3>1. Məlumat toplanması</h3><p>Ad, email, telefon və yer məlumatlarınızı toplayırıq.</p><h3>2. İstifadə</h3><p>Məlumatlarınız satılmır. Yalnız platforma xidmətlərindən istifadə edilir.</p><h3>3. Ödəniş Təhlükəsizliyi</h3><p>Bütün ödəniş məlumatları şifrələnib.</p><h3>4. Hüquqlarınız</h3><p>Məlumatlarınıza daxil olmaq, yeniləmək və ya silmək üçün bizimlə əlaqə saxlayın.</p>`
-  },
-  tr:{
-    hTitle:"Küresel Dropshipping<br>Gelecek Eternal'da",hDesc:"İşinizi sınırların ötesine taşıyın.",
-    heroBtn:"Ücretsiz Başla",heroLearn:"Daha Fazla",heroBadge:"🌍 YENİ NESİL DROPSHIPPING",
-    login:"Giriş",signup:"Kayıt Ol",
-    email:"E-posta",pass:"Şifre",name:"Ad Soyad",phone:"Telefon (+90...)",
-    country:"Ülke",city:"Şehir",
-    forgot:"Şifremi unuttum?",role:"Hesap Türü",seller:"Satıcı",buyer:"Alıcı",
-    sellerDesc:"Ürün satıyorum",buyerDesc:"Ürün alıyorum",
-    mTitleLogin:"Hoş Geldiniz",mSubLogin:"Hesabınıza giriş yapın",
-    mTitleReg:"Hesap Oluştur",mSubReg:"Global ticaret ağına katıl",
-    orDivider:"VEYA",actionLogin:"Giriş Yap",actionReg:"Hesap Oluştur",
-    noteLogin:"Hesabınız yok mu? <a onclick=\"switchTab('signup')\">Kayıt Ol</a>",
-    noteReg:"Zaten hesabınız var mı? <a onclick=\"switchTab('login')\">Giriş</a>",
-    featTitle:"Büyümek için her şey",featSub:"Modern dropshipper'lar ve global tüccarlar için.",
-    payTitle:"Kabul Edilen Ödeme Yöntemleri",paySub:"Herhangi bir para birimi, her yöntem.",
-    howTitle:"Nasıl Çalışır",howSub:"Dakikalar içinde başla, global büyü.",
-    polTitle:"Gizlilik Politikası",abtTitle:"Hakkımızda",
-    stat1:"Ülke",stat2:"Aktif Satıcı",stat3:"Aylık Hacim",stat4:"Çalışma Süresi",
-    f1t:"AI Analitik",f1d:"Satışlarınızı optimize etmek için akıllı öngörüler.",
-    f2t:"6 Dil Desteği",f2d:"Platform 6 dilde tam destek.",
-    f3t:"Global Ödemeler",f3d:"PayPal, Payoneer, Stripe, banka havalesi.",
-    f4t:"Platform Entegrasyonları",f4d:"Shopify, WooCommerce, Amazon, eBay ve 50+ platform.",
-    f5t:"Alıcı ve Satıcı Koruması",f5d:"Tam emanet sistemi ve uyuşmazlık çözümü.",
-    f6t:"VIP Üyelik",f6d:"Premium özellikler ve düşük komisyonlar.",
-    s1t:"Hesap Oluştur",s1d:"Telefon doğrulaması ile kayıt ol.",
-    s2t:"Platformları Bağla",s2d:"Mevcut mağazalarını bağla.",
-    s3t:"Ürün Listele",s3d:"Fiyat ve görselleriyle ürünleri ekle.",
-    s4t:"Kazanmaya Başla",s4d:"Sipariş al, ödemeleri yönet.",
-    nlFeatures:"Özellikler",nlPayments:"Ödemeler",nlHow:"Nasıl çalışır",nlAbout:"Hakkımızda",nlPolicy:"Gizlilik",
-    flAbout:"Hakkımızda",flPolicy:"Gizlilik Politikası",flFeat:"Özellikler",flPay:"Ödemeler",
-    abtContent:`<h3>🌍 Biz Kimiz</h3><p>Eternal Global Network, 150+ ülkede alıcı ve satıcıları birleştiren yeni nesil bir dropshipping platformudur.</p><h3>🚀 Misyonumuz</h3><p>Her girişimcinin küresel pazarlara erişim hakkı olduğuna inanıyoruz.</p><h3>📬 İletişim</h3><p>E-posta: hello@eternal-global.com</p>`,
-    polContent:`<h3>1. Veri Toplama</h3><p>Ad, e-posta, telefon ve konum bilgilerinizi topluyoruz.</p><h3>2. Kullanım</h3><p>Verileriniz satılmaz. Yalnızca platform hizmetleri için kullanılır.</p><h3>3. Ödeme Güvenliği</h3><p>Tüm ödeme bilgileri şifrelelidir.</p><h3>4. Haklarınız</h3><p>Verilerinize erişmek için bizimle iletişime geçin.</p>`
-  },
-  ru:{
-    hTitle:"Глобальный Дропшиппинг<br>Будущее за Eternal",hDesc:"Расширяйте свой бизнес за границей.",
-    heroBtn:"Начать бесплатно",heroLearn:"Подробнее",heroBadge:"🌍 ДРОПШИППИНГ НОВОГО ПОКОЛЕНИЯ",
-    login:"Вход",signup:"Регистрация",
-    email:"Электронная почта",pass:"Пароль",name:"ФИО",phone:"Телефон (+7...)",
-    country:"Страна",city:"Город",
-    forgot:"Забыли пароль?",role:"Тип аккаунта",seller:"Продавец",buyer:"Покупатель",
-    sellerDesc:"Я продаю товары",buyerDesc:"Я покупаю товары",
-    mTitleLogin:"Добро пожаловать",mSubLogin:"Войдите в свой аккаунт",
-    mTitleReg:"Создать аккаунт",mSubReg:"Присоединиться к глобальной сети",
-    orDivider:"ИЛИ",actionLogin:"Войти",actionReg:"Создать аккаунт",
-    noteLogin:"Нет аккаунта? <a onclick=\"switchTab('signup')\">Регистрация</a>",
-    noteReg:"Уже есть аккаунт? <a onclick=\"switchTab('login')\">Войти</a>",
-    featTitle:"Всё для роста бизнеса",featSub:"Для дропшипперов, оптовиков и глобальных трейдеров.",
-    payTitle:"Способы оплаты",paySub:"Безопасные транзакции в любой валюте.",
-    howTitle:"Как это работает",howSub:"Начните за минуты, масштабируйтесь глобально.",
-    polTitle:"Политика конфиденциальности",abtTitle:"О нас",
-    stat1:"Стран",stat2:"Активных продавцов",stat3:"Месячный оборот",stat4:"Работоспособность",
-    f1t:"AI-аналитика",f1d:"Умные инсайты для оптимизации продаж.",
-    f2t:"6 языков",f2d:"Полная платформа на 6 языках.",
-    f3t:"Глобальные платежи",f3d:"PayPal, Payoneer, Stripe, банковский перевод.",
-    f4t:"Интеграции платформ",f4d:"Shopify, WooCommerce, Amazon, eBay и 50+ платформ.",
-    f5t:"Защита покупателя и продавца",f5d:"Полная система эскроу и разрешения споров.",
-    f6t:"VIP-членство",f6d:"Премиум функции и пониженные комиссии.",
-    s1t:"Создать аккаунт",s1d:"Зарегистрируйтесь с подтверждением телефона.",
-    s2t:"Подключить платформы",s2d:"Привяжите существующие магазины.",
-    s3t:"Добавить товары",s3d:"Добавьте товары с ценами и изображениями.",
-    s4t:"Начать зарабатывать",s4d:"Принимайте заказы и управляйте платежами.",
-    nlFeatures:"Функции",nlPayments:"Платежи",nlHow:"Как работает",nlAbout:"О нас",nlPolicy:"Конфиденц.",
-    flAbout:"О нас",flPolicy:"Политика конфиденциальности",flFeat:"Функции",flPay:"Платежи",
-    abtContent:`<h3>🌍 Кто мы</h3><p>Eternal Global Network — платформа нового поколения, связывающая покупателей и продавцов в 150+ странах.</p><h3>🚀 Наша миссия</h3><p>Каждый предприниматель заслуживает доступа к глобальным рынкам.</p><h3>📬 Контакты</h3><p>Email: hello@eternal-global.com</p>`,
-    polContent:`<h3>1. Сбор данных</h3><p>Мы собираем имя, email, телефон и местоположение.</p><h3>2. Использование</h3><p>Ваши данные не продаются. Используются только для сервисов платформы.</p><h3>3. Безопасность платежей</h3><p>Все платёжные данные зашифрованы.</p><h3>4. Ваши права</h3><p>Свяжитесь с нами для доступа или удаления данных.</p>`
-  },
-  zh:{
-    hTitle:"全球代发货<br>未来在于 Eternal",hDesc:"跨越国界扩展您的业务。",
-    heroBtn:"免费开始",heroLearn:"了解更多",heroBadge:"🌍 下一代全球代发货",
-    login:"登录",signup:"注册",
-    email:"电子邮件",pass:"密码",name:"姓名",phone:"电话",
-    country:"国家",city:"城市",
-    forgot:"忘记密码?",role:"账户类型",seller:"卖家",buyer:"买家",
-    sellerDesc:"我出售产品",buyerDesc:"我购买产品",
-    mTitleLogin:"欢迎回来",mSubLogin:"登录您的账户",
-    mTitleReg:"创建账户",mSubReg:"加入全球贸易网络",
-    orDivider:"或",actionLogin:"登录",actionReg:"创建账户",
-    noteLogin:"没有账户? <a onclick=\"switchTab('signup')\">注册</a>",
-    noteReg:"已有账户? <a onclick=\"switchTab('login')\">登录</a>",
-    featTitle:"您所需的一切",featSub:"为现代代发货商和全球交易商而建。",
-    payTitle:"接受的付款方式",paySub:"以任何货币安全交易。",
-    howTitle:"如何使用",howSub:"几分钟内开始，全球扩展。",
-    polTitle:"隐私政策",abtTitle:"关于我们",
-    stat1:"国家",stat2:"活跃卖家",stat3:"月交易量",stat4:"运行时间",
-    f1t:"AI 分析",f1d:"优化销售的智能洞察。",
-    f2t:"6种语言支持",f2d:"平台支持6种语言。",
-    f3t:"全球支付",f3d:"PayPal、Payoneer、Stripe、银行转账。",
-    f4t:"平台集成",f4d:"Shopify、WooCommerce、Amazon、eBay及50+平台。",
-    f5t:"买卖家保护",f5d:"完整的托管系统和争议解决。",
-    f6t:"VIP会员",f6d:"解锁高级功能和更低费用。",
-    s1t:"创建账户",s1d:"通过电话验证注册。",
-    s2t:"连接平台",s2d:"链接您现有的店铺。",
-    s3t:"列出产品",s3d:"添加带价格和图片的产品。",
-    s4t:"开始赚钱",s4d:"接收订单，管理付款。",
-    nlFeatures:"功能",nlPayments:"付款",nlHow:"如何使用",nlAbout:"关于",nlPolicy:"隐私",
-    flAbout:"关于我们",flPolicy:"隐私政策",flFeat:"功能",flPay:"付款",
-    abtContent:`<h3>🌍 我们是谁</h3><p>Eternal Global Network 是连接150+国家买卖家的下一代代发货平台。</p><h3>🚀 我们的使命</h3><p>我们相信每位企业家都应该能够进入全球市场。</p><h3>📬 联系方式</h3><p>邮箱: hello@eternal-global.com</p>`,
-    polContent:`<h3>1. 数据收集</h3><p>我们收集姓名、电子邮件、电话和位置信息。</p><h3>2. 数据使用</h3><p>您的数据不会被出售，仅用于平台服务。</p><h3>3. 支付安全</h3><p>所有支付信息均已加密。</p><h3>4. 您的权利</h3><p>请联系我们以访问或删除您的数据。</p>`
-  },
-  ar:{
-    hTitle:"دروبشيبينغ عالمي<br>المستقبل مع إتيرنال",hDesc:"وسع أعمالك عبر الحدود.",
-    heroBtn:"ابدأ مجانًا",heroLearn:"اعرف أكثر",heroBadge:"🌍 دروبشيبينغ الجيل القادم",
-    login:"دخول",signup:"انضمام",
-    email:"البريد الإلكتروني",pass:"كلمة السر",name:"الاسم الكامل",phone:"الهاتف",
-    country:"البلد",city:"المدينة",
-    forgot:"نسيت كلمة السر?",role:"نوع الحساب",seller:"بائع",buyer:"مشتري",
-    sellerDesc:"أبيع منتجات",buyerDesc:"أشتري منتجات",
-    mTitleLogin:"مرحباً بعودتك",mSubLogin:"قم بتسجيل الدخول",
-    mTitleReg:"إنشاء حساب",mSubReg:"انضم إلى شبكة التجارة العالمية",
-    orDivider:"أو",actionLogin:"دخول",actionReg:"إنشاء حساب",
-    noteLogin:"ليس لديك حساب? <a onclick=\"switchTab('signup')\">انضمام</a>",
-    noteReg:"لديك حساب بالفعل? <a onclick=\"switchTab('login')\">دخول</a>",
-    featTitle:"كل ما تحتاجه للنمو",featSub:"مصمم للمتسوقين المحترفين والتجار العالميين.",
-    payTitle:"طرق الدفع المقبولة",paySub:"تعاملات آمنة بأي عملة.",
-    howTitle:"كيف يعمل",howSub:"ابدأ في دقائق وتوسع عالمياً.",
-    polTitle:"سياسة الخصوصية",abtTitle:"معلومات عنا",
-    stat1:"دولة",stat2:"بائع نشط",stat3:"حجم شهري",stat4:"وقت التشغيل",
-    f1t:"تحليلات الذكاء الاصطناعي",f1d:"رؤى ذكية لتحسين مبيعاتك.",
-    f2t:"دعم 6 لغات",f2d:"المنصة بالكامل بـ 6 لغات.",
-    f3t:"المدفوعات العالمية",f3d:"PayPal وPayoneer وStripe والتحويل المصرفي.",
-    f4t:"تكاملات المنصة",f4d:"Shopify وWooCommerce وAmazon وeBay و50+ منصة.",
-    f5t:"حماية البائع والمشتري",f5d:"نظام ضمان كامل وحل النزاعات.",
-    f6t:"عضوية VIP",f6d:"افتح الميزات المتميزة والرسوم المنخفضة.",
-    s1t:"إنشاء حساب",s1d:"سجل مع التحقق من الهاتف.",
-    s2t:"ربط المنصات",s2d:"اربط متاجرك الحالية.",
-    s3t:"إدراج المنتجات",s3d:"أضف المنتجات مع الأسعار والصور.",
-    s4t:"ابدأ في الكسب",s4d:"استلم الطلبات وأدر المدفوعات.",
-    nlFeatures:"الميزات",nlPayments:"المدفوعات",nlHow:"كيف يعمل",nlAbout:"عنا",nlPolicy:"الخصوصية",
-    flAbout:"معلومات عنا",flPolicy:"سياسة الخصوصية",flFeat:"الميزات",flPay:"المدفوعات",
-    abtContent:`<h3>🌍 من نحن</h3><p>Eternal Global Network منصة دروبشيبينغ من الجيل القادم تربط المشترين والبائعين في أكثر من 150 دولة.</p><h3>🚀 مهمتنا</h3><p>نؤمن بأن كل رائد أعمال يستحق الوصول إلى الأسواق العالمية.</p><h3>📬 اتصل بنا</h3><p>البريد الإلكتروني: hello@eternal-global.com</p>`,
-    polContent:`<h3>1. جمع البيانات</h3><p>نجمع الاسم والبريد الإلكتروني والهاتف والموقع.</p><h3>2. الاستخدام</h3><p>لا تُباع بياناتك. تُستخدم فقط لخدمات المنصة.</p><h3>3. أمان الدفع</h3><p>جميع معلومات الدفع مشفرة.</p><h3>4. حقوقك</h3><p>اتصل بنا للوصول إلى بياناتك أو حذفها.</p>`
-  }
-};
+const sellers = [
+  {code:'TZ',name:'TechZone AZ',loc:'Bakı, Azərbaycan',rating:'4.9★',sales:'12K',items:'340',color:'linear-gradient(135deg,#3b82f6,#818cf8)',vip:true},
+  {code:'FH',name:'FashionHub TR',loc:'İstanbul, Türkiyə',rating:'4.8★',sales:'8.4K',items:'520',color:'linear-gradient(135deg,#10b981,#059669)',vip:true},
+  {code:'SP',name:'SoundPro US',loc:'Nyu York, ABŞ',rating:'4.7★',sales:'5.1K',items:'89',color:'linear-gradient(135deg,#ef4444,#b91c1c)',vip:false},
+  {code:'TC',name:'ToolMaster CN',loc:'Shenzhen, Çin',rating:'4.9★',sales:'22K',items:'780',color:'linear-gradient(135deg,#f59e0b,#d97706)',vip:false},
+];
 
-let curLang = "en";
-let currentMode = "login";
-let selectedRole = "buyer";
-let confirmResult = null;
+// =========================
+// STATE
+// =========================
+let cart = JSON.parse(localStorage.getItem('eternal_cart')) || [];
+let wishlist = JSON.parse(localStorage.getItem('eternal_wishlist')) || [];
+let currentUser = JSON.parse(localStorage.getItem('eternal_user')) || null;
+let currentSlide = 0;
+let activeCategory = 'all';
+let searchQuery = '';
+let currentModalProduct = null;
+let sliderInterval = null;
 
-// ============================================================
-// LANGUAGE CHANGE
-// ============================================================
-function changeLang(lang){
-  curLang = lang;
-  const t = langData[lang];
-  document.getElementById('hTitle').innerHTML = t.hTitle;
-  document.getElementById('hDesc').innerText = t.hDesc;
-  document.getElementById('heroBtn').innerText = t.heroBtn;
-  document.getElementById('heroLearn').innerText = t.heroLearn;
-  document.getElementById('heroBadge').innerText = t.heroBadge;
-  document.getElementById('navLogin').innerText = t.login;
-  document.getElementById('navSignup').innerText = t.signup;
-  document.getElementById('featTitle').innerText = t.featTitle;
-  document.getElementById('featSub').innerText = t.featSub;
-  document.getElementById('payTitle').innerText = t.payTitle;
-  document.getElementById('paySub').innerText = t.paySub;
-  document.getElementById('howTitle').innerText = t.howTitle;
-  document.getElementById('howSub').innerText = t.howSub;
-  document.getElementById('stat1').innerText = t.stat1;
-  document.getElementById('stat2').innerText = t.stat2;
-  document.getElementById('stat3').innerText = t.stat3;
-  document.getElementById('stat4').innerText = t.stat4;
-  ['f1t','f1d','f2t','f2d','f3t','f3d','f4t','f4d','f5t','f5d','f6t','f6d'].forEach(id=>{
-    if(document.getElementById(id)) document.getElementById(id).innerText = t[id];
-  });
-  ['s1t','s1d','s2t','s2d','s3t','s3d','s4t','s4d'].forEach(id=>{
-    if(document.getElementById(id)) document.getElementById(id).innerText = t[id];
-  });
-  document.getElementById('nl-features').innerText = t.nlFeatures;
-  document.getElementById('nl-payments').innerText = t.nlPayments;
-  document.getElementById('nl-how').innerText = t.nlHow;
-  document.getElementById('nl-about').innerText = t.nlAbout;
-  document.getElementById('nl-policy').innerText = t.nlPolicy;
-  document.getElementById('fl-about').innerText = t.flAbout;
-  document.getElementById('fl-policy').innerText = t.flPolicy;
-  document.getElementById('fl-feat').innerText = t.flFeat;
-  document.getElementById('fl-pay').innerText = t.flPay;
-  const modal = document.getElementById('authModal');
-  if(modal.classList.contains('active')) renderForm();
-}
-
-// ============================================================
-// MODAL CONTROLS
-// ============================================================
-function openModal(mode){
-  currentMode = mode;
-  const modal = document.getElementById('authModal');
-  modal.classList.add('active');
-  switchTab(mode);
-  try{
-    if(!window.recaptchaVerifier){
-      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'invisible'});
-    }
-  }catch(e){}
-}
-function closeModal(){
-  document.getElementById('authModal').classList.remove('active');
-}
-function switchTab(mode){
-  currentMode = mode;
-  const t = langData[curLang];
-  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
-  document.getElementById('tabSignup').classList.toggle('active', mode==='signup');
-  document.getElementById('mTitle').innerText = mode==='login' ? t.mTitleLogin : t.mTitleReg;
-  document.getElementById('mSub').innerText = mode==='login' ? t.mSubLogin : t.mSubReg;
-  document.getElementById('mActionBtn').innerText = mode==='login' ? t.actionLogin : t.actionReg;
-  document.getElementById('formNote').innerHTML = mode==='login' ? t.noteLogin : t.noteReg;
-  document.getElementById('orDivider').innerText = t.orDivider;
-  renderForm();
-}
-function openPolicy(){
-  const t = langData[curLang];
-  document.getElementById('polTitle').innerText = t.polTitle;
-  document.getElementById('polContent').innerHTML = t.polContent;
-  document.getElementById('policyModal').classList.add('active');
-}
-function closePolicy(){
-  document.getElementById('policyModal').classList.remove('active');
-}
-function openAbout(){
-  const t = langData[curLang];
-  document.getElementById('abtTitle').innerText = t.abtTitle;
-  document.getElementById('abtContent').innerHTML = t.abtContent;
-  document.getElementById('aboutModal').classList.add('active');
-}
-function closeAbout(){
-  document.getElementById('aboutModal').classList.remove('active');
-}
-
-// ============================================================
-// FORM RENDER
-// ============================================================
-function renderForm(){
-  const t = langData[curLang];
-  const body = document.getElementById('formBody');
-  if(currentMode==='login'){
-    body.innerHTML = `
-      <div class="input-group">
-        <label>${t.email}</label>
-        <input type="email" id="m_email" placeholder="example@gmail.com">
-      </div>
-      <div class="input-group">
-        <label>${t.pass}</label>
-        <input type="password" id="m_pass" placeholder="••••••••">
-        <button class="eye-btn" type="button" onclick="togglePass()">👁</button>
-      </div>
-      <a class="forgot-link" onclick="handleForgot()">${t.forgot}</a>`;
-  } else {
-    body.innerHTML = `
-      <div class="input-group">
-        <label>${t.role}</label>
-        <div class="role-selector">
-          <div class="role-card ${selectedRole==='seller'?'active':''}" onclick="selectRole('seller')">
-            <div class="role-card-icon">🏪</div>
-            <div class="role-card-label">${t.seller}</div>
-            <div class="role-card-desc">${t.sellerDesc}</div>
-          </div>
-          <div class="role-card ${selectedRole==='buyer'?'active':''}" onclick="selectRole('buyer')">
-            <div class="role-card-icon">🛒</div>
-            <div class="role-card-label">${t.buyer}</div>
-            <div class="role-card-desc">${t.buyerDesc}</div>
-          </div>
-        </div>
-      </div>
-      <div class="input-row">
-        <div class="input-group">
-          <label>${t.name}</label>
-          <input type="text" id="m_name" placeholder="John Doe">
-        </div>
-        <div class="input-group">
-          <label>${t.phone}</label>
-          <input type="text" id="m_phone" placeholder="+994...">
-        </div>
-      </div>
-      <div class="input-row">
-        <div class="input-group">
-          <label>${t.country}</label>
-          <select id="m_country" onchange="updateCities()">${getCountryOptions()}</select>
-        </div>
-        <div class="input-group">
-          <label>${t.city}</label>
-          <select id="m_city">${getCityOptions('Azerbaijan')}</select>
-        </div>
-      </div>
-      <div class="input-group">
-        <label>${t.email}</label>
-        <input type="email" id="m_email" placeholder="example@gmail.com">
-      </div>
-      <div class="input-group">
-        <label>${t.pass}</label>
-        <input type="password" id="m_pass" placeholder="••••••••">
-        <button class="eye-btn" type="button" onclick="togglePass()">👁</button>
-      </div>`;
-  }
-}
-
-function selectRole(role){
-  selectedRole = role;
-  renderForm();
-}
-
-function togglePass(){
-  const p = document.getElementById('m_pass');
-  p.type = p.type==='password' ? 'text' : 'password';
-}
-
-// ============================================================
-// AUTH LOGIC
-// ============================================================
-async function mainAuth(){
-  const email = document.getElementById('m_email')?.value?.trim();
-  const pass = document.getElementById('m_pass')?.value;
-  if(!email || !pass){ showToast('Please fill all fields','error'); return; }
-
-  if(currentMode==='login'){
-    auth.signInWithEmailAndPassword(email, pass)
-      .then(res => {
-        saveOffline(res.user);
-        showToast('Login successful!','success');
-        setTimeout(()=>{ window.location.href="dashboard.html"; },1000);
-      })
-      .catch(e => showToast(e.message,'error'));
-  } else {
-    const phone = document.getElementById('m_phone')?.value;
-    const name = document.getElementById('m_name')?.value;
-    const country = document.getElementById('m_country')?.value || '';
-    const city = document.getElementById('m_city')?.value || '';
-    if(!name || !phone){ showToast('Please fill all fields','error'); return; }
-
-    auth.createUserWithEmailAndPassword(email, pass)
-      .then(res => {
-        return db.collection("users").doc(res.user.uid).set({
-          fullname: name,
-          email: email,
-          phone: phone,
-          country: country,
-          city: city,
-          role: selectedRole,
-          vip: false,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(()=>res);
-      })
-      .then(res => {
-        saveOffline(res.user);
-        showToast('Account created!','success');
-        setTimeout(()=>{ window.location.href="dashboard.html"; },1000);
-      })
-      .catch(e => showToast(e.message,'error'));
-  }
-}
-
-function googleLogin(){
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).then(res => {
-    db.collection("users").doc(res.user.uid).set({
-      fullname: res.user.displayName,
-      email: res.user.email,
-      vip: false
-    },{merge:true});
-    showToast('Google login successful!','success');
-    setTimeout(()=>{ window.location.href="dashboard.html"; },1000);
-  }).catch(e => showToast(e.message,'error'));
-}
-
-function handleForgot(){
-  const email = document.getElementById('m_email')?.value || prompt(langData[curLang].email + ':');
-  if(email){
-    auth.sendPasswordResetEmail(email)
-      .then(()=>showToast('Reset link sent!','success'))
-      .catch(e=>showToast(e.message,'error'));
-  }
-}
-
-function saveOffline(user){
-  localStorage.setItem('eternal_user', JSON.stringify({uid:user.uid, email:user.email, lastLogin:Date.now()}));
-}
-
-// ============================================================
-// TOAST
-// ============================================================
-function showToast(msg, type=''){
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.className = 'toast ' + type;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 3500);
-}
-
-// ============================================================
-// CLOSE MODALS ON BG CLICK
-// ============================================================
-document.querySelectorAll('.modal').forEach(m=>{
-  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('active'); });
-});
-
+// =========================
 // INIT
-window.onload = ()=>{
-  if(!navigator.onLine){
-    const local = localStorage.getItem('eternal_user');
-    if(local) console.log("Offline mode:", JSON.parse(local).email);
-  }
-  renderForm();
-  // --- MÜDÜRÜN FİREBASE BEYNİ (BURA ƏLAVƏ OLUNDU) ---
-  const firebaseConfig = {
-    apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM", 
-    authDomain: "eternal-global.firebaseapp.com",
-    projectId: "eternal-global",
-    storageBucket: "eternal-global.appspot.com",
-    messagingSenderId: "1028365979555",
-    appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
-  };
-
-  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  // QEYDİYYAT VƏ GİRİŞ FUNKSİYASI
-  window.mainAuth = async () => {
-    const email = document.getElementById('m_email')?.value?.trim();
-    const pass = document.getElementById('m_pass')?.value;
-    
-    if(!email || !pass) return alert("Xanaları doldurun!");
-
-    if(typeof currentMode !== 'undefined' && currentMode === 'login'){
-      auth.signInWithEmailAndPassword(email, pass)
-        .then(() => {
-          alert("Xoş gəldiniz!");
-          window.location.href = "home.html"; // BURA DİQQƏT!
-        })
-        .catch(e => alert(e.message));
-    } else {
-      auth.createUserWithEmailAndPassword(email, pass)
-        .then(res => {
-          return db.collection("users").doc(res.user.uid).set({
-            email: email, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        })
-        .then(() => {
-          alert("Hesab yaradıldı!");
-          window.location.href = "home.html"; // BURA DİQQƏT!
-        })
-        .catch(e => alert(e.message));
-    }
-  };
-
-  window.googleLogin = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).then(() => {
-      window.location.href = "home.html";
-    }).catch(e => alert(e.message));
-  };
-};
-</script>
-  <script>
-// ============================================================
-// FİREBASE KONFİQURASİYASI
-// ============================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
-  authDomain: "eternal-global.firebaseapp.com",
-  projectId: "eternal-global",
-  storageBucket: "eternal-global.appspot.com",
-  messagingSenderId: "1028365979555",
-  appId: "1:1028365979555:web:ff7100da1ed4c9d66ad416"
-};
-
-if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// SƏHİFƏ YÜKLƏNƏNDƏ ROLU YOXLA
-auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    const doc = await db.collection("users").doc(user.uid).get();
-    const data = doc.data() || { role: 'buyer', fullname: user.email };
-    localStorage.setItem('eternal_user', JSON.stringify({
-      uid: user.uid, email: user.email, role: data.role, name: data.fullname 
-    }));
-    // Roluna görə yönləndirmə
-    window.location.href = data.role === 'seller' ? "Dashboard (1).html" : "home (2).html";
-  }
+// =========================
+document.addEventListener('DOMContentLoaded', () => {
+  initFirebase();
+  renderCategories();
+  renderProducts();
+  renderFlash();
+  renderIntegrations();
+  renderSellers();
+  updateCartUI();
+  updateAuthUI();
+  startSlider();
+  startCountdown();
+  initCatFilter();
 });
 
-// QEYDİYYAT VƏ GİRİŞ FUNKSİYASI
-window.mainAuth = async () => {
-  const email = document.getElementById('m_email')?.value?.trim();
-  const pass = document.getElementById('m_pass')?.value;
-  if (!email || !pass) return alert("Xanaları doldurun!");
+// =========================
+// FIREBASE (Optional)
+// =========================
+function initFirebase() {
+  try {
+    if (typeof firebase !== 'undefined' && firebase.apps && !firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyB_ZF8CnMf3-4sLhgKiTkf3InJN_TDRhLM",
+        authDomain: "eternal-global.firebaseapp.com",
+        projectId: "eternal-global"
+      });
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          currentUser = {
+            uid: user.uid,
+            email: user.email,
+            name: user.displayName || user.email.split('@')[0],
+            role: currentUser?.role || 'buyer'
+          };
+          localStorage.setItem('eternal_user', JSON.stringify(currentUser));
+        }
+        updateAuthUI();
+      });
+    }
+  } catch(e) { console.log('Firebase not loaded'); }
+}
 
-  if (currentMode === 'login') {
-    auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+// =========================
+// AUTH UI
+// =========================
+function updateAuthUI() {
+  const nav = document.getElementById('navActions');
+  const loginBtn = document.getElementById('loginBtn');
+  const joinBtn = document.getElementById('joinBtn');
+  const dashLink = document.getElementById('dashLink');
+
+  // Clean up old dynamic elements
+  const existingPill = nav.querySelector('.user-pill');
+  if (existingPill) existingPill.remove();
+  const existingLogout = nav.querySelector('#logoutBtn');
+  if (existingLogout) existingLogout.remove();
+  const existingDash = nav.querySelector('#dashBtn');
+  if (existingDash) existingDash.remove();
+
+  if (currentUser) {
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (joinBtn) joinBtn.style.display = 'none';
+
+    // User pill
+    const pill = document.createElement('div');
+    pill.className = 'user-pill';
+    pill.innerHTML = `<span>👋</span><span class="u-name">${escapeHtml(currentUser.name || 'İstifadəçi')}</span>`;
+    nav.insertBefore(pill, nav.firstChild);
+
+    // Dashboard for sellers
+    if (currentUser.role === 'seller') {
+      const dash = document.createElement('button');
+      dash.className = 'nav-btn nav-btn-outline';
+      dash.id = 'dashBtn';
+      dash.style.color = 'var(--gold)';
+      dash.style.borderColor = 'rgba(245,158,11,0.4)';
+      dash.textContent = '⚙️ Panel';
+      dash.onclick = () => window.location.href = 'dashboard.html';
+      nav.insertBefore(dash, nav.firstChild);
+      if (dashLink) dashLink.style.display = 'inline';
+    } else {
+      if (dashLink) dashLink.style.display = 'none';
+    }
+
+    // Logout
+    const logoutBtn = document.createElement('button');
+    logoutBtn.className = 'nav-btn nav-btn-outline';
+    logoutBtn.id = 'logoutBtn';
+    logoutBtn.style.borderColor = 'var(--red)';
+    logoutBtn.style.color = 'var(--red)';
+    logoutBtn.textContent = 'Çıxış';
+    logoutBtn.onclick = logout;
+    nav.appendChild(logoutBtn);
   } else {
-    const name = document.getElementById('m_name')?.value || 'İstifadəçi';
-    auth.createUserWithEmailAndPassword(email, pass)
-      .then(res => {
-        return db.collection("users").doc(res.user.uid).set({
-          fullname: name, email: email, role: currentRole,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      }).catch(e => alert(e.message));
+    if (loginBtn) loginBtn.style.display = '';
+    if (joinBtn) joinBtn.style.display = '';
+    if (dashLink) dashLink.style.display = 'none';
   }
-};
+}
 
-window.googleLogin = () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(e => alert(e.message));
-};
+function logout() {
+  try {
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().signOut();
+    }
+  } catch(e) {}
+  currentUser = null;
+  localStorage.removeItem('eternal_user');
+  updateAuthUI();
+  showToast('Hesabdan çıxıldı', 'success');
+}
 
-window.onload = () => { renderForm(); };
+function goLogin() {
+  const name = prompt('Adınızı daxil edin (test üçün):', 'Test User');
+  if (name) {
+    const isSeller = confirm('Satıcı hesabı? (OK = Bəli, Cancel = Xeyr)');
+    currentUser = { name: name, role: isSeller ? 'seller' : 'buyer', uid: 'demo_' + Date.now() };
+    localStorage.setItem('eternal_user', JSON.stringify(currentUser));
+    updateAuthUI();
+    showToast('Xoş gəldin, ' + name + '!', 'success');
+  }
+}
+
+function goJoin() { goLogin(); }
+function goSell() {
+  if (!currentUser) { showToast('Əvvəlcə daxil olun', 'error'); goLogin(); return; }
+  if (currentUser.role !== 'seller') { showToast('Satıcı hesabı tələb olunur', 'error'); return; }
+  window.location.href = 'dashboard.html';
+}
+
+// =========================
+// RENDER FUNCTIONS
+// =========================
+function renderCategories() {
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = categories.map(c => `
+    <div class="cat-card" onclick="filterProducts('${c.cat}')">
+      <div class="cat-card-icon">${c.icon}</div>
+      <div class="cat-card-name">${c.name}</div>
+      <div class="cat-card-count">${c.count} məhsul</div>
+    </div>
+  `).join('');
+}
+
+function renderProducts(list = null) {
+  const grid = document.getElementById('productGrid');
+  const noRes = document.getElementById('noResults');
+  let data = list || products;
+
+  if (activeCategory !== 'all') {
+    data = data.filter(p => p.cat === activeCategory || (activeCategory === 'Electronics' && p.cat === 'Wearables'));
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    data = data.filter(p => p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.seller.toLowerCase().includes(q));
+  }
+
+  if (data.length === 0) {
+    grid.style.display = 'none';
+    noRes.style.display = 'block';
+    return;
+  }
+  grid.style.display = 'grid';
+  noRes.style.display = 'none';
+
+  grid.innerHTML = data.map(p => {
+    const isWished = wishlist.includes(p.id);
+    const badgeClass = p.badge === 'sale' ? 'badge-sale' : p.badge === 'hot' ? 'badge-hot' : p.badge === 'new' ? 'badge-new' : 'badge-vip';
+    const oldPrice = p.old ? `<span class="prod-price-old">$${p.old}</span>` : '';
+    const discount = p.old ? `<span class="prod-discount"> -${Math.round((1 - p.price/p.old)*100)}%</span>` : '';
+    return `
+    <div class="prod-card" data-id="${p.id}">
+      <span class="prod-badge ${badgeClass}">${p.badge === 'sale' ? '-' + Math.round((1 - p.price/p.old)*100) + '%' : p.badge.toUpperCase()}</span>
+      <div class="prod-img" onclick="openModal(${p.id})">${p.icon}
+        <div class="wish-btn ${isWished ? 'active' : ''}" onclick="event.stopPropagation();toggleWishlist(${p.id})">❤</div>
+      </div>
+      <div class="prod-body" onclick="openModal(${p.id})">
+        <div class="prod-category">${p.cat.toUpperCase()}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-seller"><span class="prod-seller-dot"></span>${p.seller}</div>
+        <div class="prod-rating"><span class="stars">${p.rating}</span><span class="rating-count">(${p.reviews})</span></div>
+        <div class="prod-footer">
+          <div><span class="prod-price">$${p.price}</span>${oldPrice}${discount}</div>
+          <button class="add-cart" onclick="event.stopPropagation();addToCart(${p.id})">+</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFlash() {
+  const grid = document.getElementById('flashGrid');
+  const flashProducts = products.filter(p => p.badge === 'sale' || p.badge === 'hot').slice(0, 5);
+  grid.innerHTML = flashProducts.map(p => {
+    const badgeClass = p.badge === 'sale' ? 'badge-sale' : 'badge-hot';
+    const badgeText = p.badge === 'sale' ? '-' + Math.round((1 - p.price/p.old)*100) + '%' : 'HOT';
+    return `
+    <div class="prod-card" style="min-width:200px" data-id="${p.id}">
+      <span class="prod-badge ${badgeClass}">${badgeText}</span>
+      <div class="prod-img" onclick="openModal(${p.id})">${p.icon}</div>
+      <div class="prod-body" onclick="openModal(${p.id})">
+        <div class="prod-category">${p.cat.toUpperCase()}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-rating"><span class="stars">${p.rating}</span><span class="rating-count">(${p.reviews})</span></div>
+        <div class="prod-footer"><div><span class="prod-price">$${p.price}</span><span class="prod-price-old">$${p.old}</span></div><button class="add-cart" onclick="event.stopPropagation();addToCart(${p.id})">+</button></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderIntegrations() {
+  document.getElementById('intGrid').innerHTML = integrations.map(i => `
+    <div class="int-card">
+      <div class="int-icon">${i.icon}</div>
+      <div class="int-name">${i.name}</div>
+      <div class="int-status">${i.status}</div>
+    </div>
+  `).join('');
+}
+
+function renderSellers() {
+  document.getElementById('sellersGrid').innerHTML = sellers.map(s => `
+    <div class="seller-card">
+      ${s.vip ? '<div class="seller-badge">👑 VIP Seller</div>' : ''}
+      <div class="seller-avatar" style="background:${s.color}">${s.code}</div>
+      <div class="seller-name">${s.name}</div>
+      <div class="seller-loc">📍 ${s.loc}</div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="seller-stat-num">${s.rating}</div><div class="seller-stat-label">Reytinq</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">${s.sales}</div><div class="seller-stat-label">Satış</div></div>
+        <div class="seller-stat"><div class="seller-stat-num">${s.items}</div><div class="seller-stat-label">Məhsul</div></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// =========================
+// CART LOGIC
+// =========================
+function addToCart(pid) {
+  const product = products.find(p => p.id === pid);
+  if (!product) return;
+  const existing = cart.find(c => c.id === pid);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ id: product.id, name: product.name, price: product.price, icon: product.icon, qty: 1 });
+  }
+  saveCart();
+  updateCartUI();
+  showToast(product.name + ' səbətə əlavə edildi! 🛒', 'success');
+}
+
+function addToCartFromModal() {
+  if (currentModalProduct) addToCart(currentModalProduct.id);
+}
+
+function removeFromCart(pid) {
+  cart = cart.filter(c => c.id !== pid);
+  saveCart();
+  updateCartUI();
+}
+
+function changeQty(pid, delta) {
+  const item = cart.find(c => c.id === pid);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(pid);
+  else { saveCart(); updateCartUI(); }
+}
+
+function saveCart() {
+  localStorage.setItem('eternal_cart', JSON.stringify(cart));
+}
+
+function updateCartUI() {
+  const count = cart.reduce((sum, c) => sum + c.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+
+  const body = document.getElementById('cartBody');
+  const foot = document.getElementById('cartFoot');
+
+  if (cart.length === 0) {
+    body.innerHTML = `
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <div>Səbətiniz boşdur</div>
+        <div style="font-size:0.8rem;margin-top:4px;">Məhsulları bura əlavə edin</div>
+      </div>`;
+    foot.style.display = 'none';
+    return;
+  }
+
+  foot.style.display = 'block';
+  const total = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+  document.getElementById('cartTotal').textContent = '$' + total;
+
+  body.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      <div class="cart-item-img">${c.icon}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${c.name}</div>
+        <div class="cart-item-price">$${c.price}</div>
+        <div class="cart-item-qty">
+          <button onclick="changeQty(${c.id}, -1)">−</button>
+          <span>${c.qty}</span>
+          <button onclick="changeQty(${c.id}, 1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-rm" onclick="removeFromCart(${c.id})">🗑</button>
+    </div>
+  `).join('');
+}
+
+function toggleCart() {
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.getElementById('cartSidebar').classList.toggle('open');
+}
+
+function checkout() {
+  if (cart.length === 0) { showToast('Səbət boşdur!', 'error'); return; }
+  if (!currentUser) { showToast('Əvvəlcə daxil olun', 'error'); goLogin(); return; }
+  showToast('Sifarişiniz qəbul edildi! Təşəkkürlər 🎉', 'success');
+  cart = [];
+  saveCart();
+  updateCartUI();
+  setTimeout(toggleCart, 1000);
+}
+
+// =========================
+// WISHLIST
+// =========================
+function toggleWishlist(pid) {
+  const idx = wishlist.indexOf(pid);
+  if (idx > -1) {
+    wishlist.splice(idx, 1);
+    showToast('İstək siyahısından çıxarıldı', 'success');
+  } else {
+    wishlist.push(pid);
+    showToast('İstək siyahısına əlavə edildi ❤️', 'success');
+  }
+  localStorage.setItem('eternal_wishlist', JSON.stringify(wishlist));
+  renderProducts();
+  renderFlash();
+}
+
+function addToWishlistFromModal() {
+  if (currentModalProduct) toggleWishlist(currentModalProduct.id);
+}
+
+// =========================
+// MODAL
+// =========================
+function openModal(pid) {
+  const p = products.find(x => x.id === pid);
+  if (!p) return;
+  currentModalProduct = p;
+  document.getElementById('modalImg').textContent = p.icon;
+  document.getElementById('modalCat').textContent = p.cat.toUpperCase();
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalPrice').textContent = '$' + p.price;
+  document.getElementById('modalOldPrice').textContent = p.old ? '$' + p.old : '';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentModalProduct = null;
+}
+
+// =========================
+// SEARCH & FILTER
+// =========================
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim();
+  searchQuery = q;
+  renderProducts();
+  if (q) {
+    showToast('"' + q + '" üçün nəticələr', 'success');
+    document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function filterProducts(cat) {
+  activeCategory = cat;
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  renderProducts();
+
+  document.querySelectorAll('.cat-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.cat === cat);
+  });
+
+  if (cat !== 'all') {
+    document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function initCatFilter() {
+  document.querySelectorAll('.cat-item').forEach(el => {
+    el.addEventListener('click', function() {
+      filterProducts(this.dataset.cat);
+    });
+  });
+}
+
+// =========================
+// SLIDER
+// =========================
+function goSlide(n) {
+  currentSlide = n;
+  document.getElementById('heroSlides').style.transform = `translateX(-${n*100}%)`;
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === n));
+}
+function nextSlide() { goSlide((currentSlide + 1) % 3); }
+function prevSlide() { goSlide((currentSlide - 1 + 3) % 3); }
+function startSlider() {
+  if (sliderInterval) clearInterval(sliderInterval);
+  sliderInterval = setInterval(nextSlide, 5000);
+}
+
+// =========================
+// COUNTDOWN
+// =========================
+function startCountdown() {
+  let endTime = Date.now() + 8*3600000 + 24*60000;
+  const savedEnd = localStorage.getItem('eternal_flash_end');
+  if (savedEnd && parseInt(savedEnd) > Date.now()) {
+    endTime = parseInt(savedEnd);
+  } else {
+    localStorage.setItem('eternal_flash_end', endTime);
+  }
+  function update() {
+    const diff = Math.max(0, endTime - Date.now());
+    const h = Math.floor(diff/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+    if (diff <= 0) {
+      endTime = Date.now() + 8*3600000 + 24*60000;
+      localStorage.setItem('eternal_flash_end', endTime);
+    }
+  }
+  setInterval(update, 1000);
+  update();
+}
+
+// =========================
+// TOAST
+// =========================
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// =========================
+// UTILS
+// =========================
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+function scrollToProducts() { document.getElementById('productsSection').scrollIntoView({behavior:'smooth'}); }
+function scrollToFlash() { document.getElementById('flashSection').scrollIntoView({behavior:'smooth'}); }
+function scrollToSellers() { document.getElementById('sellersSection').scrollIntoView({behavior:'smooth'}); }
 </script>
 </body>
 </html>
